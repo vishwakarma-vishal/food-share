@@ -132,4 +132,114 @@ login = async (req, res) => {
     }
 }
 
-module.exports = { ngoSignup, restaurantSignup, login }
+// update ngo profile
+updateNgoProfile = async (req, res) => {
+    const { profileImg, ngoName, phone, email, about, foundingDate, city, address } = req.body;
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).json({
+            success: false,
+            message: "Authorization token is required."
+        });
+    }
+    const token = authHeader.split(' ')[1];
+
+    try {
+        const payload = jwt.verify(token, process.env.JWT_SECRET);
+        const id = payload.id;
+        const userInDb = await Ngo.findById(id);
+
+        if (!userInDb) {
+            return res.status(404).json({
+                success: false,
+                message: "User doesn't exist"
+            });
+        }
+
+        const newUser = {
+            id,
+            profileImg: profileImg || userInDb.profileImg,
+            ngoName: ngoName || userInDb.ngoName,
+            phone: phone || userInDb.phone,
+            email: email || userInDb.email,
+            about: about || userInDb.about,
+            foundingDate: foundingDate || userInDb.foundingDate,
+            city: city || userInDb.city,
+            address: address || userInDb.address,
+        }
+
+        const updatedUserInDb = await Ngo.findByIdAndUpdate(id, newUser, { new: true });
+
+        res.status(200).json({
+            success: true,
+            message: "User updated",
+            updatedUserInDb
+        })
+
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: "Something went wrong",
+            err
+        })
+    }
+}
+
+// update restaurant profile
+updateRestaurantProfile = async (req, res) => {
+    const { profileImg, restaurantName, phone, email, about, openFrom, openTill, city, address } = req.body;
+
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).json({
+            success: false,
+            message: "Authorization token is required."
+        });
+    }
+    const token = authHeader.split(' ')[1];
+
+    try {
+        const payload = jwt.verify(token, process.env.JWT_SECRET);
+        const id = payload.id;
+        const userInDb = await Restaurant.findById(id);
+
+        if (!userInDb) {
+            return res.status(404).json({
+                success: false,
+                message: "User doesn't exist"
+            });
+        }
+
+        const newUser = {
+            id,
+            profileImg: profileImg || userInDb.profileImg,
+            restaurantName: restaurantName || userInDb.restaurantName,
+            phone: phone || userInDb.phone,
+            email: email || userInDb.email,
+            about: about || userInDb.about,
+            openFrom: openFrom || userInDb.openFrom,
+            openTill: openTill || userInDb.openTill,
+            city: city || userInDb.city,
+            address: address || userInDb.address,
+        }
+
+        const updatedUserInDb = await Restaurant.findByIdAndUpdate(id, newUser, { new: true });
+
+        res.status(200).json({
+            success: true,
+            message: "User updated",
+            updatedUserInDb
+        })
+
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: "Something went wrong",
+            err
+        })
+    }
+}
+
+module.exports = { ngoSignup, restaurantSignup, login, updateNgoProfile, updateRestaurantProfile }

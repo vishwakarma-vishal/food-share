@@ -2,13 +2,14 @@ const express = require("express");
 const dotenv = require("dotenv");
 const app = express();
 const authRoutes = require("./routes/authRoutes")
+const listingRoutes = require("./routes/listingsRoutes");
 
 // middleware
 dotenv.config(); //load env variables
 app.use(express.json());
 
 app.use('/auth', authRoutes);
-// app.use('/food-listing', listingRoutes);
+app.use('/listing', listingRoutes);
 // app.use('/ngo', ngoRoutes);
 // app.use('/restaurant', restaurantRoutes);
 

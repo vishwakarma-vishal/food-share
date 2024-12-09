@@ -2,11 +2,11 @@ const mongoose = require('mongoose');
 
 const FoodListingSchema = new mongoose.Schema({
     restaurantId: { type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant', required: true },
-    image: { type: String, required: true },
+    imageUrl: { type: String, required: true },
     title: { type: String, required: true },
-    category: { type: String, enum: ['vegetarian', 'non-vegetarian'], required: true },
-    pickupTime: { type: Date, required: true },
-    description: { type: String, required: true },
+    category: { type: String, enum: ['veg', 'non-veg'], required: true },
+    pickupTime: { type: Date},
+    description: { type: String},
     deliveryNote: { type: String },
     expiry: { type: Date, required: true },
     reservedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'Ngo' },
