@@ -157,19 +157,22 @@ updateNgoProfile = async (req, res) => {
             });
         }
 
-        const newUser = {
-            id,
-            profileImg: profileImg || userInDb.profileImg,
-            ngoName: ngoName || userInDb.ngoName,
-            phone: phone || userInDb.phone,
-            email: email || userInDb.email,
-            about: about || userInDb.about,
-            foundingDate: foundingDate || userInDb.foundingDate,
-            city: city || userInDb.city,
-            address: address || userInDb.address,
-        }
+        const updatedFields = {
+            profileImg: profileImg !== undefined ? profileImg : userInDb.profileImg,
+            ngoName: ngoName !== undefined ? ngoName : userInDb.ngoName,
+            phone: phone !== undefined ? phone : userInDb.phone,
+            email: email !== undefined ? email : userInDb.email,
+            about: about !== undefined ? about : userInDb.about,
+            foundingDate: foundingDate !== undefined ? foundingDate : userInDb.foundingDate,
+            city: city !== undefined ? city : userInDb.city,
+            address: address !== undefined ? address : userInDb.address,
+        };
 
-        const updatedUserInDb = await Ngo.findByIdAndUpdate(id, newUser, { new: true });
+        const updatedUserInDb = await Ngo.findByIdAndUpdate(
+            id,
+            { $set: updatedFields }, // Use $set for partial updates
+            { new: true }
+        );
 
         res.status(200).json({
             success: true,
@@ -212,20 +215,19 @@ updateRestaurantProfile = async (req, res) => {
             });
         }
 
-        const newUser = {
-            id,
-            profileImg: profileImg || userInDb.profileImg,
-            restaurantName: restaurantName || userInDb.restaurantName,
-            phone: phone || userInDb.phone,
-            email: email || userInDb.email,
-            about: about || userInDb.about,
-            openFrom: openFrom || userInDb.openFrom,
-            openTill: openTill || userInDb.openTill,
-            city: city || userInDb.city,
-            address: address || userInDb.address,
-        }
+        const updatedFields = {
+            profileImg: profileImg !== undefined ? profileImg : userInDb.profileImg,
+            restaurantName: restaurantName !== undefined ? restaurantName : userInDb.restaurantName,
+            phone: phone !== undefined ? phone : userInDb.phone,
+            email: email !== undefined ? email : userInDb.email,
+            about: about !== undefined ? about : userInDb.about,
+            openFrom: openFrom !== undefined ? openFrom : userInDb.openFrom,
+            openTill: openTill !== undefined ? openTill : userInDb.openTill,
+            city: city !== undefined ? city : userInDb.city,
+            address: address !== undefined ? address : userInDb.address,
+        };
 
-        const updatedUserInDb = await Restaurant.findByIdAndUpdate(id, newUser, { new: true });
+        const updatedUserInDb = await Restaurant.findByIdAndUpdate(id, { $set: updatedFields }, { new: true });
 
         res.status(200).json({
             success: true,

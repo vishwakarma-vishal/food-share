@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
-const { createFoodListing } = require("../controllers/listingController");
+const { createFoodListing, getAllFoodListingOfRestaurant, updateFoodListingById, deleteFoodListingById, getAllFoodListing } = require("../controllers/listingController");
 
 // middleware to authorize user
 const authenticateRole = (role) => (req, res, next) => {
@@ -22,7 +22,7 @@ const authenticateRole = (role) => (req, res, next) => {
         if (payload.role !== role) {
             return res.status(403).json({
                 success: false,
-                message: "Access denied"
+                message: "Access denied."
             });
         }
         // Attach the payload restaurant id to req
@@ -37,9 +37,10 @@ const authenticateRole = (role) => (req, res, next) => {
 }
 
 router.post('/create', authenticateRole('restaurant'), createFoodListing);
-// router.put('/id/:id', authenticateRole('restaurant'), updateFoodListingById);
-// router.delete('/id/:id', authenticateRole('restaurant'), deleteFoodListingById);
+router.put('/:id', authenticateRole('restaurant'), updateFoodListingById);
+router.delete('/:id', authenticateRole('restaurant'), deleteFoodListingById);
+router.get('/', authenticateRole('restaurant'), getAllFoodListingOfRestaurant);
 
-// router.get('/all', authenticateRole('ngo'), getAllFoodListing);
+router.get('/all', authenticateRole('ngo'), getAllFoodListing);
 
 module.exports = router;
