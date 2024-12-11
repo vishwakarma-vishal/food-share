@@ -1,5 +1,6 @@
+const mongoose = require("mongoose");
 
-const donationHistorySchema = mongoose.model({
+const donationHistorySchema = new mongoose.Schema({
     restaurantId: { type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant', required: true },
     foodListingId: { type: mongoose.Schema.Types.ObjectId, ref: 'FoodListing', required: true },
     status: { type: String, enum: ['collected', 'expired'], default: 'expired' },

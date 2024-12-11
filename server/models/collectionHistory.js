@@ -1,5 +1,6 @@
+const mongoose = require("mongoose");
 
-const collectionHistorySchema = mongoose.model({
+const collectionHistorySchema = new mongoose.Schema({
     ngoId: { type: mongoose.Schema.Types.ObjectId, ref: 'Ngo', required: true },
     foodListingId: { type: mongoose.Schema.Types.ObjectId, ref: 'FoodListing', required: true },
     collectedAt: { type: Date, default: Date.now() }
