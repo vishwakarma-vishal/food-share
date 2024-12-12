@@ -1,7 +1,6 @@
 const DonationHistory = require("../models/DonationHistory");
 const FoodListing = require("../models/FoodListing");
 const CollectionHistory = require("../models/CollectionHistory");
-const mongoose = require("mongoose");
 
 // mark listing to collected and add them in donation history to restaturant and collection history to ngo
 const addListingToHistory = async (req, res) => {
@@ -14,8 +13,6 @@ const addListingToHistory = async (req, res) => {
             message: "Please provide all the required information"
         });
     }
-
-    let session = null;
 
     try {
         const foodListingInDb = await FoodListing.findById(foodListingId);
@@ -39,38 +36,27 @@ const addListingToHistory = async (req, res) => {
         }
 
         // tranaction sesstion starts from here
-        session = await mongoose.startSession();
-        session.startTransaction();
 
         // update in db
         await FoodListing.findByIdAndUpdate(
             foodListingId,
-            { $set: updatedFoodListing },
-            { session }
+            { $set: updatedFoodListing }
         );
 
         // add to donation history of restro
-        await DonationHistory.create(
-            [{
-                restaurantId,
-                foodListingId,
-                status: 'collected'
-            }],
-            { session }
-        );
+        await DonationHistory.create({
+            restaurantId,
+            foodListingId,
+            status: 'collected'
+        });
 
         // add to collection history of ngo
-        await CollectionHistory.create(
-            [{
-                ngoId: foodListingInDb.reservedBy,
-                foodListingId
-            }],
-            { session }
-        );
+        await CollectionHistory.create({
+            ngoId: foodListingInDb.reservedBy,
+            foodListingId
+        });
 
         // end transaction session (completed)
-        await session.commitTransaction();
-        session.endSession();
 
         res.status(200).json({
             success: true,
@@ -78,10 +64,6 @@ const addListingToHistory = async (req, res) => {
         });
     } catch (err) {
         // end transaction sesion (failed)
-        if (session) {
-            await session.abortTransaction(); 
-            session.endSession();
-        }
 
         console.log(err);
         res.status(500).json({
@@ -91,4 +73,37 @@ const addListingToHistory = async (req, res) => {
     }
 }
 
-module.exports = { addListingToHistory }
+const getDonationHistory = async (req, res) => {
+    const restaurantId = req.restaurantId;
+
+    if (!restaurantId) {
+        return res.status(401).json({
+            success: false,
+            message: "Please provide all the required information."
+        });
+    }
+
+    try {
+        const donationHistory = await DonationHistory.find();
+
+        if (!donationHistory || donationHistory.length == 0) {
+            return res.status(404).json({
+                success: false,
+                message: "Listings are not found"
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Donation history is fetched.",
+            donationHistory
+        });
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: "Something went wrong."
+        });
+    }
+}
+
+module.exports = { addListingToHistory, getDonationHistory }

@@ -32,7 +32,7 @@ ngoSignup = async (req, res) => {
 
         // generate jwt token
         const payload = { id: _id, role: role }
-        const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign(payload, process.env.JWT_NGO_SECRET, { expiresIn: '1h' });
 
         res.status(201).json({
             success: true,
@@ -77,7 +77,7 @@ restaurantSignup = async (req, res) => {
 
         // generate jwt token
         const payload = { id: _id, role: role };
-        const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign(payload, process.env.JWT_RESTAURANT_SECRET, { expiresIn: '1h' });
 
         res.status(201).json({
             success: true,
@@ -110,7 +110,9 @@ login = async (req, res) => {
         if (match) {
             // generate token
             const payload = { id: userInDb._id, role: userInDb.role };
-            const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+            const JWT_SECRET = userInDb.role === 'ngo' ? process.env.JWT_NGO_SECRET : process.env.JWT_RESTAURANT_SECRET;
+            const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
 
             return res.status(200).json({
                 success: true,
@@ -146,7 +148,7 @@ updateNgoProfile = async (req, res) => {
     const token = authHeader.split(' ')[1];
 
     try {
-        const payload = jwt.verify(token, process.env.JWT_SECRET);
+        const payload = jwt.verify(token, process.env.JWT_NGO_SECRET);
         const id = payload.id;
         const userInDb = await Ngo.findById(id);
 
@@ -176,8 +178,7 @@ updateNgoProfile = async (req, res) => {
 
         res.status(200).json({
             success: true,
-            message: "User updated",
-            updatedUserInDb
+            message: "User updated"
         })
 
     } catch (err) {
@@ -204,7 +205,7 @@ updateRestaurantProfile = async (req, res) => {
     const token = authHeader.split(' ')[1];
 
     try {
-        const payload = jwt.verify(token, process.env.JWT_SECRET);
+        const payload = jwt.verify(token, process.env.JWT_RESTAURANT_SECRET);
         const id = payload.id;
         const userInDb = await Restaurant.findById(id);
 
@@ -231,8 +232,7 @@ updateRestaurantProfile = async (req, res) => {
 
         res.status(200).json({
             success: true,
-            message: "User updated",
-            updatedUserInDb
+            message: "User updated"
         })
 
     } catch (err) {

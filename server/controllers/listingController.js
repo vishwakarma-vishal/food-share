@@ -168,29 +168,4 @@ deleteFoodListingById = async (req, res) => {
     }
 }
 
-// for ngo only
-getAllFoodListing = async (req, res) => {
-    try {
-        const foodListings = await FoodListing.find();
-
-        if (!foodListings || foodListings.length === 0) {
-            return res.status(404).json({
-                success: false,
-                message: "No food listings found.",
-            });
-        }
-
-        res.status(200).json({
-            success: true,
-            FoodListings: foodListings
-        });
-
-    } catch (err) {
-        res.status(500).json({
-            success: false,
-            message: "Something went wrong."
-        });
-    }
-}
-
-module.exports = { createFoodListing, getAllFoodListingOfRestaurant, updateFoodListingById, deleteFoodListingById, getAllFoodListing };  
+module.exports = { createFoodListing, getAllFoodListingOfRestaurant, updateFoodListingById, deleteFoodListingById };  
