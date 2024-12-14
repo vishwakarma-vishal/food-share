@@ -1,28 +1,42 @@
 const FoodListing = require("../models/FoodListing");
+const { z } = require("zod");
 
 createFoodListing = async (req, res) => {
-    const { imageUrl, title, category, pickupTime, description, deliveryNote, expiry } = req.body;
-    const restaurantId = req.restaurantId;
-
-    if (!imageUrl || !title || !category || !expiry) {
-        return res.status(400).json({
-            success: false,
-            message: "Please provide all the required information."
-        });
-    }
-
-    const newFoodListing = new FoodListing({
-        restaurantId: restaurantId,
-        imageUrl: imageUrl,
-        title: title,
-        category: category,
-        pickupTime: pickupTime || null,
-        description: description || null,
-        deliveryNote: deliveryNote || null,
-        expiry: expiry,
-    });
-
     try {
+        // input validation and santization
+        const foodListingSchema = z.object({
+            title: z.string()
+                .trim()
+                .min(3, "Title must be at least 3 characters")
+                .max(200, "Title cannot exceed 200 characters"),
+            category: z.enum(['veg', 'non-veg'], "Category must be either 'veg' or 'non-veg'"),
+            description: z.string()
+                .trim()
+                .min(3, "Description must be at least 3 characters")
+                .max(300, "Description cannot exceed 300 characters"),
+            deliveryNote: z.string()
+                .trim()
+                .min(3, "Delivery Note must be at least 3 characters")
+                .max(300, "Delivery Note cannot exceed 300 characters")
+                .optional(),
+            expiry: z.string()
+                .trim()
+                .regex(/^\d{4}-\d{2}-\d{2}$/, "Expiry Date must be in YYYY-MM-DD format"), // Corrected regex for YYYY-MM-DD
+        });
+        const sanitizedData = foodListingSchema.parse(req.body);
+
+        const { title, category, description, deliveryNote, expiry } = sanitizedData;
+        const restaurantId = req.restaurantId;
+
+        const newFoodListing = new FoodListing({
+            restaurantId: restaurantId,
+            title: title,
+            category: category,
+            description: description || null,
+            deliveryNote: deliveryNote || null,
+            expiry: expiry,
+        });
+
         const foodListingInDb = await newFoodListing.save();
 
         res.status(201).json({
@@ -30,11 +44,18 @@ createFoodListing = async (req, res) => {
             message: "New listing is created.",
         })
 
-    } catch (err) {
+    } catch (error) {
+        if (error instanceof z.ZodError) {
+            // console.log(error.errors.map((err) => err.message));
+            return res.status(400).json({
+                success: false,
+                message: "Invalid input. Please ensure all fields are correctly filled."
+            });
+        }
+
         res.status(500).json({
             success: false,
             message: "Something went wrong.",
-            err
         });
     }
 }
@@ -65,18 +86,42 @@ getAllFoodListingOfRestaurant = async (req, res) => {
 }
 
 updateFoodListingById = async (req, res) => {
-    const { imageUrl, title, category, pickupTime, description, deliveryNote, expiry } = req.body;
-    const restaurantId = req.restaurantId;
-    const ListingId = req.params.id;
-
-    if (!ListingId) {
-        return res.status(400).json({
-            success: false,
-            message: "Please provide all the required Information."
-        });
-    }
-
     try {
+        const foodListingSchema = z.object({
+            title: z.string()
+                .trim()
+                .min(3, "Title must be at least 3 characters")
+                .max(200, "Title cannot exceed 200 characters")
+                .optional(),
+            category: z.enum(['veg', 'non-veg'], "Category must be either 'veg' or 'non-veg'").optional(),
+            description: z.string()
+                .trim()
+                .min(3, "Description must be at least 3 characters")
+                .max(300, "Description cannot exceed 300 characters")
+                .optional(),
+            deliveryNote: z.string()
+                .trim()
+                .min(3, "Delivery Note must be at least 3 characters")
+                .max(300, "Delivery Note cannot exceed 300 characters")
+                .optional(),
+            expiry: z.string()
+                .trim()
+                .regex(/^\d{4}-\d{2}-\d{2}$/, "Expiry Date must be in YYYY-MM-DD format")  // Corrected regex for YYYY-MM-DD
+                .optional(),
+        });
+        const sanitizedData = foodListingSchema.parse(req.body);
+
+        const { title, category, description, deliveryNote, expiry } = sanitizedData;
+        const restaurantId = req.restaurantId;
+        const ListingId = req.params.id;
+
+        if (!ListingId) {
+            return res.status(400).json({
+                success: false,
+                message: "Please provide all the required Information."
+            });
+        }
+
         const foodListingInDb = await FoodListing.findById(ListingId);
 
         if (!foodListingInDb) {
@@ -94,10 +139,8 @@ updateFoodListingById = async (req, res) => {
         }
 
         const updatedFoodListing = {
-            imageUrl: imageUrl !== undefined ? imageUrl : foodListingInDb.imageUrl,
             title: title !== undefined ? title : foodListingInDb.title,
             category: category !== undefined ? category : foodListingInDb.category,
-            pickupTime: pickupTime !== undefined ? pickupTime : foodListingInDb.pickupTime,
             description: description !== undefined ? description : foodListingInDb.description,
             deliveryNote: deliveryNote !== undefined ? deliveryNote : foodListingInDb.deliveryNote,
             expiry: expiry !== undefined ? expiry : foodListingInDb.expiry,
@@ -111,15 +154,21 @@ updateFoodListingById = async (req, res) => {
 
         res.status(200).json({
             success: true,
-            message: "Food listing is updated.",
-            updatedFoodListingInDb
+            message: "Food listing is updated."
         })
 
-    } catch (err) {
+    } catch (error) {
+        if (error instanceof z.ZodError) {
+            console.log(error.errors.map((err) => err.message));
+            return res.status(400).json({
+                success: false,
+                message: "Invalid input. Please ensure all fields are correctly filled."
+            });
+        }
+
         res.status(500).json({
             success: false,
             message: "Something went wrong.",
-            error: err.message
         })
     }
 }
@@ -162,8 +211,7 @@ deleteFoodListingById = async (req, res) => {
     } catch (err) {
         res.status(500).json({
             success: false,
-            message: "Something went wrong.",
-            err
+            message: "Something went wrong."
         });
     }
 }

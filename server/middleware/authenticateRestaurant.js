@@ -15,12 +15,6 @@ const authenticateRestaurant = (req, res, next) => {
     try {
         const payload = jwt.verify(token, process.env.JWT_RESTAURANT_SECRET);
 
-        // if (payload.role !== role) {
-        //     return res.status(403).json({
-        //         success: false,
-        //         message: "Access denied."
-        //     });
-        // }
         // Attach the payload restaurant id to req
         req.restaurantId = payload.id;
         next();

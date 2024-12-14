@@ -2,7 +2,7 @@ const DonationHistory = require("../models/DonationHistory");
 const FoodListing = require("../models/FoodListing");
 const CollectionHistory = require("../models/CollectionHistory");
 
-// mark listing to collected and add them in donation history to restaturant and collection history to ngo
+// to mark food as collected, add at in donation history of restaurant and collection history of ngo
 const addListingToHistory = async (req, res) => {
     const { foodListingId } = req.body;
     const restaurantId = req.restaurantId;
@@ -31,31 +31,47 @@ const addListingToHistory = async (req, res) => {
             });
         }
 
-        const updatedFoodListing = {
-            status: 'collected'
+        if (foodListingInDb.status == 'available') {
+            return res.status(403).json({
+                success: false,
+                message: "This listing is not reserved yet."
+            })
         }
 
-        // tranaction sesstion starts from here
+        if (foodListingInDb.status == 'collected') {
+            return res.status(403).json({
+                success: false,
+                message: "This listing has already been collected.",
+            });
+        }
 
-        // update in db
-        await FoodListing.findByIdAndUpdate(
+        // tranaction session starts from here
+        // step-1 mark food as collected
+        const updatedFoodListing = await FoodListing.findByIdAndUpdate(
             foodListingId,
-            { $set: updatedFoodListing }
+            { $set: { status: "collected" } },
+            { new: true }
         );
 
-        // add to donation history of restro
+        if (!updatedFoodListing) {
+            return res.status(404).json({
+                success: false,
+                message: "Failed to update",
+            });
+        }
+
+        // step-2 add to donation history of restro
         await DonationHistory.create({
             restaurantId,
             foodListingId,
-            status: 'collected'
+            status: "collected",
         });
 
-        // add to collection history of ngo
+        // step-3 add to collection history of ngo
         await CollectionHistory.create({
             ngoId: foodListingInDb.reservedBy,
-            foodListingId
+            foodListingId,
         });
-
         // end transaction session (completed)
 
         res.status(200).json({
@@ -63,8 +79,6 @@ const addListingToHistory = async (req, res) => {
             message: "Listing is collected"
         });
     } catch (err) {
-        // end transaction sesion (failed)
-
         console.log(err);
         res.status(500).json({
             success: false,

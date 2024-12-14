@@ -15,12 +15,6 @@ const authenticateNgo = (req, res, next) => {
     try {
         const payload = jwt.verify(token, process.env.JWT_NGO_SECRET);
 
-        // if (payload.role !== role) {
-        //     return res.status(403).json({
-        //         success: false,
-        //         message: "Access denied."
-        //     });
-        // }
         // Attach the payload restaurant id to req
         req.ngoId = payload.id;
         next();

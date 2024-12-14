@@ -6,8 +6,8 @@ const { createFoodListing, getAllFoodListingOfRestaurant, updateFoodListingById,
 const authenticateRestaurant = require("../middleware/authenticateRestaurant");
 
 router.post('/create', authenticateRestaurant, createFoodListing);
+router.get('/', authenticateRestaurant, getAllFoodListingOfRestaurant);
 router.put('/:id', authenticateRestaurant, updateFoodListingById);
 router.delete('/:id', authenticateRestaurant, deleteFoodListingById);
-router.get('/', authenticateRestaurant, getAllFoodListingOfRestaurant);
 
 module.exports = router;
