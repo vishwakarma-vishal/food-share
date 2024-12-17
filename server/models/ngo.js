@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const ngoSchema = mongoose.Schema({
     profileImg: { type: String },
+    imgPublicId: {type: String},
     ngoName: { type: String, required: true },
     role: {type: String, default: "ngo"},
     phone: { type: Number, required: true },

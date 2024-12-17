@@ -1,8 +1,11 @@
 const DonationHistory = require("../models/DonationHistory");
 const FoodListing = require("../models/FoodListing");
 const CollectionHistory = require("../models/CollectionHistory");
+const Restaurant = require("../models/Restaurant");
+const { z } = require("zod");
+const cloudinaryUpload = require("../utils/cloudinaryUpload");
 
-// to mark food as collected, add at in donation history of restaurant and collection history of ngo
+// Mark food as collected, add at in donation history of restaurant and collection history of ngo
 const addListingToHistory = async (req, res) => {
     const { foodListingId } = req.body;
     const restaurantId = req.restaurantId;
@@ -87,6 +90,7 @@ const addListingToHistory = async (req, res) => {
     }
 }
 
+// Get donation history
 const getDonationHistory = async (req, res) => {
     const restaurantId = req.restaurantId;
 
@@ -120,4 +124,105 @@ const getDonationHistory = async (req, res) => {
     }
 }
 
-module.exports = { addListingToHistory, getDonationHistory }
+// Update restaurant profile
+updateRestaurantProfile = async (req, res) => {
+    try {
+        const restaurantId = req.restaurantId;
+        const file = req.files?.restaurantImg;
+
+        if (!req.body.data) {
+            return res.status(400).json({
+                success: false,
+                message: "Missing data in request body.",
+            });
+        }
+        const data = JSON.parse(req.body.data);
+
+        const updateRestaurantProfileSchema = z.object({
+            restaurantName: z.string()
+                .trim()
+                .min(3, "Restaurant Name must be at least 3 characters")
+                .max(100, "Restaurant Name cannot exceed 100 characters")
+                .optional(),
+            about: z.string()
+                .trim()
+                .min(6, "About must be at least 6 characters")
+                .max(100, "About cannot exceed 100 characters")
+                .optional(),
+            openFrom: z.string()
+                .trim()
+                .regex(/^(0[1-9]|1[0-2]):([0-5][0-9]) (AM|PM)$/, "Invalid time format")
+                .optional(),
+            openTill: z.string()
+                .trim()
+                .regex(/^(0[1-9]|1[0-2]):([0-5][0-9]) (AM|PM)$/, "Invalid time format")
+                .optional(),
+            city: z.string()
+                .trim()
+                .min(3, "City must be at least 3 characters")
+                .max(50, "City cannot exceed 50 characters")
+                .optional(),
+            address: z.string()
+                .trim()
+                .min(3, "Address must be at least 3 characters")
+                .max(200, "Address cannot exceed 200 characters")
+                .optional(),
+        });
+
+        const sanitizedData = updateRestaurantProfileSchema.parse(data);
+
+        const userInDb = await Restaurant.findById(restaurantId);
+        if (!userInDb) {
+            return res.status(404).json({
+                success: false,
+                message: "User doesn't exist"
+            });
+        }
+
+        // img upload
+        let secure_url = userInDb.profileImg;
+        let public_id = userInDb.imgPublicId;
+
+        if (file) {
+            const result = await cloudinaryUpload(file, "food-share/user/restaurant", public_id);
+            secure_url = result.secure_url;
+            public_id = result.public_id;
+        }
+
+        // Update data
+        const updatedFields = {
+            ...sanitizedData,
+            profileImg: secure_url,
+            imgPublicId: public_id
+        };
+
+        const updatedUserInDb = await Restaurant.findByIdAndUpdate(
+            restaurantId,
+            { $set: updatedFields },
+            { new: true }
+        );
+
+        res.status(200).json({
+            success: true,
+            message: "User updated",
+            updatedUserInDb
+        })
+
+    } catch (error) {
+
+        if (error instanceof z.ZodError) {
+            // console.log(error.errors.map((err) => err.message));
+            return res.status(400).json({
+                success: false,
+                message: "Invalid input. Please ensure all fields are correctly filled."
+            });
+        }
+
+        res.status(500).json({
+            success: false,
+            message: "Something went wrong"
+        })
+    }
+}
+
+module.exports = { addListingToHistory, getDonationHistory, updateRestaurantProfile }
