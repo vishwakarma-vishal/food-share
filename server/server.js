@@ -6,7 +6,6 @@ const listingRoutes = require("./routes/listingsRoutes");
 const ngoRoutes = require("./routes/ngoRoutes");
 const restaurantRoutes = require("./routes/restaurantRoutes");
 const fileUpload = require("express-fileupload");
-const path = require("path");
 
 // middleware
 dotenv.config(); //load env variables

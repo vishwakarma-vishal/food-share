@@ -133,7 +133,7 @@ updateRestaurantProfile = async (req, res) => {
         if (!req.body.data) {
             return res.status(400).json({
                 success: false,
-                message: "Missing data in request body.",
+                message: "Missing data in request body",
             });
         }
         const data = JSON.parse(req.body.data);
@@ -168,7 +168,6 @@ updateRestaurantProfile = async (req, res) => {
                 .max(200, "Address cannot exceed 200 characters")
                 .optional(),
         });
-
         const sanitizedData = updateRestaurantProfileSchema.parse(data);
 
         const userInDb = await Restaurant.findById(restaurantId);

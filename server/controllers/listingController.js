@@ -1,8 +1,22 @@
+const Restaurant = require("../models/Restaurant");
 const FoodListing = require("../models/FoodListing");
 const { z } = require("zod");
+const cloudinaryUpload = require("../utils/cloudinaryUpload");
+const cloudinary = require("cloudinary");
 
 createFoodListing = async (req, res) => {
     try {
+        const restaurantId = req.restaurantId;
+        const file = req.files?.listingImg;
+
+        if (!req.body.data) {
+            return res.status(400).json({
+                success: false,
+                message: "Missing data in request body",
+            });
+        }
+        const data = JSON.parse(req.body.data);
+
         // input validation and santization
         const foodListingSchema = z.object({
             title: z.string()
@@ -23,18 +37,31 @@ createFoodListing = async (req, res) => {
                 .trim()
                 .regex(/^\d{4}-\d{2}-\d{2}$/, "Expiry Date must be in YYYY-MM-DD format"), // Corrected regex for YYYY-MM-DD
         });
-        const sanitizedData = foodListingSchema.parse(req.body);
+        const sanitizedData = foodListingSchema.parse(data);
 
-        const { title, category, description, deliveryNote, expiry } = sanitizedData;
-        const restaurantId = req.restaurantId;
+        const userInDb = await Restaurant.findById(restaurantId);
+        if (!userInDb) {
+            return res.status(404).json({
+                success: false,
+                message: "User doesn't exist"
+            });
+        }
+
+        // img upload
+        let secure_url = userInDb.imageUrl;
+        let public_id = userInDb.imgPublicId;
+
+        if (file) {
+            const result = await cloudinaryUpload(file, "food-share/listing", public_id);
+            secure_url = result.secure_url;
+            public_id = result.public_id;
+        }
 
         const newFoodListing = new FoodListing({
+            ...sanitizedData,
             restaurantId: restaurantId,
-            title: title,
-            category: category,
-            description: description || null,
-            deliveryNote: deliveryNote || null,
-            expiry: expiry,
+            imageUrl: secure_url,
+            imgPublicId: public_id
         });
 
         const foodListingInDb = await newFoodListing.save();
@@ -42,6 +69,7 @@ createFoodListing = async (req, res) => {
         res.status(201).json({
             success: true,
             message: "New listing is created.",
+            foodListingInDb
         })
 
     } catch (error) {
@@ -87,6 +115,19 @@ getAllFoodListingOfRestaurant = async (req, res) => {
 
 updateFoodListingById = async (req, res) => {
     try {
+        const restaurantId = req.restaurantId;
+        const ListingId = req.params.id;
+        const file = req.files?.listingImg;
+
+        if(!req.body.data) {
+            return res.status(400).json({
+                success: false,
+                message: "Missing data in requrest body."
+            });
+        }
+        const data = JSON.parse(req.body.data);
+
+        // Validate and sanitize data
         const foodListingSchema = z.object({
             title: z.string()
                 .trim()
@@ -109,11 +150,7 @@ updateFoodListingById = async (req, res) => {
                 .regex(/^\d{4}-\d{2}-\d{2}$/, "Expiry Date must be in YYYY-MM-DD format")  // Corrected regex for YYYY-MM-DD
                 .optional(),
         });
-        const sanitizedData = foodListingSchema.parse(req.body);
-
-        const { title, category, description, deliveryNote, expiry } = sanitizedData;
-        const restaurantId = req.restaurantId;
-        const ListingId = req.params.id;
+        const sanitizedData = foodListingSchema.parse(data);
 
         if (!ListingId) {
             return res.status(400).json({
@@ -122,8 +159,17 @@ updateFoodListingById = async (req, res) => {
             });
         }
 
-        const foodListingInDb = await FoodListing.findById(ListingId);
+        // Check if user exists
+        const userInDb = await Restaurant.findById(restaurantId);
+        if (!userInDb) {
+            return res.status(404).json({
+                success: false,
+                message: "User doesn't exist"
+            });
+        }
 
+        // Check if the listing exists
+        const foodListingInDb = await FoodListing.findById(ListingId);
         if (!foodListingInDb) {
             return res.status(404).json({
                 success: false,
@@ -138,12 +184,20 @@ updateFoodListingById = async (req, res) => {
             });
         }
 
+        // image upload
+        let secure_url = foodListingInDb.imageUrl;
+        let public_id = foodListingInDb.imgPublicId;
+
+        if (file) {
+            const result = await cloudinaryUpload(file, "food-share/listing", public_id);
+            secure_url = result.secure_url;
+            public_id = result.public_id;
+        }
+
         const updatedFoodListing = {
-            title: title !== undefined ? title : foodListingInDb.title,
-            category: category !== undefined ? category : foodListingInDb.category,
-            description: description !== undefined ? description : foodListingInDb.description,
-            deliveryNote: deliveryNote !== undefined ? deliveryNote : foodListingInDb.deliveryNote,
-            expiry: expiry !== undefined ? expiry : foodListingInDb.expiry,
+            ...sanitizedData,
+            imageUrl: secure_url,
+            imgPublicId: public_id,
         };
 
         const updatedFoodListingInDb = await FoodListing.findByIdAndUpdate(
@@ -154,10 +208,13 @@ updateFoodListingById = async (req, res) => {
 
         res.status(200).json({
             success: true,
-            message: "Food listing is updated."
+            message: "Food listing is updated.",
+            updatedFoodListingInDb
         })
 
     } catch (error) {
+        console.log(error);
+
         if (error instanceof z.ZodError) {
             console.log(error.errors.map((err) => err.message));
             return res.status(400).json({
@@ -201,12 +258,14 @@ deleteFoodListingById = async (req, res) => {
             });
         }
 
-        const deletedListing = await FoodListing.findByIdAndDelete(ListingId);
+        // delete from db and cloudinary
+        const deletedListing = await FoodListing.findByIdAndDelete(ListingId); 
+        const deleteImg = await cloudinary.uploader.destroy(deletedListing.imgPublicId);
 
         res.status(200).json({
             success: true,
             message: "Listing is deleted.",
-            deletedListingId: deletedListing._id,
+            deletedListingId: deletedListing._id
         });
     } catch (err) {
         res.status(500).json({
