@@ -195,6 +195,7 @@ login = async (req, res) => {
                 success: true,
                 message: "Login successful",
                 token: token,
+                role: userInDb.role,
             })
         } else {
             return res.status(401).json({

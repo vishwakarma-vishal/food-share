@@ -6,10 +6,12 @@ const listingRoutes = require("./routes/listingsRoutes");
 const ngoRoutes = require("./routes/ngoRoutes");
 const restaurantRoutes = require("./routes/restaurantRoutes");
 const fileUpload = require("express-fileupload");
+const cors = require("cors");
 
 // middleware
 dotenv.config(); //load env variables
 app.use(express.json());
+app.use(cors());
 app.use(fileUpload({
     useTempFiles: true, 
     tempFileDir: '/tmp/',
