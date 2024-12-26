@@ -26,12 +26,12 @@ const Header = () => {
 
             <div className="flex gap-4">
                 <button
-                    className="px-4 py-2 bg-green-500 rounded-full text-white"
+                    className="px-4 py-2 bg-green-500 rounded-full text-white font-semibold"
                     onClick={() => navigate('/restaurant-signup')}>
                     Sign up
                 </button>
                 <button
-                    className="px-4 py-2 border border-green-500 rounded-full text-green-500"
+                    className="px-4 py-2 border border-green-500 rounded-full text-green-500 font-semibold"
                     onClick={() => navigate('/login')}>
                     Log in
                 </button>

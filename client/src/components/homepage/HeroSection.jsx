@@ -3,7 +3,7 @@
 const HeroSection = () => {
     return (
         <section
-              className="min-h-[400px] lg:min-h-[480px] text-white flex max-w-6xl mx-auto flex-col bg-cover bg-center bg-no-repeat items-start justify-end pb-2 lg:pb-10 rounded-md sm:rounded-xl px-4 sm:px-10 my-6"
+              className="min-h-[400px] lg:min-h-[480px] text-white flex flex-col bg-cover bg-center bg-no-repeat items-start justify-end pb-2 lg:pb-10 rounded-md sm:rounded-xl px-4 sm:px-10 my-6"
             style={{
                 backgroundImage:
                     'linear-gradient(rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.6) 100%), url("https://cdn.usegalileo.ai/sdxl10/1209d0c1-0be6-4eff-8e7d-abf045fa00b5.png")',
