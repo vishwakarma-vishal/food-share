@@ -1,10 +1,9 @@
-import { Route, Routes } from "react-router-dom"
-import Layout from "./Layout/Layout"
-import Home from "./pages/Home"
-import RestaurantSignup from "./pages/RestaurantSignup"
-import NgoSignup from "./pages/NgoSignup"
-import Login from "./pages/Login"
-
+import { Route, Routes } from "react-router-dom";
+import Layout from "./Layout/Layout";
+import Home from "./pages/Home";
+import RestaurantSignup from "./pages/RestaurantSignup";
+import NgoSignup from "./pages/NgoSignup";
+import Login from "./pages/Login";
 
 function App() {
   return (
@@ -19,4 +18,4 @@ function App() {
   )
 }
 
-export default App
+export default App;

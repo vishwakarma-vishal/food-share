@@ -15,15 +15,15 @@ ngoSignup = async (req, res) => {
             phone: z.string()
                 .trim()
                 .regex(/^[0-9]+$/, "Phone number must contain only digits")
-                .min(10, "Phone number must be at least 10 digits")
-                .max(15, "Phone number cannot exceed 15 digits"),
+                .min(10, "Phone number must be 10 digits")
+                .max(10, "Phone number must be 10 digits"),
             email: z.string()
                 .trim()
                 .email("Invalid email format"),
             password: z.string()
                 .trim()
-                .min(6, "Password must be at least 6 characters")
-                .max(100, "Password cannot exceed 100 characters"),
+                .min(5, "Password must be at least 5 characters")
+                .max(30, "Password cannot exceed 30 characters"),
             city: z.string()
                 .trim()
                 .min(3, "City must be at least 3 characters")
@@ -91,15 +91,15 @@ restaurantSignup = async (req, res) => {
             phone: z.string()
                 .trim()
                 .regex(/^[0-9]+$/, "Phone number must contain only digits")
-                .min(10, "Phone number must be at least 10 digits")
-                .max(15, "Phone number cannot exceed 15 digits"),
+                .min(10, "Phone number must have 10 digits")
+                .max(10, "Phone number must have 10 digits"),
             email: z.string()
                 .trim()
                 .email("Invalid email format"),
             password: z.string()
                 .trim()
-                .min(6, "Password must be at least 6 characters")
-                .max(100, "Password cannot exceed 100 characters"),
+                .min(5, "Password must be at least 5 characters")
+                .max(30, "Password cannot exceed 30 characters"),
             city: z.string()
                 .trim()
                 .min(3, "City must be at least 3 characters")
@@ -165,8 +165,8 @@ login = async (req, res) => {
                 .email("Invalid email format"),
             password: z.string()
                 .trim()
-                .min(6, "Password must be at least 6 characters")
-                .max(100, "Password cannot exceed 100 characters"),
+                .min(5, "Password must be at least 5 characters")
+                .max(30, "Password cannot exceed 20 characters"),
         });
 
         const sanitizedData = loginSchema.parse(req.body);
