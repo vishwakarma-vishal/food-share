@@ -5,7 +5,7 @@ import FAQSection from "../components/homepage/FAQSection";
 
 const Home = () => {
     return (
-        <div className="space-y-10">
+        <div className="max-w-6xl mx-auto px-4 md:px-8 lg:px-10 py-4 space-y-10">
             <HeroSection />
             <WorkSection />
             <WhyUsSection />

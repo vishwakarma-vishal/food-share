@@ -80,7 +80,7 @@ const RestaurantSignup = () => {
     }
 
     return (
-        <div className="py-4 flex flex-col lg:flex-row justify-between items-center gap-10">
+        <div className="max-w-6xl mx-auto px-4 md:px-8 lg:px-10 py-10 flex flex-col lg:flex-row justify-between items-center gap-10">
             <div className=" space-y-2 text-center">
                 <h2 className="text-3xl font-semibold">Sign up your restaurant</h2>
                 <p className="py-2">"Share your flavors with the world <br /> and connect with food lovers everywhere!"</p>

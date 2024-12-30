@@ -1,0 +1,83 @@
+import { FaHome, FaBox, FaUserCircle, FaBars, FaTimes } from 'react-icons/fa';
+import { GiCardboardBox } from "react-icons/gi";
+import { GiBoxUnpacking } from "react-icons/gi";
+import { FaArrowLeft } from "react-icons/fa6";
+import { useState } from 'react';
+import { RiMenu2Line } from "react-icons/ri";
+import Overview from '../components/ngoDashboard/Overview';
+
+const NgoDashboard = () => {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isSelected, setIsSelected] = useState("overview");
+
+    // to render menu content
+    const renderContent = () => {
+        switch (isSelected) {
+            case "overview":
+                return <Overview />
+            default:
+                return <Overview />
+        }
+    }
+
+    return (
+        <div className="flex w-full h-[90vh] content-start ">
+            {/* sidebar */}
+            <div className={`bg-gray-200 p-6 transition-all duration-300 ${isMenuOpen ? "w-1/5" : "w-16"}`}>
+                <div className="flex items-center justify-between">
+                    <h2 className={`font-semibold text-xl ${isMenuOpen ? "block" : "hidden"}`}>NGO Dashboard</h2>
+                    <div onClick={() => setIsMenuOpen(!isMenuOpen)} className={`${isMenuOpen ? "p-1" : "p-1 -ml-1"} border border-black  rounded-sm cursor-pointer`}>
+                        {isMenuOpen ? <FaArrowLeft className='text-lg' /> : <RiMenu2Line className='text-lg' />}</div>
+                </div>
+
+                <div className="mt-8 flex flex-col gap-y-4">
+                    <div
+                        className="flex items-center"
+                        onClick={() => setIsSelected("overview")}
+                    >
+                        <FaHome className="inline text-xl" />
+                        <span className={`ml-3 ${isMenuOpen ? "inline" : "hidden"}`}>Overview</span>
+                    </div>
+                    <div
+                        className="flex items-center"
+                        onClick={() => setIsSelected("listing")}
+                    >
+                        <FaBox className="inline  text-xl " />
+                        <span className={`ml-3 ${isMenuOpen ? "inline" : "hidden"}`}>Food Listings</span>
+                    </div>
+                    <div
+                        className="flex items-center"
+                        onClick={() => setIsSelected("collection")}
+                    >
+                        <GiCardboardBox className="inline  text-xl" />
+                        <span className={`ml-3 ${isMenuOpen ? "inline" : "hidden"}`}>Collection History</span>
+                    </div>
+                    <div
+                        className="flex items-center"
+                        onClick={() => setIsSelected("distribution")}
+                    >
+                        <GiBoxUnpacking className="inline  text-xl " />
+                        <span className={`ml-3 ${isMenuOpen ? "inline" : "hidden"}`}>Distribution History</span>
+                    </div>
+                    <div
+                        className="flex items-center"
+                        onClick={() => setIsSelected("profile")}
+                    >
+                        <FaUserCircle className="inline  text-xl " />
+                        <span className={`ml-3 ${isMenuOpen ? "inline" : "hidden"}`}>Manage Profile</span>
+                    </div>
+                </div>
+            </div>
+
+            {/* main content */}
+            <div className="w-4/5 flex-grow m-6">
+                {/* render menu content */}
+                {renderContent()}
+            </div>
+        </div >
+    )
+}
+
+export default NgoDashboard;
+
+

@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import RestaurantSignup from "./pages/RestaurantSignup";
 import NgoSignup from "./pages/NgoSignup";
 import Login from "./pages/Login";
+import NgoDashboard from "./pages/NgoDashboard";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path='restaurant-signup' element={<RestaurantSignup />} />
         <Route path='ngo-signup' element={<NgoSignup />} />
         <Route path='login' element={<Login />} />
+        <Route path='ngo-dashboard' element={<NgoDashboard />} />
       </Route>
     </Routes>
   )

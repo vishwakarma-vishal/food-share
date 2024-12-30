@@ -2,9 +2,11 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { IoIosEyeOff, IoIosEye } from "react-icons/io";
 
 const Login = () => {
     const navigate = useNavigate();
+    const [isPassVisible, setIsPassVisible] = useState(false);
     const [formdata, setFormdata] = useState({
         email: "",
         password: ""
@@ -39,7 +41,7 @@ const Login = () => {
                 });
 
                 // store the token
-                
+
                 toast.success("Logged in successfully.");
                 navigate('/');
             }
@@ -51,7 +53,7 @@ const Login = () => {
     }
 
     return (
-        <div className="py-4 flex flex-col lg:flex-row justify-between items-center gap-10">
+        <div className="max-w-6xl mx-auto px-4 md:px-8 lg:px-10 py-10 flex flex-col lg:flex-row justify-between items-center gap-10">
             <div className=" space-y-2 text-center">
                 <h2 className="text-3xl font-semibold">Login to Your Account</h2>
                 <p className="py-2">"Log in to continue your journey of making a difference!"</p>
@@ -66,7 +68,7 @@ const Login = () => {
                 <div className="h-[1px] w-28 bg-black mx-auto my-2"></div>
 
                 <form onSubmit={submitHandler} className="space-y-2">
-                    <div className="basis-1/2 space-y-2">
+                    <div className="space-y-2">
                         <label htmlFor="email" className="font-medium text-gray-800">Email</label><br />
                         <input
                             type="email"
@@ -74,26 +76,31 @@ const Login = () => {
                             name="email"
                             value={formdata.email}
                             onChange={changeHandler}
-                            placeholder="abc@gmail.com"
+                            placeholder="yourmail@gmail.com"
                             className="border outline-none border-gray-600 p-2 w-full rounded-xl"
                             required
                         />
                     </div>
 
-                    <div className="basis-1/2 space-y-2">
+                    <div className="space-y-2">
                         <label htmlFor="password" className="font-medium text-gray-800">Password</label><br />
-                        <input
-                            type="text"
-                            id="password"
-                            name="password"
-                            value={formdata.password}
-                            onChange={changeHandler}
-                            placeholder="Your password"
-                            className="border outline-none border-gray-600 p-2 w-full rounded-xl"
-                            minLength={5}
-                            maxLength={30}
-                            required
-                        />
+                        <div className="flex items-center justify-between gap-2 border border-gray-600 p-2 rounded-xl">
+                            <input
+                                type={isPassVisible ? "text" : "password"}
+                                id="password"
+                                name="password"
+                                value={formdata.password}
+                                onChange={changeHandler}
+                                placeholder="******************"
+                                className="w-full outline-none"
+                                minLength={5}
+                                maxLength={30}
+                                required
+                            />
+                            <span className="text-xl cursor-pointer" onClick={() => setIsPassVisible(!isPassVisible)}>
+                                {isPassVisible ? <IoIosEye /> : <IoIosEyeOff />}
+                            </span>
+                        </div>
                     </div>
 
                     <p className="text-right text-gray-500 hover:underline text-sm cursor-pointer">Forgot password?</p>
