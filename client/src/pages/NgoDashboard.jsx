@@ -5,6 +5,10 @@ import { FaArrowLeft } from "react-icons/fa6";
 import { useState } from 'react';
 import { RiMenu2Line } from "react-icons/ri";
 import Overview from '../components/ngoDashboard/Overview';
+import Listing from '../components/ngoDashboard/Listing';
+import { Collection } from '../components/ngoDashboard/Collection';
+import { Distribution } from '../components/ngoDashboard/Distribution';
+import { Profile } from '../components/ngoDashboard/Profile';
 
 const NgoDashboard = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -15,6 +19,14 @@ const NgoDashboard = () => {
         switch (isSelected) {
             case "overview":
                 return <Overview />
+            case "listing":
+                return <Listing isMenuOpen={isMenuOpen} />
+            case "collection":
+                return <Collection />
+            case "distribution":
+                return <Distribution />
+            case "profile":
+                return <Profile />
             default:
                 return <Overview />
         }
@@ -32,35 +44,35 @@ const NgoDashboard = () => {
 
                 <div className="mt-8 flex flex-col gap-y-4">
                     <div
-                        className="flex items-center"
+                        className="flex items-center cursor-pointer"
                         onClick={() => setIsSelected("overview")}
                     >
                         <FaHome className="inline text-xl" />
                         <span className={`ml-3 ${isMenuOpen ? "inline" : "hidden"}`}>Overview</span>
                     </div>
                     <div
-                        className="flex items-center"
+                        className="flex items-center cursor-pointer"
                         onClick={() => setIsSelected("listing")}
                     >
                         <FaBox className="inline  text-xl " />
                         <span className={`ml-3 ${isMenuOpen ? "inline" : "hidden"}`}>Food Listings</span>
                     </div>
                     <div
-                        className="flex items-center"
+                        className="flex items-center cursor-pointer"
                         onClick={() => setIsSelected("collection")}
                     >
                         <GiCardboardBox className="inline  text-xl" />
                         <span className={`ml-3 ${isMenuOpen ? "inline" : "hidden"}`}>Collection History</span>
                     </div>
                     <div
-                        className="flex items-center"
+                        className="flex items-center cursor-pointer"
                         onClick={() => setIsSelected("distribution")}
                     >
                         <GiBoxUnpacking className="inline  text-xl " />
                         <span className={`ml-3 ${isMenuOpen ? "inline" : "hidden"}`}>Distribution History</span>
                     </div>
                     <div
-                        className="flex items-center"
+                        className="flex items-center cursor-pointer"
                         onClick={() => setIsSelected("profile")}
                     >
                         <FaUserCircle className="inline  text-xl " />
@@ -70,7 +82,7 @@ const NgoDashboard = () => {
             </div>
 
             {/* main content */}
-            <div className="w-4/5 flex-grow m-6">
+            <div className="w-4/5 flex-grow p-6 mr-0 overflow-scroll">
                 {/* render menu content */}
                 {renderContent()}
             </div>

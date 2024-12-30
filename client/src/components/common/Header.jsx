@@ -4,7 +4,7 @@ const Header = () => {
     const navigate = useNavigate();
 
     return (
-        <header className="flex justify-between items-center px-4 md:px-8 lg:px-10 py-4 bg-white shadow-xl">
+        <header className="flex justify-between items-center px-4 md:px-8 lg:px-10 py-4 bg-white shadow-md">
             <div
                 className="flex items-center gap-x-5 cursor-pointer"
                 onClick={() => navigate('/')}>
