@@ -77,14 +77,14 @@ const Listing = ({ isMenuOpen }) => {
                 <h2 className="font-semibold text-2xl">Food Listings</h2>
 
                 <form className="flex gap-4">
-                    <input type="text" placeholder="search listing..." className="p-2 rounded-lg outline-none" />
-                    <select className="p-2 rounded-lg outline-none">
+                    <input type="text" placeholder="search listing..." className="py-2 px-4 border rounded-lg outline-none" />
+                    <select className="py-2 px-4 border rounded-lg outline-none">
                         <option value="all-type">All types</option>
                         <option value="veg">Veg</option>
                         <option value="non-veg">Non-veg</option>
                     </select>
 
-                    <select className="p-2 rounded-lg outline-none">
+                    <select className="py-2 px-4 border rounded-lg outline-none">
                         <option value="all-status">All status</option>
                         <option value="available">Available</option>
                         <option value="reserved">Reserved</option>

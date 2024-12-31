@@ -33,7 +33,7 @@ const NgoDashboard = () => {
     }
 
     return (
-        <div className="flex w-full h-[90vh] content-start ">
+        <div className="flex w-full min-h-[90vh] content-start ">
             {/* sidebar */}
             <div className={`bg-gray-200 p-6 transition-all duration-300 ${isMenuOpen ? "w-1/5" : "w-16"}`}>
                 <div className="flex items-center justify-between">
@@ -82,7 +82,7 @@ const NgoDashboard = () => {
             </div>
 
             {/* main content */}
-            <div className="w-4/5 flex-grow p-6 mr-0 overflow-scroll">
+            <div className="w-4/5 flex-grow p-6 mr-0">
                 {/* render menu content */}
                 {renderContent()}
             </div>
