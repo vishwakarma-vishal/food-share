@@ -6,7 +6,7 @@ import { useState } from 'react';
 
 import Overview from '../components/restaurantDashboard/Overview';
 import MyListing from '../components/restaurantDashboard/MyListing';
-import { Collection } from '../components/ngoDashboard/Collection';
+import Donation from '../components/restaurantDashboard/Donation';
 import { Distribution } from '../components/ngoDashboard/Distribution';
 import { Profile } from '../components/ngoDashboard/Profile';
 
@@ -21,8 +21,8 @@ const RestaurantDashboard = () => {
                 return <Overview />
             case "listing":
                 return <MyListing isMenuOpen={isMenuOpen} />
-            case "collection":
-                return <Collection />
+            case "donation":
+                return <Donation />
             case "distribution":
                 return <Distribution />
             case "profile":
@@ -59,7 +59,7 @@ const RestaurantDashboard = () => {
                     </div>
                     <div
                         className="flex items-center cursor-pointer"
-                        onClick={() => setIsSelected("collection")}
+                        onClick={() => setIsSelected("donation")}
                     >
                         <FaHistory className="inline  text-xl" />
                         <span className={`ml-3 ${isMenuOpen ? "inline" : "hidden"}`}>Donation History</span>

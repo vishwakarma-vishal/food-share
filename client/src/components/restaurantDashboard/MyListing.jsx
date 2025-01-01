@@ -130,23 +130,27 @@ const MyListing = ({ isMenuOpen }) => {
             {/* filters */}
             <div className="flex justify-between">
                 <h2 className="font-semibold text-2xl">My Listings</h2>
-
-                <form className="flex gap-4">
-                    <input type="text" placeholder="Search by name..." className="py-2 px-4 border rounded-lg outline-none" onChange={searchByListingName} />
-                    <select className="py-2 px-4 border rounded-lg outline-none" onChange={filterByCategory}>
-                        <option value="all">All types</option>
-                        <option value="veg">Veg</option>
-                        <option value="non-veg">Non-Veg</option>
-                    </select>
-
-                    <select className="py-2 px-4 border rounded-lg outline-none" onChange={filterByStatus}>
-                        <option value="all">All status</option>
-                        <option value="available">Available</option>
-                        <option value="reserved">Reserved</option>
-                        <option value="collected">Collected</option>
-                    </select>
-                </form>
+                <button className="text-white bg-green-500 rounded-lg py-2 px-4 font-semibold">
+                    New Listing
+                </button>
             </div>
+
+            <form className="flex gap-4 mt-4">
+                <input type="text" placeholder="Search by name..." className="py-2 px-4 border rounded-lg outline-none" onChange={searchByListingName} />
+                <select className="py-2 px-4 border rounded-lg outline-none" onChange={filterByCategory}>
+                    <option value="all">All types</option>
+                    <option value="veg">Veg</option>
+                    <option value="non-veg">Non-Veg</option>
+                </select>
+
+                <select className="py-2 px-4 border rounded-lg outline-none" onChange={filterByStatus}>
+                    <option value="all">All status</option>
+                    <option value="available">Available</option>
+                    <option value="reserved">Reserved</option>
+                    <option value="collected">Collected</option>
+                </select>
+            </form>
+
 
             {/* food listings */}
             <div className={`grid ${isMenuOpen ? "grid-cols-3" : "grid-cols-4"} gap-4 mt-6`}>
@@ -159,7 +163,7 @@ const MyListing = ({ isMenuOpen }) => {
                 }
 
             </div>
-        </div>
+        </div >
     )
 }
 
