@@ -5,6 +5,7 @@ import RestaurantSignup from "./pages/RestaurantSignup";
 import NgoSignup from "./pages/NgoSignup";
 import Login from "./pages/Login";
 import NgoDashboard from "./pages/NgoDashboard";
+import RestaurantDashboard from "./pages/RestaurantDashboard";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path='ngo-signup' element={<NgoSignup />} />
         <Route path='login' element={<Login />} />
         <Route path='ngo-dashboard' element={<NgoDashboard />} />
+        <Route path='restaurant-dashboard' element={<RestaurantDashboard />} />
       </Route>
     </Routes>
   )

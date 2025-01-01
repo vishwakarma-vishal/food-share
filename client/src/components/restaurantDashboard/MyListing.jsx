@@ -129,7 +129,7 @@ const MyListing = ({ isMenuOpen }) => {
         <div>
             {/* filters */}
             <div className="flex justify-between">
-                <h2 className="font-semibold text-2xl">Food Listings</h2>
+                <h2 className="font-semibold text-2xl">My Listings</h2>
 
                 <form className="flex gap-4">
                     <input type="text" placeholder="Search by name..." className="py-2 px-4 border rounded-lg outline-none" onChange={searchByListingName} />

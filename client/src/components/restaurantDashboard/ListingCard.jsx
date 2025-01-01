@@ -26,6 +26,11 @@ const ListingCard = ({ foodListing }) => {
                 ${foodListing.status.toLowerCase() == "collected" && "bg-gray-600"}`}
             >{foodListing.status}
             </button>
+
+            <div className="mt-2 w-full flex gap-4">
+                <button className="py-1 rounded-sm text-white bg-green-600 w-full rounded-sm">Edit</button>
+                <button className="py-1 rounded-sm text-white bg-red-600 w-full rounded-sm">Delete</button>
+            </div>
         </div>
     );
 }
