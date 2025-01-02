@@ -8,7 +8,7 @@ import Overview from '../components/restaurantDashboard/Overview';
 import MyListing from '../components/restaurantDashboard/MyListing';
 import DonationHistory from '../components/restaurantDashboard/DonationHistory';
 import NewDonation from '../components/restaurantDashboard/NewDonation';
-import { Profile } from '../components/ngoDashboard/Profile';
+import Profile from '../components/restaurantDashboard/Profile';
 
 const RestaurantDashboard = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
