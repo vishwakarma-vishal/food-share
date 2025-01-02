@@ -74,7 +74,7 @@ export const donationHistory = [
     },
 ];
 
-const Donation = () => {
+const DonationHistory = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [currentHistory, setCurrentHistory] = useState(donationHistory);
     const [searchedHistory, setSearchedHistory] = useState(donationHistory);
@@ -182,4 +182,4 @@ const Donation = () => {
     )
 }
 
-export default Donation;
+export default DonationHistory;

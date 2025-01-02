@@ -6,8 +6,8 @@ import { useState } from 'react';
 
 import Overview from '../components/restaurantDashboard/Overview';
 import MyListing from '../components/restaurantDashboard/MyListing';
-import Donation from '../components/restaurantDashboard/Donation';
-import { Distribution } from '../components/ngoDashboard/Distribution';
+import DonationHistory from '../components/restaurantDashboard/DonationHistory';
+import NewDonation from '../components/restaurantDashboard/NewDonation';
 import { Profile } from '../components/ngoDashboard/Profile';
 
 const RestaurantDashboard = () => {
@@ -21,10 +21,10 @@ const RestaurantDashboard = () => {
                 return <Overview />
             case "listing":
                 return <MyListing isMenuOpen={isMenuOpen} />
-            case "donation":
-                return <Donation />
-            case "distribution":
-                return <Distribution />
+            case "donation-history":
+                return <DonationHistory />
+            case "new-donation":
+                return <NewDonation />
             case "profile":
                 return <Profile />
             default:
@@ -59,14 +59,14 @@ const RestaurantDashboard = () => {
                     </div>
                     <div
                         className="flex items-center cursor-pointer"
-                        onClick={() => setIsSelected("donation")}
+                        onClick={() => setIsSelected("donation-history")}
                     >
                         <FaHistory className="inline  text-xl" />
                         <span className={`ml-3 ${isMenuOpen ? "inline" : "hidden"}`}>Donation History</span>
                     </div>
                     <div
                         className="flex items-center cursor-pointer"
-                        onClick={() => setIsSelected("distribution")}
+                        onClick={() => setIsSelected("new-donation")}
                     >
                         <FaPlus className="inline  text-xl " />
                         <span className={`ml-3 ${isMenuOpen ? "inline" : "hidden"}`}>New Donation</span>
