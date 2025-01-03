@@ -1,7 +1,9 @@
 import { useNavigate } from "react-router-dom";
+import useAuth from "../../utils/useAuth";
 
 const Header = () => {
     const navigate = useNavigate();
+    const {auth, logout} = useAuth();
 
     return (
         <header className="flex justify-between items-center px-4 md:px-8 lg:px-10 py-4 bg-white shadow-md">
@@ -24,18 +26,35 @@ const Header = () => {
                 </nav>
             </div>
 
-            <div className="flex gap-4">
-                <button
-                    className="px-4 py-2 bg-green-500 rounded-full text-white font-semibold"
-                    onClick={() => navigate('/restaurant-signup')}>
-                    Sign up
-                </button>
-                <button
-                    className="px-4 py-2 border border-green-500 rounded-full text-green-500 font-semibold"
-                    onClick={() => navigate('/login')}>
-                    Log in
-                </button>
-            </div>
+            {auth.isAuthenticated ?
+                <div className="flex gap-4">
+                    <button
+                        className="px-4 py-2 bg-green-500 rounded-full text-white font-semibold"
+                        onClick={() => navigate(auth.role === "ngo" ? '/ngo-dashboard' : '/restaurant-dashboard')}>
+                        Dashboard
+                    </button>
+                    <button
+                        className="px-4 py-2 border bg-red-500 rounded-full text-white font-semibold"
+                        onClick={logout}>
+                        Log out
+                    </button>
+                </div>
+                :
+                <div className="flex gap-4">
+                    <button
+                        className="px-4 py-2 bg-green-500 rounded-full text-white font-semibold"
+                        onClick={() => navigate('/restaurant-signup')}>
+                        Sign up
+                    </button>
+                    <button
+                        className="px-4 py-2 border border-green-500 rounded-full text-green-500 font-semibold"
+                        onClick={() => navigate('/login')}>
+                        Log in
+                    </button>
+                </div>
+            }
+
+
         </header>
     )
 }

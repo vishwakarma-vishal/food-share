@@ -3,6 +3,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { IoIosEyeOff, IoIosEye } from "react-icons/io";
+import useAuth from "../utils/useAuth";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -11,6 +12,7 @@ const Login = () => {
         email: "",
         password: ""
     });
+    const { login } = useAuth();
 
     const changeHandler = (e) => {
         const { name, value } = e.target;
@@ -40,7 +42,7 @@ const Login = () => {
                     password: ""
                 });
 
-                // store the token
+                login(data.role, data.token);
 
                 toast.success("Logged in successfully.");
                 navigate('/');

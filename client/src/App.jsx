@@ -7,6 +7,8 @@ import Login from "./pages/Login";
 import NgoDashboard from "./pages/NgoDashboard";
 import RestaurantDashboard from "./pages/RestaurantDashboard";
 
+import ProtecedRoute from "./utils/ProtectedRoute";
+
 function App() {
   return (
     <Routes>
@@ -15,8 +17,9 @@ function App() {
         <Route path='restaurant-signup' element={<RestaurantSignup />} />
         <Route path='ngo-signup' element={<NgoSignup />} />
         <Route path='login' element={<Login />} />
-        <Route path='ngo-dashboard' element={<NgoDashboard />} />
-        <Route path='restaurant-dashboard' element={<RestaurantDashboard />} />
+
+        <Route path='ngo-dashboard' element={<ProtecedRoute element={<NgoDashboard />} requiredRole ="ngo" />} />
+        <Route path='restaurant-dashboard' element={<ProtecedRoute element={<RestaurantDashboard />} requiredRole="restaurant" />} />
       </Route>
     </Routes>
   )

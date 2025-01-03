@@ -62,6 +62,7 @@ ngoSignup = async (req, res) => {
         res.status(201).json({
             success: true,
             token: token,
+            role: role,
             message: "Successfully signed up."
         });
     } catch (error) {
@@ -138,6 +139,7 @@ restaurantSignup = async (req, res) => {
         res.status(201).json({
             success: true,
             token: token,
+            role: role,
             message: "Successfully signed up!"
         });
     } catch (error) {

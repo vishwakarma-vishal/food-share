@@ -3,11 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { IoIosEyeOff, IoIosEye } from "react-icons/io";
 import axios from "axios";
 import { toast } from "react-toastify";
+import useAuth from "../utils/useAuth";
 
 const RestaurantSignup = () => {
     const navigate = useNavigate();
     const [error, setError] = useState("");
     const [isPassVisible, setIsPassVisible] = useState(false);
+    const { login } = useAuth(); // recoil state
 
     const [formdata, setFormdata] = useState({
         restaurantName: "",
@@ -68,13 +70,15 @@ const RestaurantSignup = () => {
                     password: ""
                 });
                 setConfirmPass("");
-                // store the token
-                
+                // managing the state
+                login(data.role, data.token);
+
                 toast.success("Signed up successfully.");
                 console.log(data);
-                navigate('/login');
+                navigate('/restaurant-dashboard');
             }
         } catch (e) {
+            console.log(e);
             toast.error("An error occurred. Please try again.");
         }
     }
@@ -129,21 +133,18 @@ const RestaurantSignup = () => {
 
                     <div className="space-y-2">
                         <label htmlFor="city" className="font-medium text-gray-800">City</label><br />
-                        <select
+                        <input
+                            type="text"
                             id="city"
                             name="city"
                             value={formdata.city}
                             onChange={changeHandler}
+                            placeholder="Type your city"
                             className="border outline-none border-gray-600 p-2 w-full rounded-xl"
+                            minLength={3}
+                            maxLength={200}
                             required
-                        >
-                            <option value="" disabled>Select city</option>
-                            <option value="Indore">Indore</option>
-                            <option value="Ujjain">Ujjain</option>
-                            <option value="Agar">Agar</option>
-                            <option value="Susner">Susner</option>
-                            <option value="Soyat">Soyat</option>
-                        </select>
+                        />
                     </div>
 
                     <div className="flex gap-3">
