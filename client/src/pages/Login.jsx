@@ -42,7 +42,7 @@ const Login = () => {
                     password: ""
                 });
 
-                login(data.role, data.token);
+                login(data.role, data.token, data.safeUser);
 
                 toast.success("Logged in successfully.");
                 navigate('/');

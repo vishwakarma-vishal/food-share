@@ -193,11 +193,16 @@ login = async (req, res) => {
             const JWT_SECRET = userInDb.role === 'ngo' ? process.env.JWT_NGO_SECRET : process.env.JWT_RESTAURANT_SECRET;
             const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
 
+            // creating safe user obj to send in response
+            const userObject = userInDb.toObject();
+            const { _id, role, password, __v, createdAt, ...safeUser } = userObject;
+
             return res.status(200).json({
                 success: true,
                 message: "Login successful",
                 token: token,
                 role: userInDb.role,
+                safeUser
             })
         } else {
             return res.status(401).json({

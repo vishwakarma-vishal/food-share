@@ -151,16 +151,16 @@ updateRestaurantProfile = async (req, res) => {
                 .optional(),
             openFrom: z.string()
                 .trim()
-                .regex(/^(0[1-9]|1[0-2]):([0-5][0-9]) (AM|PM)$/, "Invalid time format")
+                .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "Invalid time format")
                 .optional(),
             openTill: z.string()
                 .trim()
-                .regex(/^(0[1-9]|1[0-2]):([0-5][0-9]) (AM|PM)$/, "Invalid time format")
+                .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "Invalid time format")
                 .optional(),
             city: z.string()
                 .trim()
                 .min(3, "City must be at least 3 characters")
-                .max(50, "City cannot exceed 50 characters")
+                .max(20, "City cannot exceed 20 characters")
                 .optional(),
             address: z.string()
                 .trim()
@@ -201,10 +201,14 @@ updateRestaurantProfile = async (req, res) => {
             { new: true }
         );
 
+         // creating safe user obj to send in response
+         const userObject = updatedUserInDb.toObject();
+         const { _id, role, password, __v, createdAt, ...safeUser } = userObject;
+
         res.status(200).json({
             success: true,
             message: "User updated",
-            updatedUserInDb
+            safeUser
         })
 
     } catch (error) {

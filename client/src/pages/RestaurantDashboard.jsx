@@ -18,7 +18,7 @@ const RestaurantDashboard = () => {
     const renderContent = () => {
         switch (isSelected) {
             case "overview":
-                return <Overview />
+                return <Overview setIsSelected={setIsSelected} />
             case "listing":
                 return <MyListing isMenuOpen={isMenuOpen} />
             case "donation-history":
