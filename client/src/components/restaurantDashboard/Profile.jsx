@@ -8,6 +8,8 @@ const Profile = () => {
   const { auth, updateUser } = useAuth();
   const user = auth.safeUser;
   const [previewImg, setPreviewImg] = useState(user.profileImg);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     restaurantName: user.restaurantName || '',
@@ -18,45 +20,39 @@ const Profile = () => {
     about: user.about || ''
   });
 
+  // to prepare formData
   const changeHandler = (e) => {
     const value = e.target.value;
     const name = e.target.name;
 
-    setFormData({
-      ...formData,
-      [name]: value
-    });
-  }
-
-  // convert time to 24 hour format
-  const convertTo24HourFormat = (time) => {
-    const [timePart, modifier] = time.split(' ');
-    let [hours, minutes] = timePart.split(':');
-
-    if (hours === '12') {
-      hours = '00';
+    if (e.target.type === 'file') {
+      const file = e.target.files[0];
+      setSelectedFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewImg(reader.result);
+      }
+      reader.readAsDataURL(file);
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value
+      });
     }
-    if (modifier === 'PM') {
-      hours = parseInt(hours, 10) + 12;
-    }
-
-    return `${hours}:${minutes}`;
   }
 
   // submit funtion
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const dataToSend = {
-      ...formData,
-      openFrom: convertTo24HourFormat(formData.openFrom),
-      openTill: convertTo24HourFormat(formData.openTill)
+    const formDataToSend = new FormData();
+    formDataToSend.append('data', JSON.stringify(formData));
+    if (selectedFile) {
+      formDataToSend.append('restaurantImg', selectedFile);
     }
 
-    const formDataToSend = new FormData();
-    formDataToSend.append('data', JSON.stringify(dataToSend));
-
     try {
+      setLoading(true);
       const response = await axios({
         url: "http://localhost:3001/restaurant/profile",
         method: "put",
@@ -75,7 +71,10 @@ const Profile = () => {
         updateUser(updatedUser);
       }
 
+      setLoading(false);
     } catch (e) {
+      setLoading(false);
+      console.log(e);
       toast.error("Something went wrong");
     }
   }
@@ -90,8 +89,10 @@ const Profile = () => {
       openTill: user.openTill || '',
       city: user.city || '',
       address: user.address || '',
-      description: user.description || ''
-    })
+      about: user.about || ''
+    });
+    setPreviewImg(user.profileImg);
+    setSelectedFile(null);
   }
 
   return (
@@ -102,12 +103,17 @@ const Profile = () => {
         {/* first row */}
         <div className="flex gap-6">
           {/* image */}
-          <div className="basis-5/12 w-full h-[200] bg-gray-300 rounded-lg">
+          <div className="basis-5/12 w-full h-[160px] rounded-lg"> 
             {
               previewImg ?
-                <div className="relative">
-                  <img src={previewImg} className="rounded-lg"></img>
-                  <button className="absolute top-2 -left-1 text-xs bg-green-600 text-white p-1 rounded-sm" onClick={() => setPreviewImg("")}>Upload new img</button>
+                <div className="relative h-full">
+                  <img src={previewImg} className="rounded-lg h-full object-cover"></img>
+                  <button
+                    type="button"
+                    className="absolute top-2 -left-1 text-xs bg-green-600 text-white p-1 rounded-sm"
+                    onClick={() => setPreviewImg("")}>
+                    Upload new img
+                  </button>
                 </div> :
                 <div className="flex justify-center items-center h-full">
                   <input
@@ -116,7 +122,7 @@ const Profile = () => {
                     className="hidden"
                     onChange={changeHandler}
                   />
-                  <label htmlFor="fileInput" className="w-full h-full flex flex-col justify-center items-center cursor-pointer text-gray-800 rounded-md text-center">
+                  <label htmlFor="fileInput" className="w-full h-full flex flex-col justify-center items-center cursor-pointer text-gray-800 rounded-md text-center border">
                     <FiUploadCloud className="text-3xl" />
                     <span className="text-xs">Upload new image</span>
                   </label>
@@ -233,8 +239,8 @@ const Profile = () => {
         </div>
 
         <div className="flex gap-4">
-          <button type="submit" className="mt-4 block bg-gray-600 text-white font-semibold w-1/2 mx-auto py-2 rounded-lg" onClick={resetForm}>Reset Form</button>
-          <button type="submit" className="mt-4 block bg-green-600 text-white font-semibold w-1/2 mx-auto py-2 rounded-lg">Save changes</button>
+          <button className="mt-4 block bg-gray-600 text-white font-semibold w-1/2 mx-auto py-2 rounded-lg" onClick={resetForm}>Reset Form</button>
+          <button type="submit" className="mt-4 block bg-green-600 text-white font-semibold w-1/2 mx-auto py-2 rounded-lg">{loading ? "Updating..." : "Update changes"}</button>
         </div>
       </form >
     </div >
