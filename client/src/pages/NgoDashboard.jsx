@@ -18,7 +18,7 @@ const NgoDashboard = () => {
     const renderContent = () => {
         switch (isSelected) {
             case "overview":
-                return <Overview />
+                return <Overview setIsSelected={setIsSelected} />
             case "listing":
                 return <Listing isMenuOpen={isMenuOpen} />
             case "collection":

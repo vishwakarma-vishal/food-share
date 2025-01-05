@@ -77,7 +77,6 @@ const NgoSignup = () => {
                 login(data.role, data.token);
 
                 toast.success("Signed up successfully.");
-                console.log(data);
                 navigate('/ngo-dashboard');
             }
         } catch (e) {

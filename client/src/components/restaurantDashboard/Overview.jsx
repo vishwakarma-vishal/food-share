@@ -6,10 +6,10 @@ const Overview = ({ setIsSelected }) => {
 
     // convert time to required format (12:08 AM)
     const convertTo12HourFormat = (time) => {
-        if (!time) return '';
+        if (!time) return "";
 
-        const [hour, minute] = time.split(':');
-        const ampm = hour >= 12 ? 'PM' : 'AM';
+        const [hour, minute] = time.split(":");
+        const ampm = hour >= 12 ? "PM" : "AM";
         const hour12 = hour % 12 || 12;
 
         return `${hour12}:${minute} ${ampm}`;
@@ -34,10 +34,12 @@ const Overview = ({ setIsSelected }) => {
                         )}
                     </h3>
 
-                    <p>Email: {user.email}</p>
-                    <p>Contact: {user.phone}</p>
-                    <p>City: {user.city}</p>
-                    <p>Address: {user.address}</p>
+                    <div className="mt-1">
+                        <p className="font-semibold ">Email: <span className="font-normal">{user.email}</span></p>
+                        <p className="font-semibold ">Phone: <span className="font-normal">{user.phone}</span></p>
+                        <p className="font-semibold ">City: <span className="font-normal">{user.city}</span></p>
+                        <p className="font-semibold ">Address: <span className="font-normal">{user.address}</span></p>
+                    </div>
                 </div>
                 <button className="inline-block ml-auto bg-green-500 py-1 px-4 rounded-md text-white font-semibold hover:bg-green-600 transition-bg duration-200"
                     onClick={() => setIsSelected("profile")}
