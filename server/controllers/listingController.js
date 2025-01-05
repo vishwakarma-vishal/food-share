@@ -22,20 +22,26 @@ createFoodListing = async (req, res) => {
             title: z.string()
                 .trim()
                 .min(3, "Title must be at least 3 characters")
-                .max(200, "Title cannot exceed 200 characters"),
+                .max(100, "Title cannot exceed 100 characters"),
             category: z.enum(['veg', 'non-veg'], "Category must be either 'veg' or 'non-veg'"),
+            expiry: z.string()
+                .trim()
+                .regex(/^\d{4}-\d{2}-\d{2}$/, "Expiry Date must be in YYYY-MM-DD format"), // Corrected regex for YYYY-MM-DD
+            pickupFrom: z.string()
+                .trim()
+                .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "Invalid time format"),
+            pickupTill: z.string()
+                .trim()
+                .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "Invalid time format"),
             description: z.string()
                 .trim()
                 .min(3, "Description must be at least 3 characters")
                 .max(300, "Description cannot exceed 300 characters"),
             deliveryNote: z.string()
                 .trim()
-                .min(3, "Delivery Note must be at least 3 characters")
-                .max(300, "Delivery Note cannot exceed 300 characters")
+                // .min(3, "Delivery Note must be at least 3 characters")
+                .max(100, "Delivery Note cannot exceed 100 characters")
                 .optional(),
-            expiry: z.string()
-                .trim()
-                .regex(/^\d{4}-\d{2}-\d{2}$/, "Expiry Date must be in YYYY-MM-DD format"), // Corrected regex for YYYY-MM-DD
         });
         const sanitizedData = foodListingSchema.parse(data);
 
@@ -48,11 +54,11 @@ createFoodListing = async (req, res) => {
         }
 
         // img upload
-        let secure_url = userInDb.imageUrl;
-        let public_id = userInDb.imgPublicId;
+        let secure_url;
+        let public_id;
 
         if (file) {
-            const result = await cloudinaryUpload(file, "food-share/listing", public_id);
+            const result = await cloudinaryUpload(file, "food-share/listing");
             secure_url = result.secure_url;
             public_id = result.public_id;
         }
@@ -119,7 +125,7 @@ updateFoodListingById = async (req, res) => {
         const ListingId = req.params.id;
         const file = req.files?.listingImg;
 
-        if(!req.body.data) {
+        if (!req.body.data) {
             return res.status(400).json({
                 success: false,
                 message: "Missing data in requrest body."
@@ -259,7 +265,7 @@ deleteFoodListingById = async (req, res) => {
         }
 
         // delete from db and cloudinary
-        const deletedListing = await FoodListing.findByIdAndDelete(ListingId); 
+        const deletedListing = await FoodListing.findByIdAndDelete(ListingId);
         const deleteImg = await cloudinary.uploader.destroy(deletedListing.imgPublicId);
 
         res.status(200).json({

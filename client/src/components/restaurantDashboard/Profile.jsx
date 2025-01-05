@@ -103,11 +103,11 @@ const Profile = () => {
         {/* first row */}
         <div className="flex gap-6">
           {/* image */}
-          <div className="basis-5/12 w-full h-[160px] rounded-lg"> 
+          <div className="basis-6/12 w-full h-[180px] rounded-lg"> 
             {
               previewImg ?
                 <div className="relative h-full">
-                  <img src={previewImg} className="rounded-lg h-full object-cover"></img>
+                  <img src={previewImg} className="rounded-lg h-full w-full border"></img>
                   <button
                     type="button"
                     className="absolute top-2 -left-1 text-xs bg-green-600 text-white p-1 rounded-sm"
@@ -122,7 +122,7 @@ const Profile = () => {
                     className="hidden"
                     onChange={changeHandler}
                   />
-                  <label htmlFor="fileInput" className="w-full h-full flex flex-col justify-center items-center cursor-pointer text-gray-800 rounded-md text-center border">
+                  <label htmlFor="fileInput" className="w-full h-full flex flex-col justify-center items-center cursor-pointer text-gray-800 rounded-md text-center border bg-gray-200">
                     <FiUploadCloud className="text-3xl" />
                     <span className="text-xs">Upload new image</span>
                   </label>

@@ -24,7 +24,7 @@ const RestaurantDashboard = () => {
             case "donation-history":
                 return <DonationHistory />
             case "new-donation":
-                return <NewDonation />
+                return <NewDonation  setIsSelected={setIsSelected}/>
             case "profile":
                 return <Profile />
             default:
