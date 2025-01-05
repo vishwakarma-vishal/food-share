@@ -20,7 +20,9 @@ const NewDonation = ({ setIsSelected }) => {
     const changeHandler = (e) => {
         const value = e.target.value;
         const name = e.target.name;
-
+        
+        console.log(formData);
+        
         if (e.target.type === 'file') {
             const file = e.target.files[0];
             setImageFile(file);

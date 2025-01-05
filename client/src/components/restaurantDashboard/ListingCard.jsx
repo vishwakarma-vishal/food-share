@@ -1,36 +1,94 @@
+import useAuth from "../../utils/useAuth";
+import EditListingModal from './EditListingModal';
 
-const ListingCard = ({ foodListing }) => {
+const ListingCard = ({ foodListing, handleDelete, isModalOpen, setIsModalOpen, getMyFoodListings }) => {
+    const { auth } = useAuth();
+    const address = auth.safeUser?.address;
+
+    // format date like 1-jan-2025
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const day = date.getDate();
+        const month = date.toLocaleString('default', { month: 'short' });
+        const year = date.getFullYear();
+        return `${day}-${month}-${year}`;
+    };
+
+    // format time from 24 hours to 12 hours format
+    const formatTime = (time) => {
+        let [hours, minutes] = time.split(':').map(Number);
+        let ampm = "AM";
+
+        if (hours === 0) {
+            hours = 12;
+        } else if (hours === 12) {
+            ampm = "PM";
+        } else if (hours > 12) {
+            hours = hours % 12;
+            ampm = "PM";
+        }
+
+        return `${hours}:${minutes < 10 ? '0' + minutes : minutes} ${ampm}`;
+    }
+
     return (
-        <div className="relative bg-white p-4 rounded-lg flex flex-col gap-1 shadow-lg flex flex-col justify-between">
-            <img src={foodListing.imageUrl} alt="food listing image" className="relative w-full h-40 rounded-lg" />
+        <div className=" bg-white p-4 rounded-lg flex flex-col gap-1 shadow-lg flex flex-col justify-between">
+            {/* image and delivery note */}
+            <div className="relative w-full h-full">
+                <img src={foodListing.imageUrl} alt="food listing image" className="w-full h-40 rounded-lg" />
 
+                {/* absolute posioned pickup note */}
+                {foodListing.deliveryNote && <p className="absolute top-2 -left-2 bg-gray-300 p-2 rounded-sm text-xs font-semibold">Delivery Note: <span className="font-normal text-gray-600">{foodListing.deliveryNote}</span></p>}
+            </div>
+
+            {/* details */}
             <div className="my-2 flex flex-col gap-y-1">
-                <h3 className="font-semibold">{foodListing.name}</h3>
+                <h3 className="font-semibold">{foodListing.title}</h3>
                 <p className="text-gray-600 text-sm">{foodListing.description}</p>
 
                 <div className="mt-1 flex flex-col gap-y-1">
-                    <p className="text-sm font-semibold">Category: <span className="font-normal text-gray-600">{foodListing.category}</span></p>
-                    <p className="text-sm font-semibold">Expiry: <span className="font-normal text-gray-600">{foodListing.expiry}</span></p>
-                    <p className="text-sm font-semibold">Pickup Time: <span className="font-normal text-gray-600">{foodListing.pickupFrom} - {foodListing.pickupTillTime}</span></p>
-                    <p className="text-sm font-semibold">Address: <span className="font-normal text-gray-600">{foodListing.address}</span></p>
+                    <p className="text-sm font-semibold">
+                        Category:
+                        <span className="font-normal text-gray-600"> {foodListing.category}</span>
+                    </p>
+                    <p className="text-sm font-semibold">
+                        Expiry:
+                        <span className="font-normal text-gray-600"> {formatDate(foodListing.expiry)}</span>
+                    </p>
+                    <p className="text-sm font-semibold">
+                        Pickup Time:
+                        <span className="font-normal text-gray-600"> {formatTime(foodListing.pickupFrom)} - {formatTime(foodListing.pickupTill)}</span>
+                    </p>
+                    <p className="text-sm font-semibold">
+                        Address:
+                        <span className="font-normal text-gray-600"> {address}</span>
+                    </p>
                 </div>
             </div>
 
-            {/* absolute posioned pickup note */}
-            {foodListing.pickupNote && <p className="absolute top-32 left-2 bg-gray-300 p-2 rounded-sm text-xs font-semibold">Pickup Note: <span className="font-normal text-gray-600">{foodListing.pickupNote}</span></p>}
+            {/* mark collected action will appears when an ngo reserved a food */}
+            {
+                foodListing.status.toLowerCase() == "reserved" &&
+                <button
+                    className="py-1 rounded-full text-white bg-yellow-600"
+                >
+                    Mark Collected
+                </button>
+            }
 
-            <button
-                className={`py-1 rounded-sm text-white
-                ${foodListing.status.toLowerCase() == "available" && "bg-green-600"}
-                ${foodListing.status.toLowerCase() == "reserved" && "bg-yellow-600"}
-                ${foodListing.status.toLowerCase() == "collected" && "bg-gray-600"}`}
-            >{foodListing.status}
-            </button>
-
+            {/* buttons */}
             <div className="mt-2 w-full flex gap-4">
-                <button className="py-1 rounded-sm text-white bg-green-600 w-full rounded-sm">Edit</button>
-                <button className="py-1 rounded-sm text-white bg-red-600 w-full rounded-sm">Delete</button>
+                <button onClick={() => setIsModalOpen(true)} className="py-1 text-white bg-green-600 w-full rounded-full">Edit</button>
+                <button onClick={() => handleDelete(foodListing._id)} className="py-1 text-white bg-red-600 w-full rounded-full">Delete</button>
             </div>
+
+            {/* editing modal */}
+            {isModalOpen &&
+                <EditListingModal
+                    foodListing={foodListing}
+                    setIsModalOpen={setIsModalOpen}
+                    getMyFoodListings={getMyFoodListings} />
+            }
         </div>
     );
 }

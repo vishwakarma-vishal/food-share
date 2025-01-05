@@ -20,11 +20,11 @@ const RestaurantDashboard = () => {
             case "overview":
                 return <Overview setIsSelected={setIsSelected} />
             case "listing":
-                return <MyListing isMenuOpen={isMenuOpen} />
+                return <MyListing isMenuOpen={isMenuOpen} isSelected={isSelected}  setIsSelected={setIsSelected} />
             case "donation-history":
                 return <DonationHistory />
             case "new-donation":
-                return <NewDonation  setIsSelected={setIsSelected}/>
+                return <NewDonation setIsSelected={setIsSelected}/>
             case "profile":
                 return <Profile />
             default:

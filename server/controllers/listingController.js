@@ -274,6 +274,7 @@ deleteFoodListingById = async (req, res) => {
             deletedListingId: deletedListing._id
         });
     } catch (err) {
+        console.log(err);
         res.status(500).json({
             success: false,
             message: "Something went wrong."

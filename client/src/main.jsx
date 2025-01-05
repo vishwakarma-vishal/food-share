@@ -12,7 +12,8 @@ createRoot(document.getElementById('root')).render(
       <RecoilRoot>
         <App />
       </RecoilRoot>
-      <ToastContainer />
+      <ToastContainer 
+      position="bottom-right"/>
     </BrowserRouter>
   </StrictMode>,
 )
