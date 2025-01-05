@@ -4,6 +4,15 @@ const Overview = ({ setIsSelected }) => {
     const { auth } = useAuth();
     const user = auth.safeUser;
 
+    // format date like 1-jan-2025
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const day = date.getDate();
+        const month = date.toLocaleString('default', { month: 'short' });
+        const year = date.getFullYear();
+        return `${day}-${month}-${year}`;
+    };
+
     return (
         < div className="flex flex-col gap-6" >
             <div>
@@ -22,7 +31,7 @@ const Overview = ({ setIsSelected }) => {
                 <div className="flex flex-col gap-y-1 text-gray-700">
                     <h3 className="text-2xl font-semibold text-gray-800">
                         {user.ngoName}
-                        {user.foundingDate && <span className="text-xs text-gray-800 italic"> since {user.foundingDate}</span>}
+                        {user.foundingDate && <span className="text-xs text-gray-800 italic"> since {formatDate(user.foundingDate)}</span>}
                     </h3>
 
                     <div className="mt-1">

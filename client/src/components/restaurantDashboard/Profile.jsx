@@ -6,8 +6,8 @@ import { toast } from "react-toastify";
 
 const Profile = () => {
   const { auth, updateUser } = useAuth();
-  const user = auth.safeUser;
-  const [previewImg, setPreviewImg] = useState(user.profileImg);
+  const user = auth.safeUser || {};
+  const [previewImg, setPreviewImg] = useState(user.profileImg || "");
   const [selectedFile, setSelectedFile] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -48,7 +48,7 @@ const Profile = () => {
     const formDataToSend = new FormData();
     formDataToSend.append('data', JSON.stringify(formData));
     if (selectedFile) {
-      formDataToSend.append('restaurantImg', selectedFile);
+      formDataToSend.append('ngoImg', selectedFile);
     }
 
     try {
@@ -69,6 +69,7 @@ const Profile = () => {
       if (data.success) {
         toast.success("User updated sucessfully");
         updateUser(updatedUser);
+        
       }
 
       setLoading(false);
@@ -239,8 +240,8 @@ const Profile = () => {
         </div>
 
         <div className="flex gap-4">
-          <button className="mt-4 block bg-gray-600 text-white font-semibold w-1/2 mx-auto py-2 rounded-lg" onClick={resetForm}>Reset Form</button>
-          <button type="submit" className="mt-4 block bg-green-600 text-white font-semibold w-1/2 mx-auto py-2 rounded-lg">{loading ? "Updating..." : "Update changes"}</button>
+          <button className="mt-4 block bg-gray-600 text-white font-semibold w-1/2 mx-auto py-2 rounded-lg" onClick={resetForm} disabled={loading}>Reset Form</button>
+          <button type="submit" className="mt-4 block bg-green-600 text-white font-semibold w-1/2 mx-auto py-2 rounded-lg" disabled={loading}>{loading ? "Updating..." : "Update changes"}</button>
         </div>
       </form >
     </div >

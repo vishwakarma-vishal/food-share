@@ -124,30 +124,34 @@ const updateNgoProfile = async (req, res) => {
             ngoName: z.string()
                 .trim()
                 .min(3, "NGO Name must be at least 3 characters")
-                .max(100, "NGO Name cannot exceed 100 characters")
-                .optional(),
+                .max(100, "NGO Name cannot exceed 100 characters"),
             about: z.string()
                 .trim()
                 .min(6, "About must be at least 6 characters")
                 .max(100, "About cannot exceed 100 characters")
-                .optional(),
+                .or(z.literal('')),
             foundingDate: z.string()
                 .trim()
                 .regex(/^\d{4}-\d{2}-\d{2}$/, "Founding Date must be in YYYY-MM-DD format")
-                .optional(),
+                .or(z.literal('')),
             city: z.string()
                 .trim()
                 .min(3, "City must be at least 3 characters")
-                .max(50, "City cannot exceed 50 characters")
-                .optional(),
+                .max(50, "City cannot exceed 50 characters"),
             address: z.string()
                 .trim()
                 .min(3, "Address must be at least 3 characters")
-                .max(200, "Address cannot exceed 200 characters")
-                .optional(),
+                .max(200, "Address cannot exceed 200 characters"),
         });
 
         const sanitizedData = updateNgoProfileSchema.parse(data);
+
+        // Set fields with empty strings to null
+        Object.keys(sanitizedData).forEach(key => {
+            if (sanitizedData[key] === "") {
+                sanitizedData[key] = null;
+            }
+        });
 
         const userInDb = await Ngo.findById(ngoId);
         if (!userInDb) {
@@ -180,10 +184,14 @@ const updateNgoProfile = async (req, res) => {
             { new: true }
         );
 
+         // creating safe user obj to send in response
+         const userObject = updatedUserInDb.toObject();
+         const { _id, role, password, __v, createdAt, ...safeUser } = userObject;
+
         res.status(200).json({
             success: true,
             message: "Profile updated successfully.",
-            updatedUserInDb,
+            safeUser,
         });
     } catch (error) {
         // console.log("Error->", error);
