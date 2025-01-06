@@ -4,6 +4,7 @@ const Ngo = require("../models/Ngo");
 const { z } = require("zod");
 const cloudinaryUpload = require("../utils/cloudinaryUpload");
 
+
 // Reserve food
 const addListingToCollection = async (req, res) => {
     const { FoodListingId } = req.body;
@@ -56,7 +57,7 @@ const addListingToCollection = async (req, res) => {
 // Get all food Listings
 const getAllFoodListing = async (req, res) => {
     try {
-        const foodListings = await FoodListing.find();
+        const foodListings = await FoodListing.find().populate('restaurantId', 'address restaurantName');
 
         if (!foodListings || foodListings.length === 0) {
             return res.status(404).json({
@@ -64,6 +65,10 @@ const getAllFoodListing = async (req, res) => {
                 message: "No food listings found.",
             });
         }
+
+        const restaurantId = foodListings.map((listing)=>{
+            return listing.restaurantId;
+        });
 
         res.status(200).json({
             success: true,
