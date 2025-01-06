@@ -1,5 +1,7 @@
 import useAuth from "../../utils/useAuth";
 import EditListingModal from './EditListingModal';
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const ListingCard = ({ foodListing, handleDelete, isModalOpen, setIsModalOpen, getMyFoodListings }) => {
     const { auth } = useAuth();
@@ -29,6 +31,37 @@ const ListingCard = ({ foodListing, handleDelete, isModalOpen, setIsModalOpen, g
         }
 
         return `${hours}:${minutes < 10 ? '0' + minutes : minutes} ${ampm}`;
+    }
+
+    // mark food as collected
+    const collectHandler = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await axios({
+                url: "http://localhost:3001/restaurant/history",
+                method: "post",
+                data: {
+                    foodListingId: foodListing._id,
+                },
+                headers: {
+                    "content-type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                }
+            });
+
+            if (response.data.success) {
+                toast.success("Mark collected successfully.");
+                getMyFoodListings();
+            } else {
+                toast.info("Unable to mark collected.");
+            }
+            console.log(response);
+        } catch (error) {
+            console.log(error);
+            toast.error("Something went wrong, try again later.");
+        }
+
     }
 
     return (
@@ -70,6 +103,7 @@ const ListingCard = ({ foodListing, handleDelete, isModalOpen, setIsModalOpen, g
             {
                 foodListing.status.toLowerCase() == "reserved" &&
                 <button
+                    onClick={collectHandler}
                     className="py-1 rounded-full text-white bg-yellow-600"
                 >
                     Mark Collected
