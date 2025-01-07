@@ -66,7 +66,7 @@ const getAllFoodListing = async (req, res) => {
             });
         }
 
-        const restaurantId = foodListings.map((listing)=>{
+        const restaurantId = foodListings.map((listing) => {
             return listing.restaurantId;
         });
 
@@ -88,7 +88,15 @@ const getCollectionHistory = async (req, res) => {
     const ngoId = req.ngoId;
 
     try {
-        const collectionHistory = await CollectionHistory.find({ ngoId: ngoId });
+        const collectionHistory = await CollectionHistory.find({ ngoId: ngoId })
+        .populate({
+            path: "foodListingId",
+            select: "title category expiry restaurantId",
+            populate: {
+                path: "restaurantId",
+                select: "restaurantName"
+            }
+        });
 
         if (!collectionHistory || collectionHistory.length == 0) {
             return res.status(404).json({
@@ -103,6 +111,7 @@ const getCollectionHistory = async (req, res) => {
             collectionHistory
         });
     } catch (err) {
+        console.log(err);
         res.status(500).json({
             success: false,
             message: "Something went wrong."
@@ -189,9 +198,9 @@ const updateNgoProfile = async (req, res) => {
             { new: true }
         );
 
-         // creating safe user obj to send in response
-         const userObject = updatedUserInDb.toObject();
-         const { _id, role, password, __v, createdAt, ...safeUser } = userObject;
+        // creating safe user obj to send in response
+        const userObject = updatedUserInDb.toObject();
+        const { _id, role, password, __v, createdAt, ...safeUser } = userObject;
 
         res.status(200).json({
             success: true,

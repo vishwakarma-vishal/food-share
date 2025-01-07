@@ -1,140 +1,57 @@
-import React from 'react'
-import { useState } from 'react';
-
-export const collectionHistory = [
-  {
-    id: 1,
-    foodName: 'Rice and Lentils',
-    type: 'Veg',
-    expiry: '2024-11-28',
-    pickupDate: '2024-10-12',
-    restaurantName: 'Helping Hands NGO',
-  },
-  {
-    id: 2,
-    foodName: 'Chicken Curry',
-    type: 'Non-Veg',
-    expiry: '2024-11-27',
-    pickupDate: '2024-10-12',
-    restaurantName: 'Food For All',
-  },
-  {
-    id: 3,
-    foodName: 'Vegetable Biryani',
-    type: 'Veg',
-    expiry: '2024-11-29',
-    pickupDate: '2024-10-12',
-    restaurantName: 'Care Foundation',
-  },
-  {
-    id: 4,
-    foodName: 'Fruit Basket',
-    type: 'Veg',
-    expiry: '2024-11-30',
-    pickupDate: '2024-10-12',
-    restaurantName: 'Charity Aid',
-  },
-  {
-    id: 5,
-    foodName: 'Fish Curry',
-    type: 'Non-Veg',
-    expiry: '2024-12-01',
-    pickupDate: '2024-10-12',
-    restaurantName: 'Helping Hands NGO',
-  },
-  {
-    id: 6,
-    foodName: 'Bread and Butter',
-    type: 'Veg',
-    expiry: '2024-11-28',
-    pickupDate: '2024-10-12',
-    restaurantName: 'Good Samaritan Trust',
-  },
-  {
-    id: 7,
-    foodName: 'Egg Curry',
-    type: 'Non-Veg',
-    expiry: '2024-11-29',
-    pickupDate: '2024-10-12',
-    restaurantName: 'Care Foundation',
-  },
-  {
-    id: 8,
-    foodName: 'Mixed Vegetable Curry',
-    type: 'Veg',
-    expiry: '2024-12-02',
-    pickupDate: '2024-10-12',
-    restaurantName: 'Helping Hands NGO',
-  },
-  {
-    id: 9,
-    foodName: 'Mutton Stew',
-    type: 'Non-Veg',
-    expiry: '2024-12-03',
-    pickupDate: '2024-10-12',
-    restaurantName: 'Food For All',
-  },
-  {
-    id: 10,
-    foodName: 'Dal Tadka',
-    type: 'Veg',
-    expiry: '2024-12-01',
-    pickupDate: '2024-10-12',
-    restaurantName: 'Charity Aid',
-  },
-  {
-    id: 11,
-    foodName: 'Paneer Butter Masala',
-    type: 'Veg',
-    expiry: '2024-11-28',
-    pickupDate: '2024-10-12',
-    restaurantName: 'Helping Hands NGO',
-  },
-  {
-    id: 12,
-    foodName: 'Grilled Chicken',
-    type: 'Non-Veg',
-    expiry: '2024-11-29',
-    pickupDate: '2024-10-12',
-    restaurantName: 'Care Foundation',
-  },
-  {
-    id: 13,
-    foodName: 'Spinach Soup',
-    type: 'Veg',
-    expiry: '2024-11-30',
-    pickupDate: '2024-10-12',
-    restaurantName: 'Good Samaritan Trust',
-  },
-  {
-    id: 14,
-    foodName: 'Vegetable Fried Rice',
-    type: 'Veg',
-    expiry: '2024-12-01',
-    pickupDate: '2024-10-12',
-    restaurantName: 'Charity Aid',
-  },
-  {
-    id: 15,
-    foodName: 'Chicken Sandwich',
-    type: 'Non-Veg',
-    expiry: '2024-12-02',
-    pickupDate: '2024-10-12',
-    restaurantName: 'Food For All',
-  },
-];
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'; // Combined useState import
+import { toast } from 'react-toastify';
 
 export const Collection = () => {
+  const [collectionHistory, setCollectionHistory] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [currentHistory, setCurrentHistory] = useState(collectionHistory);
+  const [currentHistory, setCurrentHistory] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // fetch collection history
+  const getCollectionHistory = async () => {
+    try {
+      const response = await axios({
+        url: "http://localhost:3001/ngo/collection",
+        method: "get",
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
+        }
+      });
+
+      setCollectionHistory(response.data.collectionHistory);
+
+      const sortedHistory = [...response.data.collectionHistory].sort((a, b) => new Date(a.foodListingId.expiry) - new Date(b.foodListingId.expiry));
+      setCurrentHistory(sortedHistory);
+
+    } catch (error) {
+      console.log(error);
+      toast.error("Unable to collect history, try again later.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    getCollectionHistory();
+  }, []);
+
+  // format date like 1-jan-2025
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = date.toLocaleString('default', { month: 'short' });
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
 
   // search
   const searchInHistory = (e) => {
     const searchTerm = e.target.value;
 
     const newArray = collectionHistory.filter(item =>
-      item.foodName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.restaurantName.toLowerCase().includes(searchTerm.toLowerCase()));
+      item.foodListingId.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.foodListingId.restaurantId.restaurantName.toLowerCase().includes(searchTerm.toLowerCase()));
 
     setCurrentHistory(newArray);
   }
@@ -143,9 +60,9 @@ export const Collection = () => {
   const sortHistory = (e) => {
     const type = e.target.value;
 
-    if (type == "expiry") {
+    if (type === "expiry") {
       sortByExpiry();
-    } else if (type == "pickup-date") {
+    } else if (type === "pickup-date") {
       sortByPickupDate();
     } else {
       sortByName();
@@ -153,20 +70,20 @@ export const Collection = () => {
   }
 
   const sortByExpiry = () => {
-    const newArray = [...currentHistory].sort((a, b) => new Date(a.expiry) - new Date(b.expiry));
+    const newArray = [...currentHistory].sort((a, b) => new Date(a.foodListingId.expiry) - new Date(b.foodListingId.expiry));
     setCurrentHistory(newArray);
   }
 
   const sortByPickupDate = () => {
-    const newArray = [...currentHistory].sort((a, b) => new Date(a.pickupDate) - new Date(b.pickupDate));
+    const newArray = [...currentHistory].sort((a, b) => new Date(b.collectedAt) - new Date(a.collectedAt));
     setCurrentHistory(newArray);
   }
 
   const sortByName = () => {
     const newArray = [...currentHistory]
       .sort(function (a, b) {
-        let x = a.foodName.toLowerCase();
-        let y = b.foodName.toLowerCase();
+        let x = a.foodListingId.title.toLowerCase();
+        let y = b.foodListingId.title.toLowerCase();
         if (x < y) { return -1; }
         if (x > y) { return 1; }
         return 0;
@@ -174,7 +91,7 @@ export const Collection = () => {
     setCurrentHistory(newArray);
   }
 
-  const rowsPerPage = 7; // we can change as per the requirment
+  const rowsPerPage = 7; // we can change as per the requirement
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
   const currentRows = currentHistory.slice(indexOfFirstRow, indexOfLastRow);
@@ -185,13 +102,18 @@ export const Collection = () => {
   const goToPrevPage = () => setCurrentPage(prev => Math.max(prev - 1, 1));
 
   return (
-    <div className="flex flex-col gap-y-6">
+    <div className="flex flex-col h-full">
       {/* filters */}
       <div className="flex justify-between">
         <h2 className="font-semibold text-2xl">Collection History</h2>
 
         <form className="flex items-center gap-4">
-          <input type="text" placeholder="Search by Food or Restaurant..." className="p-2 w-56  text-sm rounded-lg border outline-none" onChange={searchInHistory} />
+          <input
+            type="text"
+            placeholder="Search by Food or Restaurant..."
+            className="p-2 w-56  text-sm rounded-lg border outline-none"
+            onChange={searchInHistory}
+          />
           <label htmlFor="sort" className="font-medium">Sort By</label>
           <select id="sort" className="py-2 px-4 rounded-lg border outline-none" onChange={sortHistory}>
             <option value="expiry">Expiry</option>
@@ -202,40 +124,53 @@ export const Collection = () => {
       </div>
 
       {/* data */}
-      <div>
-        <table className="w-full rounded-lg border-collapse shadow-xl bg-white">
-          <thead>
-            <tr className="bg-gray-200 text-left text-sm font-medium text-gray-700">
-              <th className="border-b p-3">Food Name</th>
-              <th className="border-b p-3">Type</th>
-              <th className="border-b p-3">Expiry</th>
-              <th className="border-b p-3">Pickup Date</th>
-              <th className="border-b p-3">Restaurant Name</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentRows.map((collection) => {
-              return (
-                <tr key={collection.id} className="text-left text-sm text-gray-800 hover:bg-gray-200">
-                  <td className="border-b p-3">{collection.foodName}</td>
-                  <td className="border-b p-3">{collection.type}</td>
-                  <td className="border-b p-3">{collection.expiry}</td>
-                  <td className="border-b p-3">{collection.pickupDate}</td>
-                  <td className="border-b p-3">{collection.restaurantName}</td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-      </div>
+      {
+        loading ?
+          <div className="text-gray-500 flex justify-center items-center h-full">Loading...</div>
+          : collectionHistory.length === 0 ?
+            <div className="text-gray-500 flex justify-center items-center h-full">Ooops, You haven't collected any food yet.</div>
+            :
+            <div>
+              <div>
+                <div className="bg-yellow-100 text-yellow-900 my-6 p-4 rounded-lg shadow-sm text-sm">
+                  Foods that are expiring soon is on the top by default, try to distribute them first before they got expired. 
+                </div>
 
-      {/* pagination */}
-      <div className="flex gap-4 items-center">
-        <button onClick={goToPrevPage} className="bg-green-600 py-1 px-4 rounded-lg text-white">Previous</button>
-        <button onClick={goToNextPage} className="bg-blue-600 py-1 px-4 rounded-lg text-white">Next</button>
+                <table className="w-full rounded-lg border-collapse shadow-xl bg-white">
+                  <thead>
+                    <tr className="bg-gray-200 text-left text-sm font-medium text-gray-700">
+                      <th className="border-b p-3">Food Name</th>
+                      <th className="border-b p-3">Category</th>
+                      <th className="border-b p-3">Expiry</th>
+                      <th className="border-b p-3">Pickup Date</th>
+                      <th className="border-b p-3">Restaurant Name</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {currentRows.map((collection) => {
+                      return (
+                        <tr key={collection._id} className="text-left text-sm text-gray-800 hover:bg-gray-200">
+                          <td className="border-b p-3">{collection.foodListingId.title}</td>
+                          <td className="border-b p-3">{collection.foodListingId.category}</td>
+                          <td className="border-b p-3">{formatDate(collection.foodListingId.expiry)}</td>
+                          <td className="border-b p-3">{formatDate(collection.collectedAt)}</td>
+                          <td className="border-b p-3">{collection.foodListingId.restaurantId.restaurantName}</td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
 
-        <span className="ml-auto text-sm">Page {currentPage} of {totalPages}</span>
-      </div>
+              {/* pagination */}
+              <div className="flex gap-4 items-center mt-6">
+                <button onClick={goToPrevPage} className="bg-green-600 py-1 px-4 rounded-lg text-white">Previous</button>
+                <button onClick={goToNextPage} className="bg-blue-600 py-1 px-4 rounded-lg text-white">Next</button>
+
+                <span className="ml-auto text-sm">Page {currentPage} of {totalPages}</span>
+              </div>
+            </div>
+      }
     </div>
   )
 }
