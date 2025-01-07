@@ -126,11 +126,11 @@ const MyListing = ({ isMenuOpen }) => {
                 className={`grid ${isMenuOpen ? "grid-cols-3" : "grid-cols-4"} gap-4 mt-6`}>
                 {
                     foodListings.length === 0 ?
-                        <div className="text-center text-red-400">
+                        <div className="text-center text-gray-400">
                             No foods are available as of now, check after some time.
                         </div> :
                         currentListings.length == 0 ?
-                            <div className="text-center text-red-400">
+                            <div className="text-center text-gray-400">
                                 The filtered result not available, Choose a different filter.
                             </div> :
                             // dispalying all food listings here
