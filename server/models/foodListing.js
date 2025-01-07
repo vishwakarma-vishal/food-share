@@ -11,7 +11,7 @@ const FoodListingSchema = new mongoose.Schema({
     expiry: { type: Date, required: true },
     pickupFrom: { type: String, required: true },
     pickupTill: { type: String, required: true },
-    reservedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'Ngo' },
+    reservedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'ngo' },
     reservedAt: { type: Date },
     status: { type: String, enum: ['available', 'reserved', 'collected', 'expired'], default: 'available' },
     createdAt: { type: Date, default: Date.now }

@@ -2,6 +2,7 @@ const DonationHistory = require("../models/DonationHistory");
 const FoodListing = require("../models/FoodListing");
 const CollectionHistory = require("../models/CollectionHistory");
 const Restaurant = require("../models/Restaurant");
+const Ngo = require("../models/Ngo");
 const { z } = require("zod");
 const cloudinaryUpload = require("../utils/cloudinaryUpload");
 
@@ -102,7 +103,15 @@ const getDonationHistory = async (req, res) => {
     }
 
     try {
-        const donationHistory = await DonationHistory.find();
+        const donationHistory = await DonationHistory.find({ restaurantId: restaurantId })
+            .populate({
+                path: "foodListingId",
+                select: "title reservedBy",
+                populate: {
+                    path: "reservedBy",
+                    select: "ngoName"
+                }
+            });
 
         if (!donationHistory || donationHistory.length == 0) {
             return res.status(404).json({
@@ -201,9 +210,9 @@ updateRestaurantProfile = async (req, res) => {
             { new: true }
         );
 
-         // creating safe user obj to send in response
-         const userObject = updatedUserInDb.toObject();
-         const { _id, role, password, __v, createdAt, ...safeUser } = userObject;
+        // creating safe user obj to send in response
+        const userObject = updatedUserInDb.toObject();
+        const { _id, role, password, __v, createdAt, ...safeUser } = userObject;
 
         res.status(200).json({
             success: true,
