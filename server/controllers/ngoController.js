@@ -274,5 +274,40 @@ const addToDistributionHistory = async (req, res) => {
     }
 };
 
+// get distribution history
+const getDistributionHistory = async (req, res) => {
+    const ngoId = req.ngoId;
 
-module.exports = { addListingToCollection, getCollectionHistory, getAllFoodListing, updateNgoProfile, addToDistributionHistory }
+    try {
+        const distributionHistory = await DistributionHistory.find({ ngoId: ngoId })
+            .populate({
+                path: "foodListingId",
+                select: "title category expiry reservedAt restaurantId",
+                populate: {
+                    path: "restaurantId",
+                    select: "restaurantName"
+                }
+            });
+
+        if (!distributionHistory || distributionHistory.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "Distribution History not found."
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            distributionHistory
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: "Something went wrong."
+        });
+    }
+}
+
+
+module.exports = { addListingToCollection, getCollectionHistory, getAllFoodListing, updateNgoProfile, addToDistributionHistory, getDistributionHistory }

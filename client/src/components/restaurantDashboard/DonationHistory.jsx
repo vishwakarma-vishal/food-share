@@ -43,7 +43,7 @@ const DonationHistory = () => {
         return `${day}-${month}-${year}`;
     };
 
-    // experiment
+    // apply filter
     const applyFilter = () => {
         let filteredHistory = [...donationHistory];
 

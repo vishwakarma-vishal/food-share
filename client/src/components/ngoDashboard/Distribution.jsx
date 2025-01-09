@@ -5,25 +5,25 @@ import { toast } from 'react-toastify';
 // food name, collected from, category, expiry, distribution date, distribution note
 
 export const Distribution = () => {
-  const [collectionHistory, setCollectionHistory] = useState([]);
+  const [distributionHistory, setDistributionHistory] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentHistory, setCurrentHistory] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // fetch distribution history
-  const getCollectionHistory = async () => {
+  const getDistributionHistory = async () => {
     try {
       const response = await axios({
-        url: "http://localhost:3001/ngo/collection",
+        url: "http://localhost:3001/ngo/distribution-history",
         method: "get",
         headers: {
           "Authorization": `Bearer ${localStorage.getItem("token")}`
         }
       });
 
-      setCollectionHistory(response.data.collectionHistory);
+      setDistributionHistory(response.data.distributionHistory);
 
-      const sortedHistory = [...response.data.collectionHistory].sort((a, b) => new Date(a.foodListingId.expiry) - new Date(b.foodListingId.expiry));
+      const sortedHistory = [...response.data.distributionHistory].sort((a, b) => new Date(a.foodListingId.expiry) - new Date(b.foodListingId.expiry));
       setCurrentHistory(sortedHistory);
 
     } catch (error) {
@@ -35,7 +35,7 @@ export const Distribution = () => {
   }
 
   useEffect(() => {
-    getCollectionHistory();
+    getDistributionHistory();
   }, []);
 
   // format date like 1-jan-2025
@@ -51,7 +51,7 @@ export const Distribution = () => {
   const searchInHistory = (e) => {
     const searchTerm = e.target.value;
 
-    const newArray = collectionHistory.filter(item =>
+    const newArray = distributionHistory.filter(item =>
       item.foodListingId.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.foodListingId.restaurantId.restaurantName.toLowerCase().includes(searchTerm.toLowerCase()));
 
@@ -72,17 +72,17 @@ export const Distribution = () => {
   }
 
   const sortByExpiry = () => {
-    const newArray = [...currentHistory].sort((a, b) => new Date(a.foodListingId.expiry) - new Date(b.foodListingId.expiry));
+    const newArray = [...distributionHistory].sort((a, b) => new Date(a.foodListingId.expiry) - new Date(b.foodListingId.expiry));
     setCurrentHistory(newArray);
   }
 
   const sortByPickupDate = () => {
-    const newArray = [...currentHistory].sort((a, b) => new Date(b.collectedAt) - new Date(a.collectedAt));
+    const newArray = [...distributionHistory].sort((a, b) => new Date(b.reservedAt) - new Date(a.reservedAt));
     setCurrentHistory(newArray);
   }
 
   const sortByName = () => {
-    const newArray = [...currentHistory]
+    const newArray = [...distributionHistory]
       .sort(function (a, b) {
         let x = a.foodListingId.title.toLowerCase();
         let y = b.foodListingId.title.toLowerCase();
@@ -129,13 +129,13 @@ export const Distribution = () => {
       {
         loading ?
           <div className="text-gray-500 flex justify-center items-center h-full">Loading...</div>
-          : collectionHistory.length === 0 ?
-            <div className="text-gray-500 flex justify-center items-center h-full">Ooops, You haven't collected any food yet.</div>
+          : distributionHistory.length === 0 ?
+            <div className="text-gray-500 flex justify-center items-center h-full">Ooops, You haven't distribute any food yet.</div>
             :
             <div>
               <div>
-                <div className="bg-yellow-100 text-yellow-900 my-6 p-4 rounded-lg shadow-sm text-sm">
-                  Foods that are expiring soon is on the top by default, try to distribute them first before they got expired. 
+                <div className="bg-green-100 text-green-900 my-6 p-4 rounded-lg shadow-sm text-sm">
+                  Thank you for making peoples life better, we really appreciate what you are doing 👍 
                 </div>
 
                 <table className="w-full rounded-lg border-collapse shadow-xl bg-white">
@@ -157,8 +157,10 @@ export const Distribution = () => {
                           <td className="border-b p-3">{collection.foodListingId.title}</td>
                           <td className="border-b p-3">{collection.foodListingId.category}</td>
                           <td className="border-b p-3">{formatDate(collection.foodListingId.expiry)}</td>
-                          <td className="border-b p-3">{formatDate(collection.collectedAt)}</td>
+                          <td className="border-b p-3">{formatDate(collection.foodListingId.reservedAt)}</td>
                           <td className="border-b p-3">{collection.foodListingId.restaurantId.restaurantName}</td>
+                          <td className="border-b p-3">{formatDate(collection.createdAt)}</td>
+                           <td className="border-b p-3">{collection.distributionNote}</td>
                         </tr>
                       )
                     })}
