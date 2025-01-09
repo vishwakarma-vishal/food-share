@@ -1,12 +1,16 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'; // Combined useState import
 import { toast } from 'react-toastify';
+import { IoIosClose } from "react-icons/io";
+import AddToDistributionModal from './AddToDistributionModal';
 
 export const Collection = () => {
   const [collectionHistory, setCollectionHistory] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentHistory, setCurrentHistory] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [listingId, setListingId] = useState();
 
   // fetch collection history
   const getCollectionHistory = async () => {
@@ -130,10 +134,10 @@ export const Collection = () => {
           : collectionHistory.length === 0 ?
             <div className="text-gray-500 flex justify-center items-center h-full">Ooops, You haven't collected any food yet.</div>
             :
-            <div>
+            <div className="relative">
               <div>
                 <div className="bg-yellow-100 text-yellow-900 my-6 p-4 rounded-lg shadow-sm text-sm">
-                  Foods that are expiring soon is on the top by default, try to distribute them first before they got expired. 
+                  Foods that are expiring soon is on the top by default, try to distribute them first before they got expired.
                 </div>
 
                 <table className="w-full rounded-lg border-collapse shadow-xl bg-white">
@@ -144,6 +148,7 @@ export const Collection = () => {
                       <th className="border-b p-3">Expiry</th>
                       <th className="border-b p-3">Pickup Date</th>
                       <th className="border-b p-3">Restaurant Name</th>
+                      <th className="border-b p-3 text-center">Mark Distributed</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -155,9 +160,31 @@ export const Collection = () => {
                           <td className="border-b p-3">{formatDate(collection.foodListingId.expiry)}</td>
                           <td className="border-b p-3">{formatDate(collection.collectedAt)}</td>
                           <td className="border-b p-3">{collection.foodListingId.restaurantId.restaurantName}</td>
+                          <td className="border-b p-3">
+                            {
+                              collection.foodListingId.status == "collected" ?
+                                <button
+                                  className="bg-blue-500 text-white py-1 px-3 rounded-full font-semibold mx-auto block"
+                                  onClick={() => {
+                                    setIsModalOpen(true);
+                                    setListingId(collection.foodListingId._id)
+                                  }}
+                                >
+                                  Mark Distributed
+                                </button> :
+                                <span className="block text-green-500 font-semibold mx-auto text-center">Distributed</span>
+                            }
+
+                            {/* modal */}
+                            {isModalOpen &&
+                              <AddToDistributionModal 
+                              setIsModalOpen={setIsModalOpen} 
+                              listingId={listingId}
+                              getCollectionHistory={getCollectionHistory}/>
+                            }
+                          </td>
                         </tr>
-                      )
-                    })}
+                      )})}
                   </tbody>
                 </table>
               </div>

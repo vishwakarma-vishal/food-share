@@ -3,6 +3,7 @@ const FoodListing = require("../models/FoodListing");
 const Ngo = require("../models/Ngo");
 const { z } = require("zod");
 const cloudinaryUpload = require("../utils/cloudinaryUpload");
+const DistributionHistory = require("../models/DistributionHistory");
 
 
 // Reserve food
@@ -89,14 +90,14 @@ const getCollectionHistory = async (req, res) => {
 
     try {
         const collectionHistory = await CollectionHistory.find({ ngoId: ngoId })
-        .populate({
-            path: "foodListingId",
-            select: "title category expiry restaurantId",
-            populate: {
-                path: "restaurantId",
-                select: "restaurantName"
-            }
-        });
+            .populate({
+                path: "foodListingId",
+                select: "title category expiry status restaurantId",
+                populate: {
+                    path: "restaurantId",
+                    select: "restaurantName"
+                }
+            });
 
         if (!collectionHistory || collectionHistory.length == 0) {
             return res.status(404).json({
@@ -226,4 +227,52 @@ const updateNgoProfile = async (req, res) => {
     }
 };
 
-module.exports = { addListingToCollection, getCollectionHistory, getAllFoodListing, updateNgoProfile }
+// Add food in distribution history
+const addToDistributionHistory = async (req, res) => {
+    try {
+        const ngoId = req.ngoId;
+        const { foodListingId, distributionNote } = req.body;
+
+        const distribution = new DistributionHistory({
+            ngoId,
+            foodListingId,
+            distributionNote
+        });
+        const { _id } = await distribution.save();
+
+        if (!_id) {
+            throw new Error("Failed to create distribution history.");
+        }
+
+        const foodListing = await FoodListing.findById(foodListingId);
+        if (!foodListing) {
+            throw new Error('Food listing not found');
+        }
+
+        const foodListingInDb = await FoodListing.findByIdAndUpdate(
+            foodListingId,
+            { $set: { status: 'distributed' } },
+            { new: true }
+        );
+
+        if (!foodListingInDb) {
+            await DistributionHistory.findByIdAndDelete(_id); // Remove the record added in Step 1
+            throw new Error("Failed to update food listing status.");
+        }
+
+        // iff both operations succeed
+        res.status(201).json({
+            success: true,
+            message: "Food is added to distribution history."
+        });
+    } catch (error) {
+        console.error("Error in addToDistributionHistory:", error.message);
+        res.status(500).json({
+            success: false,
+            message: "Something went wrong.",
+        });
+    }
+};
+
+
+module.exports = { addListingToCollection, getCollectionHistory, getAllFoodListing, updateNgoProfile, addToDistributionHistory }
