@@ -9,9 +9,8 @@ export const Distribution = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [currentHistory, setCurrentHistory] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortFilter, setSortFilter] = useState("");
+  const [sortFilter, setSortFilter] = useState("expiry");
 
   // fetch distribution history
   const getDistributionHistory = async () => {
@@ -25,10 +24,6 @@ export const Distribution = () => {
       });
 
       setDistributionHistory(response.data.distributionHistory);
-
-      const sortedHistory = [...response.data.distributionHistory].sort((a, b) => new Date(a.foodListingId.expiry) - new Date(b.foodListingId.expiry));
-      setCurrentHistory(sortedHistory);
-
     } catch (error) {
       console.log(error);
       toast.error("Unable to collect history, try again later.");
@@ -56,7 +51,7 @@ export const Distribution = () => {
 
     // search filter
     if (searchTerm != "") {
-      const newArray = distributionHistory.filter(item =>
+      const newArray = filteredListings.filter(item =>
         item.foodListingId.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.foodListingId.restaurantId.restaurantName.toLowerCase().includes(searchTerm.toLowerCase()));
 
@@ -89,7 +84,7 @@ export const Distribution = () => {
 
   useEffect(() => {
     applyFilter();
-  }, [searchTerm, sortFilter]);
+  }, [distributionHistory, searchTerm, sortFilter]);
 
   // search
   const searchInHistory = (e) => {

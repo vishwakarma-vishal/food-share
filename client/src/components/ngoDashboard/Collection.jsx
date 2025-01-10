@@ -11,6 +11,8 @@ export const Collection = () => {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [listingId, setListingId] = useState();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortFilter, setSortFilter] = useState("expiry");
 
   // fetch collection history
   const getCollectionHistory = async () => {
@@ -24,10 +26,6 @@ export const Collection = () => {
       });
 
       setCollectionHistory(response.data.collectionHistory);
-
-      const sortedHistory = [...response.data.collectionHistory].sort((a, b) => new Date(a.foodListingId.expiry) - new Date(b.foodListingId.expiry));
-      setCurrentHistory(sortedHistory);
-
     } catch (error) {
       console.log(error);
       toast.error("Unable to collect history, try again later.");
@@ -49,50 +47,57 @@ export const Collection = () => {
     return `${day}-${month}-${year}`;
   };
 
-  // search
-  const searchInHistory = (e) => {
-    const searchTerm = e.target.value;
+  // apply filter
+  const applyFilter = () => {
+    let filteredListings = [...collectionHistory];
 
-    const newArray = collectionHistory.filter(item =>
-      item.foodListingId.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.foodListingId.restaurantId.restaurantName.toLowerCase().includes(searchTerm.toLowerCase()));
+    // search filter
+    if (searchTerm != "") {
+      const newArray = filteredListings.filter(item =>
+        item.foodListingId.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.foodListingId.restaurantId.restaurantName.toLowerCase().includes(searchTerm.toLowerCase()));
 
-    setCurrentHistory(newArray);
-  }
-
-  // filters
-  const sortHistory = (e) => {
-    const type = e.target.value;
-
-    if (type === "expiry") {
-      sortByExpiry();
-    } else if (type === "pickup-date") {
-      sortByPickupDate();
-    } else {
-      sortByName();
+      filteredListings = newArray;
     }
+
+    // sort filter
+    if (sortFilter === "expiry") {
+      const newArray = filteredListings.sort((a, b) => new Date(a.foodListingId.expiry) - new Date(b.foodListingId.expiry));
+
+      filteredListings = newArray;
+    } else if (sortFilter === "name") {
+      const newArray = filteredListings
+        .sort(function (a, b) {
+          let x = a.foodListingId.title.toLowerCase();
+          let y = b.foodListingId.title.toLowerCase();
+          if (x < y) { return -1; }
+          if (x > y) { return 1; }
+          return 0;
+        });
+
+      filteredListings = newArray;
+    } else {
+      const newArray = filteredListings.sort((a, b) => new Date(b.reservedAt) - new Date(a.reservedAt));
+      filteredListings = newArray;;
+    }
+
+    setCurrentHistory(filteredListings);
   }
 
-  const sortByExpiry = () => {
-    const newArray = [...currentHistory].sort((a, b) => new Date(a.foodListingId.expiry) - new Date(b.foodListingId.expiry));
-    setCurrentHistory(newArray);
+  useEffect(() => {
+    applyFilter();
+  }, [collectionHistory, searchTerm, sortFilter]);
+
+  // set search term
+  const searchInHistory = (e) => {
+    const term = e.target.value.toLowerCase();
+    setSearchTerm(term);
   }
 
-  const sortByPickupDate = () => {
-    const newArray = [...currentHistory].sort((a, b) => new Date(b.collectedAt) - new Date(a.collectedAt));
-    setCurrentHistory(newArray);
-  }
-
-  const sortByName = () => {
-    const newArray = [...currentHistory]
-      .sort(function (a, b) {
-        let x = a.foodListingId.title.toLowerCase();
-        let y = b.foodListingId.title.toLowerCase();
-        if (x < y) { return -1; }
-        if (x > y) { return 1; }
-        return 0;
-      });
-    setCurrentHistory(newArray);
+  // set sort filter
+  const sortByFilter = (e) => {
+    const filter = e.target.value.toLowerCase();
+    setSortFilter(filter);
   }
 
   const rowsPerPage = 7; // we can change as per the requirement
@@ -119,10 +124,10 @@ export const Collection = () => {
             onChange={searchInHistory}
           />
           <label htmlFor="sort" className="font-medium">Sort By</label>
-          <select id="sort" className="py-2 px-4 rounded-lg border outline-none" onChange={sortHistory}>
+          <select id="sort" className="py-2 px-4 rounded-lg border outline-none" onChange={sortByFilter}>
             <option value="expiry">Expiry</option>
-            <option value="pickup-date">Pickup Date</option>
-            <option value="food-name">Food Name</option>
+            <option value="pickup">Pickup Date</option>
+            <option value="name">Food Name</option>
           </select>
         </form>
       </div>
@@ -136,7 +141,7 @@ export const Collection = () => {
             :
             <div className="relative">
               <div>
-                <div className="bg-yellow-100 text-yellow-900 my-6 p-4 rounded-lg shadow-sm text-sm">
+                <div className="bg-red-100 text-red-600 my-6 p-4 rounded-lg shadow-sm text-sm">
                   Foods that are expiring soon is on the top by default, try to distribute them first before they got expired.
                 </div>
 
@@ -177,14 +182,15 @@ export const Collection = () => {
 
                             {/* modal */}
                             {isModalOpen &&
-                              <AddToDistributionModal 
-                              setIsModalOpen={setIsModalOpen} 
-                              listingId={listingId}
-                              getCollectionHistory={getCollectionHistory}/>
+                              <AddToDistributionModal
+                                setIsModalOpen={setIsModalOpen}
+                                listingId={listingId}
+                                getCollectionHistory={getCollectionHistory} />
                             }
                           </td>
                         </tr>
-                      )})}
+                      )
+                    })}
                   </tbody>
                 </table>
               </div>
