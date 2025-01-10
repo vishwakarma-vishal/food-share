@@ -2,7 +2,7 @@ import useAuth from "../../utils/useAuth";
 
 const Overview = ({ setIsSelected }) => {
     const { auth } = useAuth();
-    const user = auth.safeUser;
+    const user = auth?.safeUser;
 
     // format date like 1-jan-2025
     const formatDate = (dateString) => {
@@ -23,7 +23,7 @@ const Overview = ({ setIsSelected }) => {
             {/* Profile info */}
             <div className="flex items-center gap-x-6 bg-white p-6 rounded-xl shadow-sm">
                 <img
-                    src={user.profileImg ? user.profileImg : "ngo.svg"}
+                     src={user && "profileImg" in user && user.profileImg ? user.profileImg : "ngo.svg"}
                     alt="ngo-img"
                     className="w-28 h-28 rounded-full"
                 />

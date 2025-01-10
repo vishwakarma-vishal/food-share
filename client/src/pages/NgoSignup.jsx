@@ -41,17 +41,14 @@ const NgoSignup = () => {
     const submitHandler = async (e) => {
         e.preventDefault();
 
-        console.log(formdata);
-
         if (formdata.password !== confirmPass) {
             setError("Password doesn't match.");
-            console.log("Password doesn't match.");
             return;
         }
 
         try {
             const response = await axios({
-                url: 'http://localhost:3001/auth/ngo',
+                url: `${import.meta.env.VITE_API_URL}/auth/ngo`,
                 method: 'post',
                 data: formdata
             });
@@ -74,7 +71,7 @@ const NgoSignup = () => {
                 });
                 setConfirmPass("");
                 // managing the state
-                login(data.role, data.token);
+                login(data.role, data.token, data.safeUser);
 
                 toast.success("Signed up successfully.");
                 navigate('/ngo-dashboard');

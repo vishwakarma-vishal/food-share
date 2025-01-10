@@ -53,16 +53,27 @@ ngoSignup = async (req, res) => {
         const hashedPassword = bcrypt.hashSync(password, 10);
 
         const ngo = new Ngo({ ngoName, phone, email, password: hashedPassword, city, address });
-        const { _id, role } = await ngo.save();
+        const userInDb = await ngo.save();
 
         // generate jwt token
-        const payload = { id: _id, role: role }
+        const payload = { id: userInDb._id, role: userInDb.role };
         const token = jwt.sign(payload, process.env.JWT_NGO_SECRET, { expiresIn: '1h' });
+
+        // creating safe user obj to send in response
+        const safeUser = userInDb.toObject();
+
+        // Rremoving unnecessary fileds
+        delete safeUser.password;
+        delete safeUser._id;
+        delete safeUser.role;
+        delete safeUser.__v;
+        delete safeUser.createdAt;
 
         res.status(201).json({
             success: true,
             token: token,
-            role: role,
+            role: userInDb.role,
+            safeUser,
             message: "Successfully signed up."
         });
     } catch (error) {

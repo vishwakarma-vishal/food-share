@@ -24,7 +24,7 @@ const Login = () => {
 
         try {
             const response = await axios({
-                url: 'http://localhost:3001/auth/login',
+                url: `${import.meta.env.VITE_API_URL}/auth/login`,
                 method: 'post',
                 data: formdata
             });
