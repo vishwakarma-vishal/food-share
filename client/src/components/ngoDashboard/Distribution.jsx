@@ -10,6 +10,9 @@ export const Distribution = () => {
   const [currentHistory, setCurrentHistory] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortFilter, setSortFilter] = useState("");
+
   // fetch distribution history
   const getDistributionHistory = async () => {
     try {
@@ -47,50 +50,56 @@ export const Distribution = () => {
     return `${day}-${month}-${year}`;
   };
 
+  // apply filter
+  const applyFilter = () => {
+    let filteredListings = [...distributionHistory];
+
+    // search filter
+    if (searchTerm != "") {
+      const newArray = distributionHistory.filter(item =>
+        item.foodListingId.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.foodListingId.restaurantId.restaurantName.toLowerCase().includes(searchTerm.toLowerCase()));
+
+      filteredListings = newArray;
+    }
+
+    // sort filter
+    if (sortFilter === "expiry") {
+      const newArray = filteredListings.sort((a, b) => new Date(a.foodListingId.expiry) - new Date(b.foodListingId.expiry));
+
+      filteredListings = newArray;
+    } else if (sortFilter === "name") {
+      const newArray = filteredListings
+        .sort(function (a, b) {
+          let x = a.foodListingId.title.toLowerCase();
+          let y = b.foodListingId.title.toLowerCase();
+          if (x < y) { return -1; }
+          if (x > y) { return 1; }
+          return 0;
+        });
+
+      filteredListings = newArray;
+    } else {
+      const newArray = filteredListings.sort((a, b) => new Date(b.reservedAt) - new Date(a.reservedAt));
+      filteredListings = newArray;;
+    }
+
+    setCurrentHistory(filteredListings);
+  }
+
+  useEffect(() => {
+    applyFilter();
+  }, [searchTerm, sortFilter]);
+
   // search
   const searchInHistory = (e) => {
-    const searchTerm = e.target.value;
-
-    const newArray = distributionHistory.filter(item =>
-      item.foodListingId.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.foodListingId.restaurantId.restaurantName.toLowerCase().includes(searchTerm.toLowerCase()));
-
-    setCurrentHistory(newArray);
+    const term = e.target.value.toLowerCase();
+    setSearchTerm(term);
   }
 
-  // filters
-  const sortHistory = (e) => {
-    const type = e.target.value;
-
-    if (type === "expiry") {
-      sortByExpiry();
-    } else if (type === "pickup-date") {
-      sortByPickupDate();
-    } else {
-      sortByName();
-    }
-  }
-
-  const sortByExpiry = () => {
-    const newArray = [...distributionHistory].sort((a, b) => new Date(a.foodListingId.expiry) - new Date(b.foodListingId.expiry));
-    setCurrentHistory(newArray);
-  }
-
-  const sortByPickupDate = () => {
-    const newArray = [...distributionHistory].sort((a, b) => new Date(b.reservedAt) - new Date(a.reservedAt));
-    setCurrentHistory(newArray);
-  }
-
-  const sortByName = () => {
-    const newArray = [...distributionHistory]
-      .sort(function (a, b) {
-        let x = a.foodListingId.title.toLowerCase();
-        let y = b.foodListingId.title.toLowerCase();
-        if (x < y) { return -1; }
-        if (x > y) { return 1; }
-        return 0;
-      });
-    setCurrentHistory(newArray);
+  const sortByFilter = (e) => {
+    const filter = e.target.value.toLowerCase();
+    setSortFilter(filter);
   }
 
   const rowsPerPage = 7; // we can change as per the requirement
@@ -117,10 +126,10 @@ export const Distribution = () => {
             onChange={searchInHistory}
           />
           <label htmlFor="sort" className="font-medium">Sort By</label>
-          <select id="sort" className="py-2 px-4 rounded-lg border outline-none" onChange={sortHistory}>
+          <select id="sort" className="py-2 px-4 rounded-lg border outline-none" onChange={sortByFilter}>
             <option value="expiry">Expiry</option>
-            <option value="pickup-date">Pickup Date</option>
-            <option value="food-name">Food Name</option>
+            <option value="pickup">Pickup Date</option>
+            <option value="name">Food Name</option>
           </select>
         </form>
       </div>
@@ -135,7 +144,7 @@ export const Distribution = () => {
             <div>
               <div>
                 <div className="bg-green-100 text-green-900 my-6 p-4 rounded-lg shadow-sm text-sm">
-                  Thank you for making peoples life better, we really appreciate what you are doing 👍 
+                  Thank you for making peoples life better, we really appreciate what you are doing 👍
                 </div>
 
                 <table className="w-full rounded-lg border-collapse shadow-xl bg-white">
@@ -160,7 +169,7 @@ export const Distribution = () => {
                           <td className="border-b p-3">{formatDate(collection.foodListingId.reservedAt)}</td>
                           <td className="border-b p-3">{collection.foodListingId.restaurantId.restaurantName}</td>
                           <td className="border-b p-3">{formatDate(collection.createdAt)}</td>
-                           <td className="border-b p-3">{collection.distributionNote}</td>
+                          <td className="border-b p-3">{collection.distributionNote}</td>
                         </tr>
                       )
                     })}
