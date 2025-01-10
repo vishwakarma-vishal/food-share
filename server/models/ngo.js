@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const ngoSchema = mongoose.Schema({
+const NgoSchema = mongoose.Schema({
     profileImg: { type: String },
     imgPublicId: {type: String},
     ngoName: { type: String, required: true },
@@ -15,4 +15,4 @@ const ngoSchema = mongoose.Schema({
     createdAt: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model("Ngo", ngoSchema);
+module.exports = mongoose.model("Ngo", NgoSchema);
