@@ -15,7 +15,7 @@ const DonationHistory = () => {
     const getDonationHistory = async () => {
         try {
             const response = await axios({
-                url: "http://localhost:3001/restaurant/history",
+                url: `${import.meta.env.VITE_API_URL}/restaurant/history`,
                 method: "get",
                 headers: {
                     "Authorization": `Bearer ${localStorage.getItem("token")}`

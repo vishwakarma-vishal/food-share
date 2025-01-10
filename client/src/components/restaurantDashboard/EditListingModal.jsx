@@ -82,7 +82,7 @@ const EditListingModal = ({ foodListing, setIsModalOpen, getMyFoodListings }) =>
         try {
             setLoading(true);
             const response = await axios({
-                url: `http://localhost:3001/listing/${foodListing._id}`,
+                url: `${import.meta.env.VITE_API_URL}/listing/${foodListing._id}`,
                 method: 'put',
                 data: formDataToSend,
                 headers: {

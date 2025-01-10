@@ -72,7 +72,7 @@ export const Profile = ({ setIsSelected }) => {
     try {
       setLoading(true);
       const response = await axios({
-        url: "http://localhost:3001/ngo/profile",
+        url: `${import.meta.env.VITE_API_URL}/ngo/profile`,
         method: "put",
         data: formDataToSend,
         headers: {

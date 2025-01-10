@@ -18,7 +18,7 @@ export const Collection = () => {
   const getCollectionHistory = async () => {
     try {
       const response = await axios({
-        url: "http://localhost:3001/ngo/collection",
+        url: `${import.meta.env.VITE_API_URL}/ngo/collection`,
         method: "get",
         headers: {
           "Authorization": `Bearer ${localStorage.getItem("token")}`

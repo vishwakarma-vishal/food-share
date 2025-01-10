@@ -39,7 +39,7 @@ const ListingCard = ({ foodListing, handleDelete, isModalOpen, setIsModalOpen, g
 
         try {
             const response = await axios({
-                url: "http://localhost:3001/restaurant/history",
+                url: `${import.meta.env.VITE_API_URL}/restaurant/history`,
                 method: "post",
                 data: {
                     foodListingId: foodListing._id,

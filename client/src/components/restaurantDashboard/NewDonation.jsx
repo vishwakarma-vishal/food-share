@@ -66,7 +66,7 @@ const NewDonation = ({ setIsSelected }) => {
         try {
             setLoading(true);
             const response = await axios({
-                url: "http://localhost:3001/listing/create",
+                url: `${import.meta.env.VITE_API_URL}/listing/create`,
                 method: "post",
                 data: formDataToSend,
                 headers: {

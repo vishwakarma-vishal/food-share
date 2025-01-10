@@ -16,7 +16,7 @@ export const Distribution = () => {
   const getDistributionHistory = async () => {
     try {
       const response = await axios({
-        url: "http://localhost:3001/ngo/distribution-history",
+        url: `${import.meta.env.VITE_API_URL}/ngo/distribution-history`,
         method: "get",
         headers: {
           "Authorization": `Bearer ${localStorage.getItem("token")}`

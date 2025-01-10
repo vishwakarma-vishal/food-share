@@ -54,7 +54,7 @@ const Profile = () => {
     try {
       setLoading(true);
       const response = await axios({
-        url: "http://localhost:3001/restaurant/profile",
+        url: `${import.meta.env.VITE_API_URL}/restaurant/profile`,
         method: "put",
         data: formDataToSend,
         headers: {

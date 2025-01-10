@@ -16,7 +16,7 @@ const MyListing = ({ isMenuOpen, isSelected, setIsSelected }) => {
     const getMyFoodListings = async () => {
         try {
             const response = await axios({
-                url: "http://localhost:3001/listing",
+                url: `${import.meta.env.VITE_API_URL}/listing`,
                 method: "get",
                 headers: {
                     "Content-Type": "multipart/form-data",

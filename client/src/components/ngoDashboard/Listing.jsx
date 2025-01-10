@@ -14,7 +14,7 @@ const MyListing = ({ isMenuOpen }) => {
     const getListings = async () => {
         try {
             const response = await axios({
-                url: "http://localhost:3001/ngo/all",
+                url: `${import.meta.env.VITE_API_URL}/ngo/all`,
                 method: "get",
                 headers: {
                     "Content-Type": "multipart/form-data",
