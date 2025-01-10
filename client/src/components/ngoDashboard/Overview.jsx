@@ -23,7 +23,7 @@ const Overview = ({ setIsSelected }) => {
             {/* Profile info */}
             <div className="flex items-center gap-x-6 bg-white p-6 rounded-xl shadow-sm">
                 <img
-                     src={user && "profileImg" in user && user.profileImg ? user.profileImg : "ngo.svg"}
+                    src={user.profileImg ? user.profileImg : "ngo.svg"}
                     alt="ngo-img"
                     className="w-28 h-28 rounded-full"
                 />

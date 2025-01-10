@@ -48,7 +48,7 @@ const RestaurantSignup = () => {
 
         try {
             const response = await axios({
-                url: 'http://localhost:3001/auth/restaurant',
+                url: `${import.meta.env.VITE_API_URL}/auth/restaurant`,
                 method: 'post',
                 data: formdata
             });
@@ -71,7 +71,7 @@ const RestaurantSignup = () => {
                 });
                 setConfirmPass("");
                 // managing the state
-                login(data.role, data.token);
+                login(data.role, data.token, data.safeUser);
 
                 toast.success("Signed up successfully.");
                 console.log(data);

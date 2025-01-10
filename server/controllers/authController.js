@@ -141,16 +141,27 @@ restaurantSignup = async (req, res) => {
         const hashedpassword = bcrypt.hashSync(password, 10);
 
         const newRestaurant = new Restaurant({ restaurantName, phone, email, password: hashedpassword, city, address });
-        const { _id, role } = await newRestaurant.save();
+        const userInDb = await newRestaurant.save();
 
         // generate jwt token
-        const payload = { id: _id, role: role };
+        const payload = { id: userInDb._id, role: userInDb.role };
         const token = jwt.sign(payload, process.env.JWT_RESTAURANT_SECRET, { expiresIn: '1h' });
+
+        // creating safe user obj to send in response
+        const safeUser = userInDb.toObject();
+
+        // Removing unnecessary fileds
+        delete safeUser.password;
+        delete safeUser._id;
+        delete safeUser.role;
+        delete safeUser.__v;
+        delete safeUser.createdAt;
 
         res.status(201).json({
             success: true,
             token: token,
-            role: role,
+            role: userInDb.role,
+            safeUser,
             message: "Successfully signed up!"
         });
     } catch (error) {
