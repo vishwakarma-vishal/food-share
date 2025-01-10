@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const Ngo = require('../models/Ngo');
+const Ngo = require("../models/Ngo");
 const jwt = require("jsonwebtoken");
 const Restaurant = require("../models/Restaurant");
 const { z } = require("zod");
