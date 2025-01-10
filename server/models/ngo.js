@@ -15,4 +15,4 @@ const ngoSchema = mongoose.Schema({
     createdAt: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model("ngo", ngoSchema);
+module.exports = mongoose.model("Ngo", ngoSchema);
