@@ -286,10 +286,11 @@ const getDistributionHistory = async (req, res) => {
                 }
             });
 
-        if (!distributionHistory || distributionHistory.length === 0) {
-            return res.status(404).json({
-                success: false,
-                message: "Distribution History not found."
+        if (distributionHistory.length === 0) {
+            return res.status(200).json({
+                success: true,
+                message: "You haven't distributed any food yet.",
+                distributionHistory: []
             });
         }
 
@@ -298,7 +299,7 @@ const getDistributionHistory = async (req, res) => {
             distributionHistory
         });
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         res.status(500).json({
             success: false,
             message: "Something went wrong."

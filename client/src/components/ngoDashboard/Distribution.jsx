@@ -1,8 +1,6 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'; // Combined useState import
+import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-
-// food name, collected from, category, expiry, distribution date, distribution note
 
 export const Distribution = () => {
   const [distributionHistory, setDistributionHistory] = useState([]);
@@ -15,6 +13,7 @@ export const Distribution = () => {
   // fetch distribution history
   const getDistributionHistory = async () => {
     try {
+      setLoading(true);
       const response = await axios({
         url: `${import.meta.env.VITE_API_URL}/ngo/distribution-history`,
         method: "get",
@@ -24,6 +23,7 @@ export const Distribution = () => {
       });
 
       setDistributionHistory(response.data.distributionHistory);
+      setCurrentHistory(response.data.distributionHistory);
     } catch (error) {
       console.log(error);
       toast.error("Unable to collect history, try again later.");
@@ -108,79 +108,89 @@ export const Distribution = () => {
   const goToPrevPage = () => setCurrentPage(prev => Math.max(prev - 1, 1));
 
   return (
-    <div className="flex flex-col h-full">
-      {/* filters */}
-      <div className="flex justify-between">
-        <h2 className="font-semibold text-2xl">Distribution History</h2>
-
-        <form className="flex items-center gap-4">
-          <input
-            type="text"
-            placeholder="Search by Food or Restaurant..."
-            className="p-2 w-56  text-sm rounded-lg border outline-none"
-            onChange={searchInHistory}
-          />
-          <label htmlFor="sort" className="font-medium">Sort By</label>
-          <select id="sort" className="py-2 px-4 rounded-lg border outline-none" onChange={sortByFilter}>
-            <option value="expiry">Expiry</option>
-            <option value="pickup">Pickup Date</option>
-            <option value="name">Food Name</option>
-          </select>
-        </form>
+    <div className="h-full">
+      <h2 className="font-semibold text-2xl">Distribution History</h2>
+      <div className="bg-green-100 text-green-900 my-4 p-4 rounded-lg shadow-sm text-sm">
+        Thank you for making peoples life better, we really appreciate what you are doing. 👍
       </div>
 
-      {/* data */}
       {
         loading ?
-          <div className="text-gray-500 flex justify-center items-center h-full">Loading...</div>
-          : distributionHistory.length === 0 ?
-            <div className="text-gray-500 flex justify-center items-center h-full">Ooops, You haven't distribute any food yet.</div>
-            :
-            <div>
-              <div>
-                <div className="bg-green-100 text-green-900 my-6 p-4 rounded-lg shadow-sm text-sm">
-                  Thank you for making peoples life better, we really appreciate what you are doing 👍
+          <div className="text-gray-500 flex justify-center items-center h-full">Loading...</div> :
+          <div className="h-full">
+            {/* data */}
+            {
+              distributionHistory.length === 0 ?
+                <div className="text-gray-500 flex justify-center items-center h-full text-center">
+                  You haven't distributed any food yet,<br />
+                  Please try to distribute the food before they got expired.
+                </div> :
+                <div className="flex flex-col gap-4">
+                  {/* filters */}
+                  <form className="flex items-center gap-4">
+                    <input
+                      type="text"
+                      placeholder="Search by Food or Restaurant..."
+                      className="p-2 w-56  text-sm rounded-lg border outline-none"
+                      onChange={searchInHistory}
+                    />
+                    <label htmlFor="sort" className="font-medium">Sort By</label>
+                    <select id="sort" className="py-2 px-4 rounded-lg border outline-none" onChange={sortByFilter}>
+                      <option value="expiry">Expiry</option>
+                      <option value="pickup">Pickup Date</option>
+                      <option value="name">Food Name</option>
+                    </select>
+                  </form>
+
+                  {
+                    currentHistory.length === 0 ?
+                      <div className="text-gray-500 mt-10 flex justify-center items-center">
+                        No results found. please try searching with different keywords.
+                      </div> :
+                      <div>
+                        {/* table */}
+                        <table className="w-full rounded-lg border-collapse shadow-xl bg-white">
+                          <thead>
+                            <tr className="bg-gray-200 text-left text-sm font-medium text-gray-700">
+                              <th className="border-b p-3">Food Name</th>
+                              <th className="border-b p-3">Category</th>
+                              <th className="border-b p-3">Expiry</th>
+                              <th className="border-b p-3">Pickup Date</th>
+                              <th className="border-b p-3">Collected From</th>
+                              <th className="border-b p-3">Distribution Date</th>
+                              <th className="border-b p-3">Distribution Note</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {currentRows.map((collection) => {
+                              return (
+                                <tr key={collection._id} className="text-left text-sm text-gray-800 hover:bg-gray-200">
+                                  <td className="border-b p-3">{collection.foodListingId.title}</td>
+                                  <td className="border-b p-3">{collection.foodListingId.category}</td>
+                                  <td className="border-b p-3">{formatDate(collection.foodListingId.expiry)}</td>
+                                  <td className="border-b p-3">{formatDate(collection.foodListingId.reservedAt)}</td>
+                                  <td className="border-b p-3">{collection.foodListingId.restaurantId.restaurantName}</td>
+                                  <td className="border-b p-3">{formatDate(collection.createdAt)}</td>
+                                  <td className="border-b p-3">{collection.distributionNote}</td>
+                                </tr>
+                              )
+                            })}
+                          </tbody>
+                        </table>
+
+                        {/* pagination */}
+                        <div className="flex gap-4 items-center mt-4">
+                          <button onClick={goToPrevPage} className="bg-green-600 py-1 px-4 rounded-lg text-white">Previous</button>
+                          <button onClick={goToNextPage} className="bg-blue-600 py-1 px-4 rounded-lg text-white">Next</button>
+
+                          <span className="ml-auto text-sm">Page {currentPage} of {totalPages}</span>
+                        </div>
+                      </div>
+                  }
                 </div>
-
-                <table className="w-full rounded-lg border-collapse shadow-xl bg-white">
-                  <thead>
-                    <tr className="bg-gray-200 text-left text-sm font-medium text-gray-700">
-                      <th className="border-b p-3">Food Name</th>
-                      <th className="border-b p-3">Category</th>
-                      <th className="border-b p-3">Expiry</th>
-                      <th className="border-b p-3">Pickup Date</th>
-                      <th className="border-b p-3">Collected From</th>
-                      <th className="border-b p-3">Distribution Date</th>
-                      <th className="border-b p-3">Distribution Note</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {currentRows.map((collection) => {
-                      return (
-                        <tr key={collection._id} className="text-left text-sm text-gray-800 hover:bg-gray-200">
-                          <td className="border-b p-3">{collection.foodListingId.title}</td>
-                          <td className="border-b p-3">{collection.foodListingId.category}</td>
-                          <td className="border-b p-3">{formatDate(collection.foodListingId.expiry)}</td>
-                          <td className="border-b p-3">{formatDate(collection.foodListingId.reservedAt)}</td>
-                          <td className="border-b p-3">{collection.foodListingId.restaurantId.restaurantName}</td>
-                          <td className="border-b p-3">{formatDate(collection.createdAt)}</td>
-                          <td className="border-b p-3">{collection.distributionNote}</td>
-                        </tr>
-                      )
-                    })}
-                  </tbody>
-                </table>
-              </div>
-
-              {/* pagination */}
-              <div className="flex gap-4 items-center mt-6">
-                <button onClick={goToPrevPage} className="bg-green-600 py-1 px-4 rounded-lg text-white">Previous</button>
-                <button onClick={goToNextPage} className="bg-blue-600 py-1 px-4 rounded-lg text-white">Next</button>
-
-                <span className="ml-auto text-sm">Page {currentPage} of {totalPages}</span>
-              </div>
-            </div>
+            }
+          </div>
       }
-    </div>
+    </div >
   )
 }

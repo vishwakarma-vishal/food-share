@@ -130,7 +130,7 @@ export const Collection = () => {
               <div className="relative">
                 <div>
                   {/* filters */}
-                  <div className="">
+                  <div>
                     <form className="flex items-center gap-4">
                       <input
                         type="text"
