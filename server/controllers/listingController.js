@@ -100,10 +100,11 @@ getAllFoodListingOfRestaurant = async (req, res) => {
     try {
         const foodListings = await FoodListing.find({ restaurantId: restaurantId });
 
-        if (!foodListings || foodListings.length === 0) {
-            return res.status(404).json({
-                success: false,
-                message: "No Food listings found."
+        if (foodListings.length === 0) {
+            return res.status(200).json({
+                success: true,
+                message: "You haven't posted any listing yet.",
+                foodListings: []
             })
         }
 

@@ -113,10 +113,11 @@ const getDonationHistory = async (req, res) => {
                 }
             });
 
-        if (!donationHistory || donationHistory.length == 0) {
-            return res.status(404).json({
-                success: false,
-                message: "Listings are not found"
+        if (donationHistory.length === 0) {
+            return res.status(200).json({
+                success: true,
+                message: "No food donation made by the restrorant yet.",
+                donationHistory: []
             });
         }
 
