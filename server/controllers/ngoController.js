@@ -95,10 +95,11 @@ const getCollectionHistory = async (req, res) => {
                 }
             });
 
-        if (!collectionHistory || collectionHistory.length == 0) {
-            return res.status(404).json({
-                success: false,
-                message: "Collection history not found."
+        if (collectionHistory.length === 0) {
+            return res.status(200).json({
+                success: true,
+                message: "You haven't collected any food yet.",
+                collectionHistory: []
             });
         }
 
