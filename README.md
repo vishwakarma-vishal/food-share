@@ -15,7 +15,8 @@
 7. [Technology Stack](#technology-stack)
 8. [Future Enhancements](#future-enhancements)
 9. [Conclusion](#conclusion)
-10. [Acknowledgments](#acknowledgments) 
+10. [Acknowledgments](#acknowledgments)
+11. [Terms of Use](#terms-of-use)
 
 ---
 
@@ -132,3 +133,7 @@ In today's world, many people go to bed hungry due to poverty, while numerous re
 
 - Special thanks to the open-source community for providing helpful tools and libraries that made this project possible, such as **React**, **Node.js**, **Express.js**, and **MongoDB**.
 - Thanks to the developers of **Cloudinary**, **JWT**, and **Zod** for their tools that made the application more robust.
+- 
+
+## Terms of Use
+This repository is provided for demonstration and evaluation purposes only. The contents are protected by copyright law and may not be used, copied, or distributed without explicit permission from the author.
