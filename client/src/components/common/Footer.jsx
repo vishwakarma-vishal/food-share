@@ -8,11 +8,6 @@ const Footer = () => {
     return (
         <footer className='flex flex-col items-center gap-4 border pt-4 bg-white'>
             <div>
-                <button onClick={() => navigate("ngo-dashboard")}>Ngo Dashboard</button>
-                <button onClick={() => navigate("/restaurant-dashboard")}>Restaurant Dashboad</button>
-            </div>
-
-            <div>
                 <ul className='flex flex-wrap justify-center gap-x-4 gap-y-2'>
                     <li><a href='/about'>About us</a></li>
                     <li><a href='contact'>Contact us</a></li>
