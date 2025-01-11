@@ -5,7 +5,6 @@ const cloudinaryUpload = require("../utils/cloudinaryUpload");
 const DistributionHistory = require("../models/DistributionHistory");
 const Ngo = require("../models/Ngo");
 
-
 // Reserve food
 const addListingToCollection = async (req, res) => {
     const { FoodListingId } = req.body;
@@ -60,16 +59,13 @@ const getAllFoodListing = async (req, res) => {
     try {
         const foodListings = await FoodListing.find().populate('restaurantId', 'address restaurantName');
 
-        if (!foodListings || foodListings.length === 0) {
-            return res.status(404).json({
-                success: false,
-                message: "No food listings found.",
+        if (foodListings.length === 0) {
+            return res.status(200).json({
+                success: true,
+                message: "No food listings found, check after some time.",
+                FoodListings: []
             });
         }
-
-        const restaurantId = foodListings.map((listing) => {
-            return listing.restaurantId;
-        });
 
         res.status(200).json({
             success: true,
