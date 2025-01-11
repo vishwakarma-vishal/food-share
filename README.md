@@ -20,10 +20,9 @@
 ---
 
 ## Demo
-[Click here to view the live demo of Food Share](https://food-share-app.netlify.app/)
+**Deployed link** 👉 https://food-share-app.netlify.app/
 
-[Click here to view the demo video](#) (Provide link to your demo video)
-
+**Demo link** 👉 [Watch the Food Share Demo](https://drive.google.com/file/d/1Uqf4IqXitfgH8cd19nsUKNLQjPiDAGaN/view?usp=sharing)
 
 ---
 
@@ -46,8 +45,7 @@ In today's world, many people go to bed hungry due to poverty, while numerous re
 - Full-stack application built with **React.js** (Frontend) and **Node.js** with **Express.js** (Backend)
 - **JWT Authentication** for secure user login and authorization
 - **Role-based dashboards** for both restaurants and NGOs
-- Cloud-based image storage with **Cloudinary** for restaurant and NGO profile pictures
-- Real-time notifications for NGOs when a restaurant lists surplus food
+- Cloud-based image storage with **Cloudinary** for restaurant, NGO profile and food listing pictures
 - **MongoDB** as the database to store food listings, user profiles, and donation history
 - **Recoil** for state management and efficient data flow
 - Easy-to-use interface with **Tailwind CSS** for responsive design
@@ -60,11 +58,11 @@ In today's world, many people go to bed hungry due to poverty, while numerous re
 - **Restaurant Dashboard:**
   - Restaurants can easily upload, edit, and delete food listings.
   - Each food listing includes details like food name, image, expiry, pickup time, and donation notes.
-  - Restaurants can track their donation history and see whether food has been collected or not.
+  - Restaurants can track their donation history and see whether food has been distributed by the NGO or not.
   
 - **NGO Dashboard:**
   - NGOs can create a profile and view available food listings from restaurants.
-  - NGOs can reserve food and mark it as collected once they physically pick it up.
+  - NGOs can reserve food to collect it from restaurants.
   - NGOs can mark food as distributed after delivering it to the needy and add distribution notes.
   - A history of collected and donated food is available for NGOs.
 
@@ -78,11 +76,11 @@ In today's world, many people go to bed hungry due to poverty, while numerous re
 
 ## Challenges and Solutions
 
-- **Challenge:** Storing Images on the Server  
+- **Challenge-1:** Storing Images on the Server  
   Storing images directly on the server can lead to scalability issues, increased storage requirements, and slower application performance.  
   **Solution:** I used **Cloudinary**, a cloud-based media management service, to handle image uploads. This ensures quick access to images, improved scalability, and reduced server load.
 
-- **Challenge:** Managing Secure User Authentication  
+- **Challenge-2:** Managing Secure User Authentication  
   Ensuring secure user authentication and authorization is crucial, especially when dealing with sensitive user data.  
   **Solution:** Implemented **JWT (JSON Web Tokens)** for authentication, ensuring that user data remains secure while also providing an efficient way to manage user sessions.
   
