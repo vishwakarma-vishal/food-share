@@ -4,7 +4,7 @@ import { FiUploadCloud } from "react-icons/fi";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const Profile = () => {
+const Profile = ({setIsSelected}) => {
   const { auth, updateUser } = useAuth();
   const user = auth.safeUser || {};
   const [previewImg, setPreviewImg] = useState(user.profileImg || "");
@@ -48,7 +48,7 @@ const Profile = () => {
     const formDataToSend = new FormData();
     formDataToSend.append('data', JSON.stringify(formData));
     if (selectedFile) {
-      formDataToSend.append('ngoImg', selectedFile);
+      formDataToSend.append('restaurantImg', selectedFile);
     }
 
     try {
@@ -69,7 +69,7 @@ const Profile = () => {
       if (data.success) {
         toast.success("User updated sucessfully");
         updateUser(updatedUser);
-        
+        setIsSelected("overview");
       }
 
       setLoading(false);

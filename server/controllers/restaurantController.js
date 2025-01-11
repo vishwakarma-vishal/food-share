@@ -156,16 +156,15 @@ updateRestaurantProfile = async (req, res) => {
                 .optional(),
             about: z.string()
                 .trim()
-                .min(6, "About must be at least 6 characters")
                 .max(100, "About cannot exceed 100 characters")
                 .optional(),
             openFrom: z.string()
                 .trim()
-                .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "Invalid time format")
+                // .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "Invalid time format")
                 .optional(),
             openTill: z.string()
                 .trim()
-                .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "Invalid time format")
+                // .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "Invalid time format")
                 .optional(),
             city: z.string()
                 .trim()
@@ -224,7 +223,7 @@ updateRestaurantProfile = async (req, res) => {
     } catch (error) {
 
         if (error instanceof z.ZodError) {
-            // console.log(error.errors.map((err) => err.message));
+            console.log(error.errors.map((err) => err.message));
             return res.status(400).json({
                 success: false,
                 message: "Invalid input. Please ensure all fields are correctly filled."
