@@ -16,7 +16,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(cors({
     // origin:"http://localhost:5173",
-    origin: "https://food-share-app.netlify.app/",
+    origin: "https://food-share-app.netlify.app",
     credentials: true,
 }));
 app.use(fileUpload({
