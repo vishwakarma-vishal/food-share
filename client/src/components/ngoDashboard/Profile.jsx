@@ -1,12 +1,10 @@
 import React, { useState } from 'react'
 import useAuth from '../../utils/useAuth';
 import { FiUploadCloud } from "react-icons/fi";
-import axios from "axios";
 import { toast } from "react-toastify";
+import api from '../../utils/interceptors';
 
-export const Profile = ({ setIsSelected }) => {
-  const { auth, updateUser } = useAuth();
-  const user = auth.safeUser;
+export const Profile = ({ setIsSelected, user, getUserData }) => {
   const [previewImg, setPreviewImg] = useState(user.profileImg || "");
   const [selectedFile, setSelectedFile] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -71,13 +69,13 @@ export const Profile = ({ setIsSelected }) => {
 
     try {
       setLoading(true);
-      const response = await axios({
+      const response = await api({
         url: `${import.meta.env.VITE_API_URL}/ngo/profile`,
         method: "put",
         data: formDataToSend,
         headers: {
           'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${localStorage.getItem("token")}`
+          'Authorization': `Bearer ${localStorage.getItem("accessToken")}`
         }
       });
 
@@ -86,7 +84,7 @@ export const Profile = ({ setIsSelected }) => {
 
       if (data.success) {
         toast.success("User updated sucessfully");
-        updateUser(updatedUser);
+        getUserData();
         setLoading(false);
         setIsSelected("overview");
       }

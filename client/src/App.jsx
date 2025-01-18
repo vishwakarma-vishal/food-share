@@ -8,8 +8,11 @@ import NgoDashboard from "./pages/NgoDashboard";
 import RestaurantDashboard from "./pages/RestaurantDashboard";
 
 import ProtecedRoute from "./utils/ProtectedRoute";
+import useAuthInitialization from "./utils/useAuthInitialization";
 
 function App() {
+  useAuthInitialization();
+
   return (
     <Routes>
       <Route path='/' element={<Layout />} >
@@ -17,8 +20,7 @@ function App() {
         <Route path='restaurant-signup' element={<RestaurantSignup />} />
         <Route path='ngo-signup' element={<NgoSignup />} />
         <Route path='login' element={<Login />} />
-
-        <Route path='ngo-dashboard' element={<ProtecedRoute element={<NgoDashboard />} requiredRole ="ngo" />} />
+        <Route path='ngo-dashboard' element={<ProtecedRoute element={<NgoDashboard />} requiredRole="ngo" />} />
         <Route path='restaurant-dashboard' element={<ProtecedRoute element={<RestaurantDashboard />} requiredRole="restaurant" />} />
       </Route>
     </Routes>

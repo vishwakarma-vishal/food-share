@@ -1,5 +1,5 @@
-import axios from "axios";
 import { toast } from "react-toastify";
+import api from "../../utils/interceptors";
 
 const ListingCard = ({ foodListing, getListings }) => {
     // format date like 1-jan-2025
@@ -37,7 +37,7 @@ const ListingCard = ({ foodListing, getListings }) => {
         if (!confirmation) return;
 
         try {
-            const response = await axios({
+            const response = await api({
                 url: "http://localhost:3001/ngo/reserve",
                 method: "post",
                 data: {
@@ -45,7 +45,7 @@ const ListingCard = ({ foodListing, getListings }) => {
                 },
                 headers: {
                     "content-type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
                 }
             });
 

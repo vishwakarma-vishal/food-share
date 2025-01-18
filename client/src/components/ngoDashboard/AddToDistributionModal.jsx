@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { IoIosClose } from "react-icons/io";
 import { toast } from "react-toastify";
-import axios from "axios";
+import api from "../../utils/interceptors";
 
 const AddToDistributionModal = ({ listingId, setIsModalOpen, getCollectionHistory }) => {
     const [distributionNote, setDistributionNote] = useState("");
@@ -11,7 +11,7 @@ const AddToDistributionModal = ({ listingId, setIsModalOpen, getCollectionHistor
         console.log(localStorage.getItem("token"));
 
         try {
-            const response = await axios({
+            const response = await api({
                 url: `${import.meta.env.VITE_API_URL}/ngo/distribution-history`,
                 method: "post",
                 data: {
@@ -19,7 +19,7 @@ const AddToDistributionModal = ({ listingId, setIsModalOpen, getCollectionHistor
                     foodListingId: listingId
                 },
                 headers: {
-                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
                 }
             });
 

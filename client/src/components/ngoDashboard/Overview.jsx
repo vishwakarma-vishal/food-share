@@ -1,9 +1,6 @@
-import useAuth from "../../utils/useAuth";
 
-const Overview = ({ setIsSelected }) => {
-    const { auth } = useAuth();
-    const user = auth?.safeUser;
 
+const Overview = ({ setIsSelected, user }) => {
     // format date like 1-jan-2025
     const formatDate = (dateString) => {
         const date = new Date(dateString);

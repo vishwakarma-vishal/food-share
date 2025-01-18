@@ -267,7 +267,9 @@ deleteFoodListingById = async (req, res) => {
 
         // delete from db and cloudinary
         const deletedListing = await FoodListing.findByIdAndDelete(ListingId);
-        const deleteImg = await cloudinary.uploader.destroy(deletedListing.imgPublicId);
+        if (deletedListing.imgPublicId) {
+            const deleteImg = await cloudinary.uploader.destroy(deletedListing.imgPublicId);
+        }
 
         res.status(200).json({
             success: true,

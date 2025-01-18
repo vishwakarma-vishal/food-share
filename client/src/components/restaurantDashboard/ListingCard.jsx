@@ -46,7 +46,7 @@ const ListingCard = ({ foodListing, handleDelete, isModalOpen, setIsModalOpen, g
                 },
                 headers: {
                     "content-type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
                 }
             });
 
@@ -92,10 +92,10 @@ const ListingCard = ({ foodListing, handleDelete, isModalOpen, setIsModalOpen, g
                         Pickup Time:
                         <span className="font-normal text-gray-600"> {formatTime(foodListing.pickupFrom)} - {formatTime(foodListing.pickupTill)}</span>
                     </p>
-                    <p className="text-sm font-semibold">
+                    {/* <p className="text-sm font-semibold">
                         Address:
                         <span className="font-normal text-gray-600"> {address}</span>
-                    </p>
+                    </p> */}
                 </div>
             </div>
 

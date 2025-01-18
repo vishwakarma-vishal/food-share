@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoIosEyeOff, IoIosEye } from "react-icons/io";
-import axios from "axios";
 import { toast } from "react-toastify";
 import useAuth from "../utils/useAuth";
+import api from "../utils/interceptors";
 
 const RestaurantSignup = () => {
     const navigate = useNavigate();
@@ -47,7 +47,7 @@ const RestaurantSignup = () => {
         }
 
         try {
-            const response = await axios({
+            const response = await api({
                 url: `${import.meta.env.VITE_API_URL}/auth/restaurant`,
                 method: 'post',
                 data: formdata
@@ -71,7 +71,7 @@ const RestaurantSignup = () => {
                 });
                 setConfirmPass("");
                 // managing the state
-                login(data.role, data.token, data.safeUser);
+                login(data.role, data.accessToken);
 
                 toast.success("Signed up successfully.");
                 console.log(data);

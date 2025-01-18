@@ -1,8 +1,7 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react'; // Combined useState import
 import { toast } from 'react-toastify';
-import { IoIosClose } from "react-icons/io";
 import AddToDistributionModal from './AddToDistributionModal';
+import api from '../../utils/interceptors';
 
 export const Collection = () => {
   const [collectionHistory, setCollectionHistory] = useState([]);
@@ -19,11 +18,11 @@ export const Collection = () => {
     try {
       setLoading(true);
 
-      const response = await axios({
+      const response = await api({
         url: `${import.meta.env.VITE_API_URL}/ngo/collection`,
         method: "get",
         headers: {
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
+          "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
         }
       });
 

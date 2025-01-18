@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import ListingCard from './ListingCard';
-import axios from 'axios';
 import { toast } from 'react-toastify'
+import api from '../../utils/interceptors';
 
 const MyListing = ({ isMenuOpen }) => {
     const [foodListings, setFoodListings] = useState([]);
@@ -16,12 +16,12 @@ const MyListing = ({ isMenuOpen }) => {
         try {
             setLoading(true);
 
-            const response = await axios({
+            const response = await api({
                 url: `${import.meta.env.VITE_API_URL}/ngo/all`,
                 method: "get",
                 headers: {
                     "Content-Type": "multipart/form-data",
-                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
                 }
             });
 

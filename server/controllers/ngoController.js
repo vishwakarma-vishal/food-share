@@ -307,5 +307,37 @@ const getDistributionHistory = async (req, res) => {
     }
 }
 
+// get use info
+const getUserProfile = async (req, res) => {
+    const ngoId = req.ngoId;
 
-module.exports = { addListingToCollection, getCollectionHistory, getAllFoodListing, updateNgoProfile, addToDistributionHistory, getDistributionHistory }
+    try {
+        const userInDb = await Ngo.findOne({ _id: ngoId });
+
+        if (!userInDb) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
+
+        const userObject = userInDb.toObject();
+        const { createdAt, __v, password, ...safeUser } = userObject;
+
+        res.status(200).json({
+            success: true,
+            message: "User information fetched successfully.",
+            user: safeUser
+        });
+    } catch (error) {
+        console.log(error);
+
+        res.status(500).json({
+            success: false,
+            message: "Something went wrong"
+        });
+    }
+}
+
+
+module.exports = { addListingToCollection, getCollectionHistory, getAllFoodListing, updateNgoProfile, addToDistributionHistory, getDistributionHistory, getUserProfile }

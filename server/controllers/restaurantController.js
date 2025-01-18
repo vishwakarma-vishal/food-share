@@ -6,6 +6,38 @@ const Ngo = require("../models/Ngo");
 const { z } = require("zod");
 const cloudinaryUpload = require("../utils/cloudinaryUpload");
 
+// get use info
+const getUserProfile = async (req, res) => {
+    const restaurantId = req.restaurantId;
+
+    try {
+        const userInDb = await Restaurant.findOne({_id:restaurantId});
+
+        if (!userInDb) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
+
+        const userObject = userInDb.toObject();
+        const { createdAt, __v, password, ...safeUser } = userObject;
+
+        res.status(200).json({
+            success: true,
+            message: "User information fetched successfully.",
+            user: safeUser
+        });
+    } catch (error) {
+        console.log(error);
+
+        res.status(500).json({
+            success: false,
+            message: "Something went wrong"
+        });
+    }
+}
+
 // Mark food as collected, add at in donation history of restaurant and collection history of ngo
 const addListingToHistory = async (req, res) => {
     const { foodListingId } = req.body;
@@ -135,7 +167,7 @@ const getDonationHistory = async (req, res) => {
 }
 
 // Update restaurant profile
-updateRestaurantProfile = async (req, res) => {
+const updateRestaurantProfile = async (req, res) => {
     try {
         const restaurantId = req.restaurantId;
         const file = req.files?.restaurantImg;
@@ -237,4 +269,4 @@ updateRestaurantProfile = async (req, res) => {
     }
 }
 
-module.exports = { addListingToHistory, getDonationHistory, updateRestaurantProfile }
+module.exports = { addListingToHistory, getDonationHistory, updateRestaurantProfile, getUserProfile }

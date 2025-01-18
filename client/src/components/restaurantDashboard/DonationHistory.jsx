@@ -19,7 +19,7 @@ const DonationHistory = () => {
                 url: `${import.meta.env.VITE_API_URL}/restaurant/history`,
                 method: "get",
                 headers: {
-                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
                 }
             });
 

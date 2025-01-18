@@ -57,7 +57,18 @@ ngoSignup = async (req, res) => {
 
         // generate jwt token
         const payload = { id: userInDb._id, role: userInDb.role };
-        const token = jwt.sign(payload, process.env.JWT_NGO_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign(payload, process.env.JWT_NGO_SECRET, { expiresIn: '1m' });
+        const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
+
+        // Store refresh token in an HTTP-only secure cookie
+        const isProduction = process.env.NODE_ENV === "production";
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,  
+            secure: isProduction, 
+            sameSite: isProduction ? "None" : "Lax", 
+            maxAge: 7 * 24 * 60 * 60 * 1000, 
+            path: "/",
+        });
 
         // creating safe user obj to send in response
         const safeUser = userInDb.toObject();
@@ -145,7 +156,17 @@ restaurantSignup = async (req, res) => {
 
         // generate jwt token
         const payload = { id: userInDb._id, role: userInDb.role };
-        const token = jwt.sign(payload, process.env.JWT_RESTAURANT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign(payload, process.env.JWT_RESTAURANT_SECRET, { expiresIn: '1m' });
+        const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
+
+        const isProduction = process.env.NODE_ENV === "production";
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true, 
+            secure: isProduction, 
+            sameSite: isProduction ? "None" : "Lax",
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+            path: "/",
+        });
 
         // creating safe user obj to send in response
         const safeUser = userInDb.toObject();
@@ -213,7 +234,19 @@ login = async (req, res) => {
             const payload = { id: userInDb._id, role: userInDb.role };
 
             const JWT_SECRET = userInDb.role === 'ngo' ? process.env.JWT_NGO_SECRET : process.env.JWT_RESTAURANT_SECRET;
-            const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
+            const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: '1m' });
+            const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
+
+            // Store refresh token in an HTTP-only secure cookie
+            const isProduction = process.env.NODE_ENV === "production";
+
+            res.cookie("refreshToken", refreshToken, {
+                httpOnly: true,  // Ensures the cookie can't be accessed by JavaScript
+                secure: isProduction,  // Only set 'secure' in production (requires HTTPS)
+                sameSite: isProduction ? "None" : "Lax",  // 'None' for cross-site cookies in production, 'Lax' for local dev
+                maxAge: 7 * 24 * 60 * 60 * 1000,  // Cookie expires in 7 days
+                path: "/",  // Accessible on the entire site
+            });
 
             // creating safe user obj to send in response
             const userObject = userInDb.toObject();
@@ -222,9 +255,9 @@ login = async (req, res) => {
             return res.status(200).json({
                 success: true,
                 message: "Login successful",
-                token: token,
+                accessToken,
                 role: userInDb.role,
-                safeUser
+                safeUser,
             })
         } else {
             return res.status(401).json({
@@ -248,4 +281,96 @@ login = async (req, res) => {
     }
 }
 
-module.exports = { ngoSignup, restaurantSignup, login }
+authenticateToken = (req, res) => {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(400).json({
+            success: false,
+            message: "Authorization token is required."
+        });
+    }
+
+    const token = authHeader.split(' ')[1];
+
+    try {
+        // Try decoding with NGO secret
+        const decodedNgoToken = jwt.verify(token, process.env.JWT_NGO_SECRET);
+        if (decodedNgoToken) {
+            return res.status(200).json({
+                isValid: true,
+                role: decodedNgoToken.role, 
+            });
+        } else {
+            const decodedRestaurantToken = jwt.verify(token, process.env.JWT_RESTAURANT_SECRET);
+            return res.status(200).json({
+                isValid: true,
+                role: decodedRestaurantToken.role
+            });
+        }
+    } catch (errRestaurant) {
+        return res.status(401).json({
+            isValid: false,
+            message: "Invalid or expired token",
+        });
+    }
+};
+
+logout = (req, res) => {
+    const isProduction = process.env.NODE_ENV === "production";
+
+    res.clearCookie('refreshToken', {
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: isProduction ? "None" : "Lax",
+        path: "/",
+    });
+
+    return res.status(200).json({
+        message: 'Logged out successfully'
+    });
+};
+
+refreshTokenHandler = (req, res) => {
+
+    const refreshToken = req.cookies.refreshToken; 
+
+    if (!refreshToken) {
+        return res.status(401).json({
+            success: false,
+            message: "Refresh token is required."
+        });
+    }
+
+    try {
+        // Verify the refresh token
+        const payload = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+
+        // Generate a new access token
+        const secret = payload.role === "ngo" ? process.env.JWT_NGO_SECRET : process.env.JWT_RESTAURANT_SECRET;
+        const newAccessToken = jwt.sign(
+            { id: payload.id, role: payload.role },
+            secret,
+            { expiresIn: "1m" } // Access token expiry
+        );
+
+        res.status(200).json({
+            success: true,
+            accessToken: newAccessToken
+        });
+    } catch (err) {
+        if (err.name === 'TokenExpiredError') {
+            return res.status(401).json({
+                success: false,
+                message: "Refresh token expired. Please log in again."
+            });
+        }
+
+        res.status(401).json({
+            success: false,
+            message: "Invalid refresh token. Please log in again."
+        });
+    }
+};
+
+module.exports = { ngoSignup, restaurantSignup, login, authenticateToken, logout, refreshTokenHandler }

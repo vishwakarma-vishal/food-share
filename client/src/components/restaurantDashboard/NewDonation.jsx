@@ -71,7 +71,7 @@ const NewDonation = ({ setIsSelected }) => {
                 data: formDataToSend,
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                    'Authorization': `Bearer ${localStorage.getItem("token")}`
+                    'Authorization': `Bearer ${localStorage.getItem("accessToken")}`
                 }
             });
 

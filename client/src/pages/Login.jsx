@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import axios from "axios";
 import { IoIosEyeOff, IoIosEye } from "react-icons/io";
 import useAuth from "../utils/useAuth";
+import api from "../utils/interceptors";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -23,10 +23,10 @@ const Login = () => {
         e.preventDefault();
 
         try {
-            const response = await axios({
+            const response = await api({
                 url: `${import.meta.env.VITE_API_URL}/auth/login`,
                 method: 'post',
-                data: formdata
+                data: formdata 
             });
 
             const data = response.data;
@@ -42,7 +42,7 @@ const Login = () => {
                     password: ""
                 });
 
-                login(data.role, data.token, data.safeUser);
+                login(data.role, data.accessToken);
 
                 toast.success("Logged in successfully.");
                 navigate('/');

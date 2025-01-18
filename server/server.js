@@ -1,17 +1,24 @@
 const express = require("express");
 const dotenv = require("dotenv");
-const app = express();
 const authRoutes = require("./routes/authRoutes")
 const listingRoutes = require("./routes/listingsRoutes");
 const ngoRoutes = require("./routes/ngoRoutes");
 const restaurantRoutes = require("./routes/restaurantRoutes");
 const fileUpload = require("express-fileupload");
 const cors = require("cors");
+const cookieParser = require('cookie-parser');
+
+dotenv.config(); //load env variables
+const app = express();
 
 // middleware
-dotenv.config(); //load env variables
+app.use(cookieParser());
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    // origin: process.env.NODE_ENV === "production" ? "https://your-production-site.com" : "http://localhost:5173",
+    origin: "http://localhost:5173",
+    credentials: true,
+}));
 app.use(fileUpload({
     useTempFiles: true, 
     tempFileDir: '/tmp/',

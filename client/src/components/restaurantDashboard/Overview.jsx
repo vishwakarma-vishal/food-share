@@ -1,8 +1,5 @@
-import useAuth from "../../utils/useAuth";
 
-const Overview = ({ setIsSelected }) => {
-    const { auth } = useAuth();
-    const user = auth.safeUser;
+const Overview = ({ setIsSelected, user }) => {
 
     // convert time to required format (12:08 AM)
     const convertTo12HourFormat = (time) => {

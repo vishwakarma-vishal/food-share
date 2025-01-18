@@ -4,9 +4,7 @@ import { FiUploadCloud } from "react-icons/fi";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const Profile = ({setIsSelected}) => {
-  const { auth, updateUser } = useAuth();
-  const user = auth.safeUser || {};
+const Profile = ({setIsSelected, user, getUserData}) => {
   const [previewImg, setPreviewImg] = useState(user.profileImg || "");
   const [selectedFile, setSelectedFile] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -59,16 +57,15 @@ const Profile = ({setIsSelected}) => {
         data: formDataToSend,
         headers: {
           'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${localStorage.getItem("token")}`
+          'Authorization': `Bearer ${localStorage.getItem("accessToken")}`
         }
       });
 
       const data = response.data;
-      const updatedUser = data.safeUser;
 
       if (data.success) {
         toast.success("User updated sucessfully");
-        updateUser(updatedUser);
+        getUserData();
         setIsSelected("overview");
       }
 

@@ -19,7 +19,6 @@ const authenticateNgo = (req, res, next) => {
         req.ngoId = payload.id;
         next();
     } catch (err) {
-        console.log(err);
         res.status(401).json({
             success: false,
             message: "Invalid or expired token."

@@ -21,7 +21,7 @@ const MyListing = ({ isMenuOpen, isSelected, setIsSelected }) => {
                 method: "get",
                 headers: {
                     "Content-Type": "multipart/form-data",
-                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
                 }
             });
 
@@ -99,7 +99,7 @@ const MyListing = ({ isMenuOpen, isSelected, setIsSelected }) => {
                 method: 'delete',
                 headers: {
                     'Content-Type': "multipart/form-data",
-                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
                 }
             });
 

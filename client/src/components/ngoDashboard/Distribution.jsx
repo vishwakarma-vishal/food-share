@@ -1,6 +1,6 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import api from '../../utils/interceptors';
 
 export const Distribution = () => {
   const [distributionHistory, setDistributionHistory] = useState([]);
@@ -14,11 +14,11 @@ export const Distribution = () => {
   const getDistributionHistory = async () => {
     try {
       setLoading(true);
-      const response = await axios({
+      const response = await api({
         url: `${import.meta.env.VITE_API_URL}/ngo/distribution-history`,
         method: "get",
         headers: {
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
+          "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
         }
       });
 

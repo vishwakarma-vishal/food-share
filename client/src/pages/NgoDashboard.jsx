@@ -1,8 +1,6 @@
 import { FaHome, FaBox, FaUserCircle, FaBars, FaTimes } from 'react-icons/fa';
 import { GiCardboardBox } from "react-icons/gi";
 import { GiBoxUnpacking } from "react-icons/gi";
-import { FaArrowLeft } from "react-icons/fa6";
-import { useState } from 'react';
 import { RiMenu2Line } from "react-icons/ri";
 import Overview from '../components/ngoDashboard/Overview';
 import Listing from '../components/ngoDashboard/Listing';
@@ -10,15 +8,48 @@ import { Collection } from '../components/ngoDashboard/Collection';
 import { Distribution } from '../components/ngoDashboard/Distribution';
 import { Profile } from '../components/ngoDashboard/Profile';
 
+import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
+import api from '../utils/interceptors';
+
 const NgoDashboard = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isSelected, setIsSelected] = useState("overview");
+
+    const [user, setUser] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    const getUserData = async () => {
+        try {
+            setLoading(true);
+            const response = await api({
+                url: `${import.meta.env.VITE_API_URL}/ngo/info`,
+                method: "get",
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+                }
+            });
+
+            console.log(response);
+            const user = response.data.user;
+            setUser(user);
+        } catch (error) {
+            console.log("something went wrong");
+            toast.error("Unable to get user info, try again later");
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    useEffect(() =>
+        getUserData, []);
 
     // to render menu content
     const renderContent = () => {
         switch (isSelected) {
             case "overview":
-                return <Overview setIsSelected={setIsSelected} />
+                return <Overview setIsSelected={setIsSelected} user={user} />
             case "listing":
                 return <Listing isMenuOpen={isMenuOpen} />
             case "collection":
@@ -26,7 +57,7 @@ const NgoDashboard = () => {
             case "distribution":
                 return <Distribution />
             case "profile":
-                return <Profile setIsSelected={setIsSelected}/>
+                return <Profile setIsSelected={setIsSelected} user={user} getUserData={getUserData}/>
             default:
                 return <Overview />
         }
