@@ -32,6 +32,9 @@ app.use(
     })
 );
 
+// Handle preflight requests explicitly
+app.options("*", cors()); // Allow all preflight requests
+
 app.use(fileUpload({
     useTempFiles: true,
     tempFileDir: '/tmp/',
