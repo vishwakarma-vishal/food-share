@@ -11,9 +11,6 @@ const cookieParser = require('cookie-parser');
 dotenv.config(); //load env variables
 const app = express();
 
-// middleware
-app.use(cookieParser());
-app.use(express.json());
 const allowedOrigins = [
     "https://food-share-app.netlify.app", 
     "http://localhost:5173",            
@@ -35,6 +32,9 @@ app.use(
 // Handle preflight requests explicitly
 app.options("*", cors()); // Allow all preflight requests
 
+// middleware
+app.use(cookieParser());
+app.use(express.json());
 app.use(fileUpload({
     useTempFiles: true,
     tempFileDir: '/tmp/',
