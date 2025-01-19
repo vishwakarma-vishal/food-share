@@ -14,10 +14,24 @@ const app = express();
 // middleware
 app.use(cookieParser());
 app.use(express.json());
-app.use(cors({
-    origin: process.env.NODE_ENV === "production" ? "https://food-share-app.netlify.app" : "http://localhost:5173",
-    credentials: true,
-}));
+const allowedOrigins = [
+    "https://food-share-app.netlify.app", 
+    "http://localhost:5173",            
+];
+
+app.use(
+    cors({
+        origin: function (origin, callback) {
+            if (!origin || allowedOrigins.includes(origin)) {
+                callback(null, true); 
+            } else {
+                callback(new Error("Not allowed by CORS")); 
+            }
+        },
+        credentials: true, 
+    })
+);
+
 app.use(fileUpload({
     useTempFiles: true,
     tempFileDir: '/tmp/',
