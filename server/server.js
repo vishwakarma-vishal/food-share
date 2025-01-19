@@ -15,12 +15,11 @@ const app = express();
 app.use(cookieParser());
 app.use(express.json());
 app.use(cors({
-    // origin:"http://localhost:5173",
-    origin: "https://food-share-app.netlify.app",
+    origin: process.env.NODE_ENV === "production" ? "https://food-share-app.netlify.app" : "http://localhost:5173",
     credentials: true,
 }));
 app.use(fileUpload({
-    useTempFiles: true, 
+    useTempFiles: true,
     tempFileDir: '/tmp/',
 }));
 
@@ -35,6 +34,6 @@ require("./config/cloudinary");
 
 
 const PORT = process.env.PORT;
-app.listen(PORT, ()=> {
+app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
