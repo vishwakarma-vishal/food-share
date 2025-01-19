@@ -42,8 +42,10 @@ const NgoDashboard = () => {
         }
     }
 
-    useEffect(() =>
-        getUserData, []);
+    useEffect(() => {
+        getUserData();
+    }, []);
+    
 
     // to render menu content
     const renderContent = () => {
