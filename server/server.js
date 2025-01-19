@@ -14,28 +14,26 @@ const app = express();
 // middleware
 app.use(cookieParser());
 app.use(express.json());
-// const allowedOrigins = [
-//     "https://food-share-app.netlify.app", 
-//     "http://localhost:5173",            
-// ];
+const allowedOrigins = [
+    "https://food-share-app.netlify.app", 
+    "http://localhost:5173",            
+];
 
-// app.use(
-//     cors({
-//         origin: function (origin, callback) {
-//             if (!origin || allowedOrigins.includes(origin)) {
-//                 callback(null, true); 
-//             } else {
-//                 callback(new Error("Not allowed by CORS")); 
-//             }
-//         },
-//         credentials: true, 
-//     })
-// );
+app.use(
+    cors({
+        origin: function (origin, callback) {
+            if (!origin || allowedOrigins.includes(origin)) {
+                callback(null, true); 
+            } else {
+                callback(new Error("Not allowed by CORS")); 
+            }
+        },
+        credentials: true, 
+    })
+);
 
-// // Handle preflight requests explicitly
-// app.options("*", cors()); // Allow all preflight requests
-app.use(cors({ origin: "*", credentials: true }));
-
+// Handle preflight requests explicitly
+app.options("*", cors()); // Allow all preflight requests
 
 app.use(fileUpload({
     useTempFiles: true,
