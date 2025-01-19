@@ -18,19 +18,22 @@ const allowedOrigins = [
 
 app.use(
     cors({
-        origin: function (origin, callback) {
+        origin: (origin, callback) => {
             if (!origin || allowedOrigins.includes(origin)) {
-                callback(null, true); 
+                callback(null, true);
             } else {
-                callback(new Error("Not allowed by CORS")); 
+                callback(new Error("Not allowed by CORS"));
             }
         },
-        credentials: true, 
+        credentials: true, // Allow cookies and credentials
+        methods: "GET,POST,PUT,DELETE", // Allowed HTTP methods
+        allowedHeaders: "Content-Type,Authorization", // Allowed headers
     })
 );
 
-// Handle preflight requests explicitly
-app.options("*", cors()); // Allow all preflight requests
+// Explicitly handle preflight requests
+app.options("*", cors());
+
 
 // middleware
 app.use(cookieParser());
