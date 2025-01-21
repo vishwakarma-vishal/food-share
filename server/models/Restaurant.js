@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const RestaurantSchema = mongoose.Schema({
     profileImg: { type: String },
     imgPublicId: {type: String},
-    restaurantName: { type: String, required: true },
+    name: { type: String, required: true },
     role: {type: String, default: 'restaurant'},
     phone: { type: Number, required: true },
     email: { type: String, required: true },

@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { IoIosEyeOff, IoIosEye } from "react-icons/io";
 import { toast } from "react-toastify";
 import useAuth from "../utils/useAuth";
 import api from "../utils/interceptors";
+import { useNavigate } from "react-router-dom";
 
-const RestaurantSignup = () => {
+const Signup = () => {
     const navigate = useNavigate();
     const [error, setError] = useState("");
     const [isPassVisible, setIsPassVisible] = useState(false);
-    const { login } = useAuth(); // recoil state
-
+    const { login } = useAuth();
+    const [type, setType] = useState("");
     const [formdata, setFormdata] = useState({
-        restaurantName: "",
+        name: "",
         address: "",
         city: "",
         phone: "",
@@ -46,68 +46,107 @@ const RestaurantSignup = () => {
             return;
         }
 
-        try {
-            const response = await api({
-                url: `${import.meta.env.VITE_API_URL}/auth/restaurant`,
-                method: 'post',
-                data: formdata
-            });
-
-            const data = response.data;
-
-            if (!data.success) {
-                console.log("Error", data);
-                toast.error(data.message);
-            }
-
-            if (data.success) {
-                setFormdata({
-                    restaurantName: "",
-                    address: "",
-                    city: "",
-                    phone: "",
-                    email: "",
-                    password: ""
+        if (type == "ngo") {
+            try {
+                const response = await api({
+                    url: `${import.meta.env.VITE_API_URL}/auth/ngo`,
+                    method: 'post',
+                    data: formdata
                 });
-                setConfirmPass("");
-                // managing the state
-                login(data.role, data.accessToken);
 
-                toast.success("Signed up successfully.");
-                console.log(data);
-                navigate('/restaurant-dashboard');
+                const data = response.data;
+
+                if (!data.success) {
+                    console.log("Error", data);
+                    toast.error(data.message);
+                }
+
+                if (data.success) {
+                    setFormdata({
+                        name: "",
+                        address: "",
+                        city: "",
+                        phone: "",
+                        email: "",
+                        password: ""
+                    });
+                    setConfirmPass("");
+                    // managing the state
+                    login(data.role, data.accessToken);
+
+                    toast.success("Signed up successfully.");
+                    navigate('/ngo-dashboard');
+                }
+            } catch (e) {
+                console.log(e);
+                toast.error("An error occurred. Please try again.");
             }
-        } catch (e) {
-            console.log(e);
-            toast.error("An error occurred. Please try again.");
+        }
+        else {
+            try {
+                const response = await api({
+                    url: `${import.meta.env.VITE_API_URL}/auth/restaurant`,
+                    method: 'post',
+                    data: formdata
+                });
+
+                console.log(response);
+
+                const data = response.data;
+
+                if (!data.success) {
+                    console.log("Error", data);
+                    toast.error(data.message);
+                }
+
+                if (data.success) {
+                    setFormdata({
+                        name: "",
+                        address: "",
+                        city: "",
+                        phone: "",
+                        email: "",
+                        password: ""
+                    });
+                    setConfirmPass("");
+                    // managing the state
+                    login(data.role, data.accessToken);
+
+                    toast.success("Signed up successfully.");
+                    console.log(data);
+                    navigate('/restaurant-dashboard');
+                }
+            } catch (e) {
+                console.log(e);
+                toast.error("An error occurred. Please try again.");
+            }
         }
     }
 
     return (
         <div className="max-w-6xl mx-auto px-4 md:px-8 lg:px-10 py-10 flex flex-col lg:flex-row justify-between items-center gap-10">
             <div className=" space-y-2 text-center">
-                <h2 className="text-3xl font-semibold">Sign up your restaurant</h2>
-                <p className="py-2">"Share your flavors with the world <br /> and connect with food lovers everywhere!"</p>
+                <h2 className="text-3xl font-semibold">Create an Account</h2>
+                <p className="py-2">"Make a difference and connect with your community!"</p>
                 <img
                     className="aspect-video rounded-xl h-[250px] mx-auto"
-                    src="/restaurant.jpg" alt="restaurant img"
+                    src="donate.jpg" alt="ngo img"
                 />
-                <button className="underline text-green-600" onClick={() => navigate('/ngo-signup')}>Switch to NGO Sign Up</button>
             </div>
 
             <div className="w-full md:w-3/4 lg:w-1/2 bg-white rounded-lg p-8 shadow-xl">
                 <form onSubmit={submitHandler} className="space-y-2">
                     <div className="space-y-2">
                         <label htmlFor="name" className="font-medium text-gray-800">
-                            Restaurant name
+                            Name
                         </label><br />
                         <input
                             type="text"
                             id="name"
-                            name="restaurantName"
-                            value={formdata.restaurantName}
+                            name="name"
+                            value={formdata.name}
                             onChange={changeHandler}
-                            placeholder="Type your restaurant name"
+                            placeholder="Type your Restaurant/NGO name"
                             className="border outline-none border-gray-600 p-2 w-full rounded-xl"
                             minLength={3}
                             maxLength={100}
@@ -131,20 +170,34 @@ const RestaurantSignup = () => {
                         />
                     </div>
 
-                    <div className="space-y-2">
-                        <label htmlFor="city" className="font-medium text-gray-800">City</label><br />
-                        <input
-                            type="text"
-                            id="city"
-                            name="city"
-                            value={formdata.city}
-                            onChange={changeHandler}
-                            placeholder="Type your city"
-                            className="border outline-none border-gray-600 p-2 w-full rounded-xl"
-                            minLength={3}
-                            maxLength={200}
-                            required
-                        />
+                    <div className="flex gap-4">
+                        <div className="w-full">
+                            <label htmlFor="profile" className="font-medium text-gray-800">Profile</label><br />
+                            <select id="profile"
+                                className="border outline-none border-gray-600 p-2 w-full rounded-xl"
+                                required
+                                value={type}
+                                onChange={(e) => setType(e.target.value)}>
+                                <option value="" disabled>Select Type</option>
+                                <option value="ngo">NGO</option>
+                                <option value="restaurant">Restaurant</option>
+                            </select>
+                        </div>
+                        <div className="w-full">
+                            <label htmlFor="city" className="font-medium text-gray-800">City</label><br />
+                            <input
+                                type="text"
+                                id="city"
+                                name="city"
+                                value={formdata.city}
+                                onChange={changeHandler}
+                                placeholder="Type your city"
+                                className="border outline-none border-gray-600 p-2 w-full rounded-xl"
+                                minLength={3}
+                                maxLength={200}
+                                required
+                            />
+                        </div>
                     </div>
 
                     <div className="flex gap-3">
@@ -232,17 +285,24 @@ const RestaurantSignup = () => {
                     </div>
 
                     <div className="space-y-2">
-                        <p className="text-sm font-gray-800">Join us and delight customers with your unique dishes!</p>
-                        <button type="submit" className="bg-green-500 hover:bg-green-600 transition-all duration-200 text-white py-2 w-full rounded-lg font-semibold">
-                            Start sharing your flavors
+                        <p className="text-sm font-gray-800"> Join us and help make a difference in your community!</p>
+                        <button
+                            type="submit"
+                            className={`bg-green-500 hover:bg-green-600 transition-all duration-200 text-white py-2 w-full rounded-lg font-semibold ${error !== "" ? "cursor-not-allowed" : ""}`}
+                            disabled={error !== ""}
+                        >
+                            Start Making a Difference
                         </button>
                     </div>
                 </form>
 
-                <button className="underline text-green-600 mx-auto block mt-4" onClick={() => navigate('/ngo-signup')}>Switch to NGO Sign Up</button>
+                <div className="flex w-full mt-2 gap-1 justify-center text-center">
+                    Already have an account{" "}
+                    <button className="inline-block underline text-base text-green-600" onClick={() => navigate('/login')}> login here</button>
+                </div>
             </div>
         </div>
     )
 }
 
-export default RestaurantSignup;
+export default Signup;

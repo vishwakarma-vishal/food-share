@@ -23,7 +23,7 @@ const Overview = ({ setIsSelected, user }) => {
             <div className="flex items-center gap-x-6 bg-white p-6 rounded-xl shadow-sm">
                 <img src={user.profileImg ? user.profileImg : "restaurant-placeholder.png"} alt="ngo-img" className="w-28 h-28 rounded-full" />
                 <div className="flex flex-col gap-y-1 text-gray-700">
-                    <h3 className="text-2xl font-semibold text-gray-800">{user.restaurantName}
+                    <h3 className="text-2xl font-semibold text-gray-800">{user.name}
                         {user.openFrom && user.openTill && (
                             <span className="text-xs text-gray-800 italic">
                                 {` ${convertTo12HourFormat(user.openFrom)} - ${convertTo12HourFormat(user.openTill)}`}

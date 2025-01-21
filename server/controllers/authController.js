@@ -8,7 +8,7 @@ ngoSignup = async (req, res) => {
     try {
         // Zod Schema
         const ngoSignupSchema = z.object({
-            ngoName: z.string()
+            name: z.string()
                 .trim()
                 .min(3, "NGO Name must be at least 3 characters")
                 .max(100, "NGO Name cannot exceed 100 characters"),
@@ -37,7 +37,7 @@ ngoSignup = async (req, res) => {
         // validate and sanitize user input
         const sanitizedData = ngoSignupSchema.parse(req.body);
 
-        let { ngoName, phone, email, password, city, address } = sanitizedData;
+        let { name, phone, email, password, city, address } = sanitizedData;
 
         const emailInNgo = await Ngo.findOne({ email: email });
         const emailInRestaurant = await Restaurant.findOne({ email: email });
@@ -52,7 +52,7 @@ ngoSignup = async (req, res) => {
         // hashing password
         const hashedPassword = bcrypt.hashSync(password, 10);
 
-        const ngo = new Ngo({ ngoName, phone, email, password: hashedPassword, city, address });
+        const ngo = new Ngo({ name, phone, email, password: hashedPassword, city, address });
         const userInDb = await ngo.save();
 
         // generate jwt token
@@ -107,7 +107,7 @@ restaurantSignup = async (req, res) => {
     try {
         // Zod Schema
         const restaurantSignupSchema = z.object({
-            restaurantName: z.string()
+            name: z.string()
                 .trim()
                 .min(3, "Restaurant Name must be at least 3 characters")
                 .max(100, "Restaurant Name cannot exceed 100 characters"),
@@ -136,7 +136,7 @@ restaurantSignup = async (req, res) => {
         // validate and sanitize user input
         const sanitizedData = restaurantSignupSchema.parse(req.body);
 
-        const { restaurantName, phone, email, password, city, address } = sanitizedData;
+        const { name, phone, email, password, city, address } = sanitizedData;
 
         const emailInRestaurant = await Restaurant.findOne({ email: email });
         const emailInNgo = await Ngo.findOne({ email: email });
@@ -151,7 +151,7 @@ restaurantSignup = async (req, res) => {
         // hashing password
         const hashedpassword = bcrypt.hashSync(password, 10);
 
-        const newRestaurant = new Restaurant({ restaurantName, phone, email, password: hashedpassword, city, address });
+        const newRestaurant = new Restaurant({ name, phone, email, password: hashedpassword, city, address });
         const userInDb = await newRestaurant.save();
 
         // generate jwt token

@@ -43,7 +43,7 @@ const Header = () => {
                 <div className="flex gap-4">
                     <button
                         className="px-4 py-2 bg-green-500 rounded-full text-white font-semibold"
-                        onClick={() => navigate('/restaurant-signup')}>
+                        onClick={() => navigate('/signup')}>
                         Sign up
                     </button>
                     <button

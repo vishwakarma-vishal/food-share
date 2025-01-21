@@ -19,7 +19,7 @@ export const Profile = ({ setIsSelected, user, getUserData }) => {
   };
 
   const [formData, setFormData] = useState({
-    ngoName: user.ngoName || "",
+    name: user.name || "",
     phone: user.phone || "",
     email: user.email || "",
     city: user.city || "",
@@ -100,7 +100,7 @@ export const Profile = ({ setIsSelected, user, getUserData }) => {
     e.preventDefault();
 
     setFormData({
-      ngoName: user.ngoName || "",
+      name: user.name || "",
       phone: user.phone || "",
       email: user.email || "",
       city: user.city || "",
@@ -154,9 +154,9 @@ export const Profile = ({ setIsSelected, user, getUserData }) => {
               <input
                 id="name"
                 type="text"
-                name="ngoName"
+                name="name"
                 onChange={handleChange}
-                value={formData.ngoName}
+                value={formData.name}
                 placeholder="Enter your name..."
                 className="border border-gray-500 w-full p-2 rounded-md my-2 outline-none"
                 required />

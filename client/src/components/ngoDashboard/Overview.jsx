@@ -27,7 +27,7 @@ const Overview = ({ setIsSelected, user }) => {
 
                 <div className="flex flex-col gap-y-1 text-gray-700">
                     <h3 className="text-2xl font-semibold text-gray-800">
-                        {user.ngoName}
+                        {user.name}
                         {user.foundingDate && <span className="text-xs text-gray-800 italic"> since {formatDate(user.foundingDate)}</span>}
                     </h3>
 

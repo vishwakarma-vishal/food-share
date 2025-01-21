@@ -61,7 +61,7 @@ const Login = () => {
                 <p className="py-2">"Log in to continue your journey of making a difference!"</p>
                 <img
                     className="aspect-video rounded-xl h-[250px] mx-auto"
-                    src="donate.jpg" alt="ngo img"
+                    src="ngo.jpg" alt="ngo img"
                 />
             </div>
 
@@ -111,9 +111,9 @@ const Login = () => {
                     <button type="submit" className="bg-green-500 hover:bg-green-600 transition-all duration-200 text-white py-2 w-full rounded-lg font-semibold">Log In</button>
                 </form>
 
-                <div className="flex mt-2">
-                    <button className="underline text-base text-green-600 mx-auto block ml-0" onClick={() => navigate('/ngo-signup')}>NGO Sign Up</button>
-                    <button className="underline text-base text-green-600 mx-auto block mr-0" onClick={() => navigate('/restaurant-signup')}>Restaurant Sign Up</button>
+                <div className="flex w-full mt-2 gap-1 justify-center text-center">
+                    Not have an account{" "} 
+                    <button className="inline-block underline text-base text-green-600" onClick={() => navigate('/signup')}> create one here</button>
                 </div>
 
             </div>

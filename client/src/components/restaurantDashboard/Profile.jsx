@@ -10,7 +10,7 @@ const Profile = ({setIsSelected, user, getUserData}) => {
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
-    restaurantName: user.restaurantName || '',
+    name: user.name || '',
     openFrom: user.openFrom || '',
     openTill: user.openTill || '',
     city: user.city || '',
@@ -82,7 +82,7 @@ const Profile = ({setIsSelected, user, getUserData}) => {
     e.preventDefault();
 
     setFormData({
-      restaurantName: user.restaurantName || '',
+      name: user.name || '',
       openFrom: user.openFrom || '',
       openTill: user.openTill || '',
       city: user.city || '',
@@ -134,9 +134,9 @@ const Profile = ({setIsSelected, user, getUserData}) => {
               <label htmlFor="name">Restaurant Name</label><br />
               <input
                 id="name"
-                name="restaurantName"
+                name="name"
                 type="text"
-                value={formData.restaurantName}
+                value={formData.name}
                 onChange={changeHandler}
                 minLength={3}
                 maxLength={100}

@@ -133,7 +133,7 @@ const updateNgoProfile = async (req, res) => {
 
         // Zod validation schema
         const updateNgoProfileSchema = z.object({
-            ngoName: z.string()
+            name: z.string()
                 .trim()
                 .min(3, "NGO Name must be at least 3 characters")
                 .max(100, "NGO Name cannot exceed 100 characters"),

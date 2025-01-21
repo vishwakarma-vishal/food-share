@@ -1,4 +1,5 @@
 import { FaHome, FaBox, FaUserCircle, FaBars, FaTimes } from 'react-icons/fa';
+import { FaArrowLeft } from "react-icons/fa6";
 import { GiCardboardBox } from "react-icons/gi";
 import { GiBoxUnpacking } from "react-icons/gi";
 import { RiMenu2Line } from "react-icons/ri";

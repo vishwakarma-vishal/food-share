@@ -181,7 +181,7 @@ const updateRestaurantProfile = async (req, res) => {
         const data = JSON.parse(req.body.data);
 
         const updateRestaurantProfileSchema = z.object({
-            restaurantName: z.string()
+            name: z.string()
                 .trim()
                 .min(3, "Restaurant Name must be at least 3 characters")
                 .max(100, "Restaurant Name cannot exceed 100 characters")
