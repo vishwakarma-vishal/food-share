@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import ListingCard from './ListingCard';
 import axios from 'axios';
 import { toast } from "react-toastify";
+import api from '../../utils/interceptors';
 
 const MyListing = ({ isMenuOpen, isSelected, setIsSelected }) => {
     const [foodListings, setFoodListings] = useState([]);
@@ -16,7 +17,7 @@ const MyListing = ({ isMenuOpen, isSelected, setIsSelected }) => {
     const getMyFoodListings = async () => {
         try {
             setLoading(true);
-            const response = await axios({
+            const response = await api({
                 url: `${import.meta.env.VITE_API_URL}/listing`,
                 method: "get",
                 headers: {
@@ -24,10 +25,13 @@ const MyListing = ({ isMenuOpen, isSelected, setIsSelected }) => {
                     "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
                 }
             });
-
             const data = response.data.foodListings;
-            setFoodListings(data);
-            setCurrentListings(data);
+
+            //sort newest first
+            const sortedData = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+            setFoodListings(sortedData);
+            setCurrentListings(sortedData);
         } catch (error) {
             console.log("something went wrong");
             toast.error("Unable to get listings, try again later");
@@ -126,8 +130,8 @@ const MyListing = ({ isMenuOpen, isSelected, setIsSelected }) => {
                 </button>
             </div>
 
-            {loading ? 
-            <div className="text-gray-500 h-full flex justify-center items-center">Loading...</div> :
+            {loading ?
+                <div className="text-gray-500 h-full flex justify-center items-center">Loading...</div> :
                 <div>
                     {
                         foodListings.length === 0 ?

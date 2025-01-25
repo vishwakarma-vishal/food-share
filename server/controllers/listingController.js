@@ -98,7 +98,11 @@ getAllFoodListingOfRestaurant = async (req, res) => {
     const restaurantId = req.restaurantId;
 
     try {
-        const foodListings = await FoodListing.find({ restaurantId: restaurantId });
+        const foodListings = await FoodListing.find({ restaurantId: restaurantId })
+        .populate({
+            path: "reservedBy",
+            select: "name"
+        });
 
         if (foodListings.length === 0) {
             return res.status(200).json({

@@ -1,7 +1,7 @@
 import { useState } from "react";
-import axios from 'axios';
 import { toast } from "react-toastify";
 import { FiUploadCloud } from "react-icons/fi";
+import api from "../../utils/interceptors";
 
 const NewDonation = ({ setIsSelected }) => {
     const [previewImg, setPreviewImg] = useState("");
@@ -65,7 +65,7 @@ const NewDonation = ({ setIsSelected }) => {
 
         try {
             setLoading(true);
-            const response = await axios({
+            const response = await api({
                 url: `${import.meta.env.VITE_API_URL}/listing/create`,
                 method: "post",
                 data: formDataToSend,

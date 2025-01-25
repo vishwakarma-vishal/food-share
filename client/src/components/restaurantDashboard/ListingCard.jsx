@@ -4,8 +4,6 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const ListingCard = ({ foodListing, handleDelete, isModalOpen, setIsModalOpen, getMyFoodListings }) => {
-    const { auth } = useAuth();
-    const address = auth.safeUser?.address;
 
     // format date like 1-jan-2025
     const formatDate = (dateString) => {
@@ -38,7 +36,7 @@ const ListingCard = ({ foodListing, handleDelete, isModalOpen, setIsModalOpen, g
         e.preventDefault();
 
         try {
-            const response = await axios({
+            const response = await api({
                 url: `${import.meta.env.VITE_API_URL}/restaurant/history`,
                 method: "post",
                 data: {
@@ -92,10 +90,12 @@ const ListingCard = ({ foodListing, handleDelete, isModalOpen, setIsModalOpen, g
                         Pickup Time:
                         <span className="font-normal text-gray-600"> {formatTime(foodListing.pickupFrom)} - {formatTime(foodListing.pickupTill)}</span>
                     </p>
-                    {/* <p className="text-sm font-semibold">
-                        Address:
-                        <span className="font-normal text-gray-600"> {address}</span>
-                    </p> */}
+                    {(foodListing.reservedBy?.name && foodListing.status === "reserved") &&
+                        <p className="text-sm font-semibold">
+                            Reserved By:
+                            <span className="font-normal text-gray-600">{foodListing.reservedBy.name}</span>
+                        </p>
+                    }
                 </div>
             </div>
 
@@ -111,10 +111,14 @@ const ListingCard = ({ foodListing, handleDelete, isModalOpen, setIsModalOpen, g
             }
 
             {/* buttons */}
-            <div className="mt-2 w-full flex gap-4">
-                <button onClick={() => setIsModalOpen(true)} className="py-1 text-white bg-green-600 w-full rounded-full">Edit</button>
-                <button onClick={() => handleDelete(foodListing._id)} className="py-1 text-white bg-red-600 w-full rounded-full">Delete</button>
-            </div>
+            {
+                (foodListing.status === "available" || foodListing.status === "reserved") ?
+                <div className="mt-2 w-full flex gap-4">
+                    <button onClick={() => setIsModalOpen(true)} className="py-1 text-white bg-green-600 w-full rounded-full">Edit</button>
+                    <button onClick={() => handleDelete(foodListing._id)} className="py-1 text-white bg-red-600 w-full rounded-full">Delete</button>
+                </div> :
+                <div className="bg-gray-300 text-center py-1 rounded-sm">{foodListing.status}</div>
+            }
 
             {/* editing modal */}
             {isModalOpen &&
