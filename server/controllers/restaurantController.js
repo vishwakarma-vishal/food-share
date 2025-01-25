@@ -141,7 +141,7 @@ const getDonationHistory = async (req, res) => {
                 select: "title reservedBy",
                 populate: {
                     path: "reservedBy",
-                    select: "ngoName"
+                    select: "name"
                 }
             });
 

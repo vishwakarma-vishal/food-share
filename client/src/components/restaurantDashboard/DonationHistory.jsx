@@ -1,7 +1,7 @@
-import axios from 'axios';
 import React, { useEffect } from 'react'
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import api from '../../utils/interceptors';
 
 const DonationHistory = () => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -15,13 +15,14 @@ const DonationHistory = () => {
     const getDonationHistory = async () => {
         try {
             setLoading(true);
-            const response = await axios({
+            const response = await api({
                 url: `${import.meta.env.VITE_API_URL}/restaurant/history`,
                 method: "get",
                 headers: {
                     "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
                 }
             });
+            console.log(response.data.donationHistory);
 
             setDonationHistory(response.data.donationHistory);
             setCurrentHistory(response.data.donationHistory);
@@ -150,7 +151,7 @@ const DonationHistory = () => {
                                                     <td className="border-b p-3">{collection.foodListingId.title}</td>
                                                     <td className="border-b p-3">{collection.status}</td>
                                                     <td className="border-b p-3">{formatDate(collection.createdAt)}</td>
-                                                    <td className="border-b p-3">{collection.foodListingId.reservedBy.ngoName}</td>
+                                                    <td className="border-b p-3">{collection.foodListingId.reservedBy?.name? collection.foodListingId.reservedBy.name: "NA" }</td>
                                                 </tr>
                                             )
                                         })}

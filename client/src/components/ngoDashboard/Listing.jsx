@@ -27,6 +27,7 @@ const MyListing = ({ isMenuOpen }) => {
 
             const data = response.data;
 
+            console.log(data);
             setFoodListings(data.FoodListings);
             setCurrentListings(data.FoodListings);
 

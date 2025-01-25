@@ -4,6 +4,7 @@ const { z } = require("zod");
 const cloudinaryUpload = require("../utils/cloudinaryUpload");
 const DistributionHistory = require("../models/DistributionHistory");
 const Ngo = require("../models/Ngo");
+const DonationHistory = require("../models/DonationHistory");
 
 // Reserve food
 const addListingToCollection = async (req, res) => {
@@ -59,6 +60,44 @@ const getAllFoodListing = async (req, res) => {
     try {
         const foodListings = await FoodListing.find().populate('restaurantId', 'address restaurantName');
 
+        const now = new Date();
+        await FoodListing.updateMany(
+            { expiry: { $lt: now } },
+            { $set: { status: "expired" } }
+        );
+        
+        // get all the expired listing from the db
+        const expiredListings = await FoodListing.find({ status: "expired" });
+        
+        // get all the id of the expired listing
+        const expiredListingIds = expiredListings.map((listing) => listing._id);
+        
+        // check which expired listings are not already in DonationHistory
+        const alreadyInHistoryIds = await DonationHistory.find({
+            foodListingId: { $in: expiredListingIds },
+        }).distinct('foodListingId'); // Get only the `foodListingId` field
+        
+        // filter out listings that are already in DonationHistory
+        const newDonationHistoryEntries = expiredListings
+            .filter((listing) => !alreadyInHistoryIds.includes(listing._id.toString()))
+            .map((listing) => ({
+                foodListingId: listing._id,
+                restaurantId: listing.restaurantId,
+                status: "expired",
+            }));
+        
+        // add new entries into DonationHistory
+        if (newDonationHistoryEntries.length > 0) {
+            await DonationHistory.insertMany(newDonationHistoryEntries);
+        }        
+
+        const filteredListings = await FoodListing.find({
+            $and: [
+                { expiry: { $gte: now } }, 
+                { status: { $nin: ["collected", "distributed", "expired"] } }, 
+            ],
+        });
+
         if (foodListings.length === 0) {
             return res.status(200).json({
                 success: true,
@@ -69,10 +108,11 @@ const getAllFoodListing = async (req, res) => {
 
         res.status(200).json({
             success: true,
-            FoodListings: foodListings
+            FoodListings: filteredListings,
         });
 
     } catch (err) {
+        console.log(err);
         res.status(500).json({
             success: false,
             message: "Something went wrong."
