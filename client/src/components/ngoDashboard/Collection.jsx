@@ -26,6 +26,8 @@ export const Collection = () => {
         }
       });
 
+      console.log(response.data.collectionHistory);
+
       setCollectionHistory(response.data.collectionHistory);
       setCurrentHistory(response.data.collectionHistory);
     } catch (error) {
@@ -176,7 +178,7 @@ export const Collection = () => {
                                 <td className="border-b p-3">{collection.foodListingId.category}</td>
                                 <td className="border-b p-3">{formatDate(collection.foodListingId.expiry)}</td>
                                 <td className="border-b p-3">{formatDate(collection.collectedAt)}</td>
-                                <td className="border-b p-3">{collection.foodListingId.restaurantId.restaurantName}</td>
+                                <td className="border-b p-3">{collection.foodListingId.restaurantId.name}</td>
                                 <td className="border-b p-3">
                                   {
                                     collection.foodListingId.status == "collected" ?

@@ -131,7 +131,7 @@ const getCollectionHistory = async (req, res) => {
                 select: "title category expiry status restaurantId",
                 populate: {
                     path: "restaurantId",
-                    select: "restaurantName"
+                    select: "name"
                 }
             });
 
@@ -322,7 +322,7 @@ const getDistributionHistory = async (req, res) => {
                 select: "title category expiry reservedAt restaurantId",
                 populate: {
                     path: "restaurantId",
-                    select: "restaurantName"
+                    select: "name"
                 }
             });
 

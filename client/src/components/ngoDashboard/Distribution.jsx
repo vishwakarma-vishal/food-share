@@ -169,7 +169,7 @@ export const Distribution = () => {
                                   <td className="border-b p-3">{collection.foodListingId.category}</td>
                                   <td className="border-b p-3">{formatDate(collection.foodListingId.expiry)}</td>
                                   <td className="border-b p-3">{formatDate(collection.foodListingId.reservedAt)}</td>
-                                  <td className="border-b p-3">{collection.foodListingId.restaurantId.restaurantName}</td>
+                                  <td className="border-b p-3">{collection.foodListingId.restaurantId.name}</td>
                                   <td className="border-b p-3">{formatDate(collection.createdAt)}</td>
                                   <td className="border-b p-3">{collection.distributionNote}</td>
                                 </tr>
