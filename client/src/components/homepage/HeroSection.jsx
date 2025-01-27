@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom";
-
+import useAuth from "../../utils/useAuth";
 
 const HeroSection = () => {
     const navigate = useNavigate();
+    const {auth, logout} = useAuth();
     
     return (
         <section
@@ -15,7 +16,7 @@ const HeroSection = () => {
             <p className="text-base md:text-medium lg:text-lg mb-8">Millions of people go hungry every day while perfectly good food is thrown away. We're here to change that.</p>
             <button
                 className="px-4 py-2 bg-green-500 rounded-full text-lg font-semibold"
-                onClick={() => navigate('/login')}
+                onClick={() =>  navigate(auth.isAuthenticated ? auth.role === "ngo" ? '/ngo-dashboard' : 'restaurant-dashboard' : '/login')}
             >
                 Get started
             </button>
