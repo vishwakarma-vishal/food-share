@@ -1,3 +1,4 @@
+import api from "../../utils/interceptors";
 import useAuth from "../../utils/useAuth";
 import EditListingModal from './EditListingModal';
 import axios from "axios";

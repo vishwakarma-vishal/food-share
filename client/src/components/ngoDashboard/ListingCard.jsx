@@ -35,6 +35,7 @@ const ListingCard = ({ foodListing, getListings }) => {
         const confirmation = confirm("Be sure that you can collect the food, because you can't unreserved the food again.");
 
         if (!confirmation) return;
+        console.log(api);
 
         try {
             const response = await api({
