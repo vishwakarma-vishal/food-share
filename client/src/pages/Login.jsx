@@ -57,17 +57,17 @@ const Login = () => {
     return (
         <div className="max-w-6xl mx-auto px-4 md:px-8 lg:px-10 py-10 flex flex-col lg:flex-row justify-between items-center gap-10">
             <div className=" space-y-2 text-center">
-                <h2 className="text-3xl font-semibold">Login to Your Account</h2>
-                <p className="py-2">"Log in to continue your journey of making a difference!"</p>
+                <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-900">Login to Your Account</h2>
+                <p className="text-gray-600">"Log in to continue your journey of making a difference!"</p>
                 <img
-                    className="aspect-video rounded-xl h-[250px] mx-auto"
-                    src="ngo.jpg" alt="ngo img"
+                    className="mix-blend-multiply rounded-xl  h-[250px] mx-auto hidden lg:block"
+                    src="login.jpg" alt="ngo img"
                 />
             </div>
 
-            <div className="w-full sm:w-2/3 lg:w-1/2 bg-white p-8 rounded-lg shadow-xl">
-                <h2 className="text-3xl font-semibold text-center">Welcome back</h2>
-                <div className="h-[1px] w-28 bg-black mx-auto my-2"></div>
+            <div className="w-full max-w-xl bg-white p-8 rounded-lg shadow-xl">
+                <h2 className="text-xl sm:text-2xl font-semibold text-center text-gray-900">Welcome back</h2>
+                <div className="h-[1px] w-28 bg-gray-500 mx-auto my-2"></div>
 
                 <form onSubmit={submitHandler} className="space-y-2">
                     <div className="space-y-2">
@@ -79,14 +79,14 @@ const Login = () => {
                             value={formdata.email}
                             onChange={changeHandler}
                             placeholder="yourmail@gmail.com"
-                            className="border outline-none border-gray-600 p-2 w-full rounded-xl"
+                            className="border outline-none border-gray-400 py-2 px-4 w-full rounded-full"
                             required
                         />
                     </div>
 
                     <div className="space-y-2">
                         <label htmlFor="password" className="font-medium text-gray-800">Password</label><br />
-                        <div className="flex items-center justify-between gap-2 border border-gray-600 p-2 rounded-xl">
+                        <div className="flex items-center justify-between gap-2 border border-gray-600 py-2 px-4 rounded-full">
                             <input
                                 type={isPassVisible ? "text" : "password"}
                                 id="password"
@@ -110,13 +110,13 @@ const Login = () => {
                         Forgot password?
                     </p>
 
-                    <p className="text-gray-700">Welcome back! Please log in to continue.</p>
+                    <p className="text-gray-700 text-sm sm:text-base">Welcome back! Please log in to continue.</p>
                     <button type="submit" className="bg-green-500 hover:bg-green-600 transition-all duration-200 text-white py-2 w-full rounded-lg font-semibold">Log In</button>
                 </form>
 
-                <div className="flex w-full mt-2 gap-1 justify-center text-center">
-                    Not have an account{" "}
-                    <button className="inline-block underline text-base text-green-600" onClick={() => navigate('/signup')}> create one here</button>
+                <div className=" w-full mt-2 justify-center text-center text-sm sm:text-base">
+                    <span>Not have an account {" "}</span>
+                    <button className="inline-block hover:underline transition-all duration-200 text-green-600" onClick={() => navigate('/signup')}> create one here</button>
                 </div>
 
             </div>
