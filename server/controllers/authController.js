@@ -3,6 +3,8 @@ const Ngo = require("../models/Ngo");
 const jwt = require("jsonwebtoken");
 const Restaurant = require("../models/Restaurant");
 const { z } = require("zod");
+const nodemailer = require("nodemailer");
+const { google } = require('googleapis');
 
 ngoSignup = async (req, res) => {
     try {
@@ -63,10 +65,10 @@ ngoSignup = async (req, res) => {
         // Store refresh token in an HTTP-only secure cookie
         const isProduction = process.env.NODE_ENV === "production";
         res.cookie("refreshToken", refreshToken, {
-            httpOnly: true,  
-            secure: isProduction, 
-            sameSite: isProduction ? "None" : "Lax", 
-            maxAge: 7 * 24 * 60 * 60 * 1000, 
+            httpOnly: true,
+            secure: isProduction,
+            sameSite: isProduction ? "None" : "Lax",
+            maxAge: 7 * 24 * 60 * 60 * 1000,
             path: "/",
         });
 
@@ -161,8 +163,8 @@ restaurantSignup = async (req, res) => {
 
         const isProduction = process.env.NODE_ENV === "production";
         res.cookie("refreshToken", refreshToken, {
-            httpOnly: true, 
-            secure: isProduction, 
+            httpOnly: true,
+            secure: isProduction,
             sameSite: isProduction ? "None" : "Lax",
             maxAge: 7 * 24 * 60 * 60 * 1000,
             path: "/",
@@ -299,7 +301,7 @@ authenticateToken = (req, res) => {
         if (decodedNgoToken) {
             return res.status(200).json({
                 isValid: true,
-                role: decodedNgoToken.role, 
+                role: decodedNgoToken.role,
             });
         } else {
             const decodedRestaurantToken = jwt.verify(token, process.env.JWT_RESTAURANT_SECRET);
@@ -333,7 +335,7 @@ logout = (req, res) => {
 
 refreshTokenHandler = (req, res) => {
 
-    const refreshToken = req.cookies.refreshToken; 
+    const refreshToken = req.cookies.refreshToken;
 
     if (!refreshToken) {
         return res.status(401).json({
@@ -373,4 +375,132 @@ refreshTokenHandler = (req, res) => {
     }
 };
 
-module.exports = { ngoSignup, restaurantSignup, login, authenticateToken, logout, refreshTokenHandler }
+forgetPassword = async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        const ngoUserInDb = await Ngo.findOne({ email });
+        const restaurantUserInDb = await Restaurant.findOne({ email });
+
+        if (!ngoUserInDb && !restaurantUserInDb) {
+            return res.status(404).json({
+                success: false,
+                message: "User does not exist",
+            });
+        }
+
+        const transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                user: process.env.GMAIL_USER,
+                pass: process.env.GMAIL_PASSWORD,
+            },
+        });
+
+        // token
+        const role = ngoUserInDb ? "ngo" : "restaurant";
+        const token = jwt.sign({ email, role }, process.env.JWT_REFRESH_SECRET, { expiresIn: "15m" });
+
+        const FRONTEND_URL = process.env.NODE_ENV === "production" ? process.env.FRONTEND_URL : "http://localhost:5173";
+        const link = `${FRONTEND_URL}/reset-password/${token}`;
+
+        // Email options
+        const mailOptions = {
+            from: `"Food Share" <${process.env.GMAIL_USER}>`,
+            to: email,
+            subject: "🔒 Reset Your Password | Food Share",
+            text: `Hello,
+
+                    We received a request to reset your password for your Food Share account. 
+                    Click the link below to reset your password. This link is valid for only 15 minutes.
+
+                    Reset Password: ${link}
+
+                    If you did not request this, please ignore this email.
+
+                    Best regards,  
+                    Food Share Team`,
+            html: `
+            <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                <h2 style="color:#22C55E;">🔒 Reset Your Password</h2>
+                <p>Hello,</p>
+                <p>We received a request to reset your password for your Food Share account.</p>
+                <p><strong>Click the button below to reset your password.</strong></p>
+                <p style="text-align: left;">
+                    <a href="${link}" target="_blank" 
+                       style="background:#22C55E; color: white; padding: 10px 20px; 
+                              text-decoration: none; border-radius: 5px; display: inline-block;">
+                       Reset Password
+                    </a>
+                </p>
+                <p>This link is valid for <strong>15 minutes</strong>. If you did not request this, please ignore this email.</p>
+                <p>Best regards,<br><strong>Food Share Team</strong></p>
+            </div>
+            `,
+        };
+
+        // Send the email
+        await transporter.sendMail(mailOptions);
+
+        res.status(200).json({
+            success: true,
+            message: "Password reset email has been sent."
+        });
+
+    } catch (error) {
+        // console.error(error);
+        res.status(500).json({
+            success: false,
+            message: "Internal server error",
+        });
+    }
+};
+
+resetPassword = async (req, res) => {
+    const { token } = req.params;
+    const { password } = req.body;
+
+    try {
+        // Validate the token
+        let decodedToken;
+        try {
+            decodedToken = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+        } catch (error) {
+            return res.status(400).json({
+                success: false,
+                message: "Token invalid or expired"
+            });
+        }
+
+        const email = decodedToken.email;
+        const hashedPassword = bcrypt.hashSync(password, 10);
+
+        let user;
+        if (decodedToken.role == "ngo") {
+            user = await Ngo.findOneAndUpdate(
+                { email },
+                { $set: { password: hashedPassword } },
+                { new: true }
+            )
+        } else {
+            user = await Restaurant.findOneAndUpdate(
+                { email },
+                { $set: { password: hashedPassword } },
+                { new: true }
+            )
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Password reset successfully"
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        })
+    }
+}
+
+module.exports = { ngoSignup, restaurantSignup, login, authenticateToken, logout, refreshTokenHandler, forgetPassword, resetPassword }

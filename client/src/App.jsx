@@ -9,6 +9,9 @@ import ProtecedRoute from "./utils/ProtectedRoute";
 import useAuthInitialization from "./utils/useAuthInitialization";
 import Signup from "./pages/Signup";
 
+import ForgetPassword from "./pages/ForgetPassword";
+import ResetPassword from "./pages/ResetPassword";
+
 function App() {
   useAuthInitialization();
 
@@ -18,6 +21,8 @@ function App() {
         <Route index element={<Home />} />
         <Route path='signup' element={<Signup />} />
         <Route path='login' element={<Login />} />
+        <Route path='forget-password' element={<ForgetPassword />} />
+        <Route path="reset-password/:token" element={<ResetPassword />} />
         <Route path='ngo-dashboard' element={<ProtecedRoute element={<NgoDashboard />} requiredRole="ngo" />} />
         <Route path='restaurant-dashboard' element={<ProtecedRoute element={<RestaurantDashboard />} requiredRole="restaurant" />} />
       </Route>

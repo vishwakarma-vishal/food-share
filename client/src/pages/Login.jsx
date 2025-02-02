@@ -26,7 +26,7 @@ const Login = () => {
             const response = await api({
                 url: `${import.meta.env.VITE_API_URL}/auth/login`,
                 method: 'post',
-                data: formdata 
+                data: formdata
             });
 
             const data = response.data;
@@ -105,14 +105,17 @@ const Login = () => {
                         </div>
                     </div>
 
-                    <p className="text-right text-gray-500 hover:underline text-sm cursor-pointer">Forgot password?</p>
+                    <p className="text-right text-gray-500 hover:underline text-sm cursor-pointer"
+                        onClick={() => navigate('/forget-password')}>
+                        Forgot password?
+                    </p>
 
                     <p className="text-gray-700">Welcome back! Please log in to continue.</p>
                     <button type="submit" className="bg-green-500 hover:bg-green-600 transition-all duration-200 text-white py-2 w-full rounded-lg font-semibold">Log In</button>
                 </form>
 
                 <div className="flex w-full mt-2 gap-1 justify-center text-center">
-                    Not have an account{" "} 
+                    Not have an account{" "}
                     <button className="inline-block underline text-base text-green-600" onClick={() => navigate('/signup')}> create one here</button>
                 </div>
 
