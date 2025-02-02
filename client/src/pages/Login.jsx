@@ -65,7 +65,7 @@ const Login = () => {
                 />
             </div>
 
-            <div className="w-full max-w-xl bg-white p-8 rounded-lg shadow-xl">
+            <div className="w-full max-w-xl bg-white p-6 sm:p-8 rounded-lg shadow-xl">
                 <h2 className="text-xl sm:text-2xl font-semibold text-center text-gray-900">Welcome back</h2>
                 <div className="h-[1px] w-28 bg-gray-500 mx-auto my-2"></div>
 
@@ -111,7 +111,7 @@ const Login = () => {
                     </p>
 
                     <p className="text-gray-700 text-sm sm:text-base">Welcome back! Please log in to continue.</p>
-                    <button type="submit" className="text-sm sm:text-base bg-green-500 hover:bg-green-600 transition-all duration-200 text-white py-2 w-full rounded-lg font-semibold">Log In</button>
+                    <button type="submit" className="text-sm sm:text-base bg-green-500 hover:bg-green-600 transition-all duration-200 text-white py-2 w-full rounded-full font-semibold">Log In</button>
                 </form>
 
                 <div className=" w-full mt-2 justify-center text-center text-sm sm:text-base">

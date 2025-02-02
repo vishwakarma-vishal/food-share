@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { MdOutlineCancel } from "react-icons/md";
+import { FaRegQuestionCircle } from "react-icons/fa";
 
 import api from "../utils/interceptors";
 
@@ -35,14 +36,15 @@ const ForgetPassword = () => {
     }
 
     return (
-        <div className="max-w-6xl mx-auto px-4 md:px-8 lg:px-10 py-10 flex flex-col lg:flex-row justify-between items-center gap-10">
+        <div className="max-w-6xl mx-auto px-4 md:px-8 lg:px-10 py-10 flex flex-col lg:flex-row justify-between items-center gap-4 sm:gap-10">
 
-            <div className=" space-y-2 text-center">
-                <h2 className="text-3xl font-semibold">Forget Password</h2>
-                <p className="py-2">"Enter your email id to reset password"</p>
+            <div className="flex flex-col gap-1 text-center">
+                <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-900">Forget Password</h2>
+                <p className="text-gray-600">"Enter your email to receive a password reset link."</p>
+                <FaRegQuestionCircle className="size-12 sm:size-32 text-center text-gray-400 mx-auto mt-4 inline-block" />
             </div>
 
-            <div className="w-full sm:w-2/3 lg:w-1/2 bg-white p-8 rounded-lg shadow-xl">
+            <div className="w-full max-w-xl bg-white p-6 sm:p-8 rounded-lg shadow-xl">
 
                 <form onSubmit={submitHandler} className="space-y-2">
                     <div className="space-y-2">
@@ -54,7 +56,7 @@ const ForgetPassword = () => {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="yourmail@gmail.com"
-                            className="border outline-none border-gray-600 p-2 w-full rounded-xl"
+                            className="border outline-none border-gray-600 py-2 px-4 w-full rounded-full"
                             required
                         />
                     </div>
@@ -64,7 +66,7 @@ const ForgetPassword = () => {
                         Login
                     </p>
 
-                    <button type="submit" className="bg-green-500 hover:bg-green-600 transition-all duration-200 text-white py-2 w-full rounded-lg font-semibold">Reset password</button>
+                    <button type="submit" className="bg-green-500 hover:bg-green-600 transition-all duration-200 text-white py-2 w-full rounded-full font-semibold text-sm sm:text-base">Reset password</button>
                 </form>
 
             </div>
