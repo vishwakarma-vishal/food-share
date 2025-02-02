@@ -28,25 +28,24 @@ const WorkSection = () => {
         },
     ];
 
-
     return (
-        <section id="Work" className="min-h-screen flex flex-col justify-center gap-10">
+        <section id="Work" className="flex flex-col justify-center gap-2 md:gap-6">
             <div>
-                <h2 className="text-4xl font-semibold">How it works</h2>
-                <ul className="ml-4 my-6 list-disc">
+                <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold">How it works</h2>
+                <ul className="ml-4 my-2 sm:my-6 list-disc">
                     <li>A restaurant creates a listing for surplus food and sets a pick-up time.</li>
                     <li>An NGO claims the listing and collects the food.</li>
                     <li>The food is distributed to those in need.</li>
                 </ul>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {steps.map((step, index) => {
                     return <div key={index}>
                         <img src={step.imageUrl} className="w-full aspect-video rounded-xl" />
-                        <div className="my-5 text-center space-y-1">
+                        <div className="mt-2 text-center space-y-1">
                             <h3 className="text-lg font-semibold">{step.title}</h3>
-                            <p className="text-sm text-yellow-700">{step.description}</p>
+                            <p className="text-sm text-gray-700">{step.description}</p>
                         </div>
                     </div>
                 })}

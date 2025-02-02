@@ -1,3 +1,4 @@
+
 const WhyUsSection = () => {
     const data = [
         {
@@ -23,19 +24,19 @@ const WhyUsSection = () => {
     ];
 
     return (
-        <section id="WhyUs" className="min-h-screen flex flex-col justify-center gap-10">
-            <div className="max-w-3xl py-10 text-center space-y-4 mx-auto">
-                <h2 className="text-4xl font-semibold">Why Choose FoodShare?</h2>
-                <p className="text-base">Discover the benefits of using FoodShare — from reducing waste to supporting those in need, while positively impacting your community and business.</p>
+        <section id="WhyUs" className="flex flex-col justify-center text-center gap-2 md:gap-6">
+            <div >
+                <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold">Why Choose FoodShare?</h2>
+                <p className="my-2 sm:my-6 text-base text-gray-900 mx-6 sm:mx-auto max-w-2xl ">Discover the benefits of using FoodShare — from reducing waste to supporting those in need, while positively impacting your community and business.</p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {data.map((item, index) => {
                     return <div key={index}>
                         <img src={item.imageUrl} className="w-full aspect-video rounded-xl" />
-                        <div className="my-5 text-center space-y-1">
+                        <div className="mt-2 text-center space-y-1">
                             <h3 className="text-lg font-semibold">{item.title}</h3>
-                            <p className="text-sm text-yellow-700">{item.description}</p>
+                            <p className="text-sm text-gray-700">{item.description}</p>
                         </div>
                     </div>
                 })}

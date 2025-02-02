@@ -36,14 +36,14 @@ const FAQSection = () => {
     ];
 
     return (
-        <section id="faq" className="min-h-screen flex flex-col justify-center gap-10">
-            <h2 className="text-4xl font-semibold text-center">Frequently Asked Questions</h2>
+        <section id="faq" className="flex flex-col justify-center gap-8 md:gap-10 lg:gap-16">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-center">Frequently Asked Questions</h2>
 
             <div className='max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6'>
                 {
                     faqs.map((faq, index) => {
                         return (
-                            <div key={index} className='bg-[#f3ece7] flex items-start gap-3 p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-200'>
+                            <div key={index} className='bg-white flex items-start gap-3 p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-200'>
                                 <div className='mt-1'>
                                     {faq.icon}
                                 </div>
