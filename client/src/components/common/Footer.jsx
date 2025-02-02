@@ -1,37 +1,38 @@
-import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { FaInstagram } from 'react-icons/fa';
+import { RiTwitterXLine } from "react-icons/ri";
+import { FiYoutube } from "react-icons/fi";
+import { RiFacebookCircleLine } from "react-icons/ri";
 
 const Footer = () => {
     const currentYear = new Date().getFullYear();
-    const navigate = useNavigate();
 
     return (
-        <footer className='flex flex-col items-center gap-4 border pt-4 bg-white'>
-            <div>
-                <ul className='flex flex-wrap justify-center gap-x-4 gap-y-2'>
-                    <li><a href='/about'>About us</a></li>
-                    <li><a href='contact'>Contact us</a></li>
-                    <li><a href='/terms'>Terms of service</a></li>
-                    <li><a href='/privacy'>Privacy policy</a></li>
-                </ul>
+        <footer className='flex flex-col items-center gap-4 border pt-4 bg-white px-4 md:px-8 lg:px-10'>
+
+            <div className="flex flex-wrap justify-center gap-x-4 lg:gap-x-6 gap-y-2 text-sm sm:text-base text-gray-800">
+                <a className="cursor-pointer hover:text-black transition-all duration-200" href="#">About Us</a>
+                <a className="cursor-pointer hover:text-black transition-all duration-200" href="#">Contact Us</a>
+                <a className="cursor-pointer hover:text-black transition-all duration-200" href="#">Terms of Service</a>
+                <a className="cursor-pointer hover:text-black transition-all duration-200" href="#">Privacy policy</a>
             </div>
 
-            <div className="flex gap-4 mb-4">
-                <a href="#" aria-label="Facebook">
-                    <FaFacebookF size={24} />
+
+            <div className="flex gap-4 mb-4 text-gray-800 text-xl sm:text-2xl">
+                <a href="#" aria-label="Facebook" className="hover:text-black">
+                    <RiFacebookCircleLine />
                 </a>
-                <a href="#" aria-label="Twitter">
-                    <FaTwitter size={24} />
+                <a href="#" aria-label="Twitter" className="hover:text-black">
+                    <RiTwitterXLine />
                 </a>
-                <a href="#" aria-label="Instagram">
-                    <FaInstagram size={24} />
+                <a href="#" aria-label="Instagram" className="hover:text-black">
+                    <FaInstagram />
                 </a>
-                <a href="#" aria-label="LinkedIn">
-                    <FaLinkedinIn size={24} />
+                <a href="#" aria-label="Youtube" className="hover:text-black">
+                    <FiYoutube />
                 </a>
             </div>
 
-            <p className="text-[#9a6e4c] text-sm font-normal leading-normal pb-2">@{currentYear} FoodShare</p>
+            <p className="text-gray-600 text-xs sm:text-sm font-normal leading-normal pb-2">@{currentYear} FoodShare</p>
         </footer>
     )
 }
