@@ -60,7 +60,7 @@ const Login = () => {
                 <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-900">Login to Your Account</h2>
                 <p className="text-gray-600">"Log in to continue your journey of making a difference!"</p>
                 <img
-                    className="mix-blend-multiply rounded-xl  h-[250px] mx-auto hidden lg:block"
+                    className="mix-blend-multiply rounded-xl h-[250px] mx-auto hidden lg:block"
                     src="login.jpg" alt="ngo img"
                 />
             </div>
@@ -111,7 +111,7 @@ const Login = () => {
                     </p>
 
                     <p className="text-gray-700 text-sm sm:text-base">Welcome back! Please log in to continue.</p>
-                    <button type="submit" className="bg-green-500 hover:bg-green-600 transition-all duration-200 text-white py-2 w-full rounded-lg font-semibold">Log In</button>
+                    <button type="submit" className="text-sm sm:text-base bg-green-500 hover:bg-green-600 transition-all duration-200 text-white py-2 w-full rounded-lg font-semibold">Log In</button>
                 </form>
 
                 <div className=" w-full mt-2 justify-center text-center text-sm sm:text-base">

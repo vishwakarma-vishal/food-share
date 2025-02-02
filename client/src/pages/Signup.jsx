@@ -126,15 +126,15 @@ const Signup = () => {
     return (
         <div className="max-w-6xl mx-auto px-4 md:px-8 lg:px-10 py-10 flex flex-col lg:flex-row justify-between items-center gap-10">
             <div className=" space-y-2 text-center">
-                <h2 className="text-3xl font-semibold">Create an Account</h2>
-                <p className="py-2">"Make a difference and connect with your community!"</p>
+                <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-900">Create an Account</h2>
+                <p className="text-gray-600">"Make a difference and connect with your community!"</p>
                 <img
-                    className="aspect-video rounded-xl h-[250px] mx-auto"
-                    src="donate.jpg" alt="ngo img"
+                    className="mix-blend-multiply rounded-xl h-[250px] mx-auto hidden lg:block"
+                    src="login.jpg" alt="ngo img"
                 />
             </div>
 
-            <div className="w-full md:w-3/4 lg:w-1/2 bg-white rounded-lg p-8 shadow-xl">
+            <div className="w-full max-w-xl bg-white rounded-lg p-8 shadow-xl">
                 <form onSubmit={submitHandler} className="space-y-2">
                     <div className="space-y-2">
                         <label htmlFor="name" className="font-medium text-gray-800">
@@ -147,7 +147,7 @@ const Signup = () => {
                             value={formdata.name}
                             onChange={changeHandler}
                             placeholder="Type your Restaurant/NGO name"
-                            className="border outline-none border-gray-600 p-2 w-full rounded-xl"
+                            className="border outline-none border-gray-600 py-2 px-4 w-full rounded-full"
                             minLength={3}
                             maxLength={100}
                             required
@@ -163,18 +163,18 @@ const Signup = () => {
                             value={formdata.address}
                             onChange={changeHandler}
                             placeholder="Type your address"
-                            className="border outline-none border-gray-600 p-2 w-full rounded-xl"
+                            className="border outline-none border-gray-600 py-2 px-4 w-full rounded-full"
                             minLength={3}
                             maxLength={200}
                             required
                         />
                     </div>
 
-                    <div className="flex gap-4">
-                        <div className="w-full">
+                    <div className="flex flex-wrap sm:flex-nowrap gap-4">
+                        <div className="min-w-0 w-full space-y-2">
                             <label htmlFor="profile" className="font-medium text-gray-800">Profile</label><br />
                             <select id="profile"
-                                className="border outline-none border-gray-600 p-2 w-full rounded-xl"
+                                className="border outline-none border-gray-600 py-2 px-4 w-full rounded-full"
                                 required
                                 value={type}
                                 onChange={(e) => setType(e.target.value)}>
@@ -183,7 +183,7 @@ const Signup = () => {
                                 <option value="restaurant">Restaurant</option>
                             </select>
                         </div>
-                        <div className="w-full">
+                        <div className="min-w-0 w-full space-y-2">
                             <label htmlFor="city" className="font-medium text-gray-800">City</label><br />
                             <input
                                 type="text"
@@ -192,7 +192,7 @@ const Signup = () => {
                                 value={formdata.city}
                                 onChange={changeHandler}
                                 placeholder="Type your city"
-                                className="border outline-none border-gray-600 p-2 w-full rounded-xl"
+                                className="border outline-none border-gray-600 py-2 px-4 w-full rounded-full"
                                 minLength={3}
                                 maxLength={200}
                                 required
@@ -200,8 +200,8 @@ const Signup = () => {
                         </div>
                     </div>
 
-                    <div className="flex gap-3">
-                        <div className="basis-1/2 space-y-2">
+                    <div className="flex flex-wrap sm:flex-nowrap gap-3">
+                        <div className="min-w-0 w-full space-y-2">
                             <label htmlFor="phone" className="font-medium text-gray-800">Phone number</label><br />
                             <input
                                 type="text"
@@ -210,13 +210,13 @@ const Signup = () => {
                                 value={formdata.phone}
                                 onChange={changeHandler}
                                 placeholder="1234567890"
-                                className="border outline-none border-gray-600 p-2 w-full rounded-xl"
+                                className="border outline-none border-gray-600 py-2 px-4 w-full rounded-full"
                                 minLength={10}
                                 maxLength={10}
                                 required
                             />
                         </div>
-                        <div className="basis-1/2 space-y-2">
+                        <div className="min-w-0 w-full space-y-2">
                             <label htmlFor="email" className="font-medium text-gray-800">Email</label><br />
                             <input
                                 type="email"
@@ -225,16 +225,16 @@ const Signup = () => {
                                 value={formdata.email}
                                 onChange={changeHandler}
                                 placeholder="abc@gmail.com"
-                                className="border outline-none border-gray-600 p-2 w-full rounded-xl"
+                                className="border outline-none border-gray-600 py-2 px-4 w-full rounded-full"
                                 required
                             />
                         </div>
                     </div>
 
-                    <div className="flex gap-3">
-                        <div className="basis-1/2 space-y-2">
+                    <div className="flex flex-wrap sm:flex-nowrap gap-3">
+                        <div className="min-w-0 w-full space-y-2">
                             <label htmlFor="password" className="font-medium text-gray-800">Password</label><br />
-                            <div className=" flex items-center justify-between gap-2 border border-gray-600 p-2 rounded-xl">
+                            <div className="w-full flex items-center justify-between gap-2 border border-gray-600 py-2 px-4 rounded-full">
                                 <input
                                     type={isPassVisible ? "text" : "password"}
                                     id="password"
@@ -252,9 +252,9 @@ const Signup = () => {
                                 </span>
                             </div>
                         </div>
-                        <div className="basis-1/2 space-y-2">
+                        <div className="min-w-0 w-full space-y-2">
                             <label htmlFor="confirm-password" className="font-medium text-gray-800">Confirm password</label><br />
-                            <div className=" flex items-center justify-between gap-2 border border-gray-600 p-2 rounded-xl">
+                            <div className="flex items-center justify-between gap-2 border border-gray-600 py-2 px-4 rounded-full">
                                 <input
                                     type={isPassVisible ? "text" : "password"}
                                     id="confirm-password"
@@ -279,16 +279,15 @@ const Signup = () => {
                         {error}
                     </div>
 
-                    <div className="flex items-center gap-2">
-                        <input type="checkbox" id="terms" className="w-4 h-4 my-2" required></input>
+                    <div className="flex items-start gap-2 text-gray-700">
+                        <input type="checkbox" id="terms" className="w-3 h-3 my-2 text-sm sm:text-base" required></input>
                         <label htmlFor="terms">I agree to the terms of service and privacy policy</label>
                     </div>
 
                     <div className="space-y-2">
-                        <p className="text-sm font-gray-800"> Join us and help make a difference in your community!</p>
                         <button
                             type="submit"
-                            className={`bg-green-500 hover:bg-green-600 transition-all duration-200 text-white py-2 w-full rounded-lg font-semibold ${error !== "" ? "cursor-not-allowed" : ""}`}
+                            className={`text-sm sm:text-base bg-green-500 hover:bg-green-600 transition-all duration-200 text-white py-2 w-full rounded-lg font-semibold ${error !== "" ? "cursor-not-allowed" : ""}`}
                             disabled={error !== ""}
                         >
                             Start Making a Difference
@@ -296,9 +295,9 @@ const Signup = () => {
                     </div>
                 </form>
 
-                <div className="flex w-full mt-2 gap-1 justify-center text-center">
+                <div className="flex w-full mt-2 gap-1 justify-center text-center text-sm sm:text-base">
                     Already have an account{" "}
-                    <button className="inline-block underline text-base text-green-600" onClick={() => navigate('/login')}> login here</button>
+                    <button className="inline-block hover:underline transition-all duration-200 text-green-600" onClick={() => navigate('/login')}> login here</button>
                 </div>
             </div>
         </div>
