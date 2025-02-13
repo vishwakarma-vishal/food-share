@@ -63,7 +63,7 @@ const ListingCard = ({ foodListing, getListings }) => {
     }
 
     return (
-        <div className="relative bg-white p-4 rounded-lg flex flex-col gap-1 shadow-lg flex flex-col justify-between">
+        <div className="w-[300px] relative bg-white p-4 rounded-lg flex flex-col gap-1 shadow-lg flex flex-col justify-between">
             {/* image */}
             <img src={foodListing.imageUrl}
                 alt="food listing image"

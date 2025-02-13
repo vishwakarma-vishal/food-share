@@ -129,8 +129,9 @@ export const Distribution = () => {
                   {/* filters */}
                   <form className="flex flex-wrap items-center gap-4 text-sm sm:text-base">
                     <div className="flex items-center gap-2 sm:gap-4">
-                      <label htmlFor="sort" className="font-medium">Search</label>
+                      <label htmlFor="search" className="font-medium">Search</label>
                       <input
+                        id="search"
                         type="text"
                         placeholder="Search by Food or Restaurant..."
                         className="p-2 w-56  text-sm rounded-lg border outline-none"
@@ -188,10 +189,10 @@ export const Distribution = () => {
                         </div>
                         {/* pagination */}
                         <div className="flex gap-4 items-center mt-4 text-sm sm:text-base">
-                          <button onClick={goToPrevPage} className="bg-green-600 py-1 px-4 rounded-lg text-white">Previous</button>
-                          <button onClick={goToNextPage} className="bg-blue-600 py-1 px-4 rounded-lg text-white">Next</button>
+                          <button onClick={goToPrevPage} className="bg-green-600 py-1 px-4 rounded-full text-white">Previous</button>
+                          <button onClick={goToNextPage} className="bg-blue-600 py-1 px-4 rounded-full text-white">Next</button>
 
-                          <span className="ml-auto text-sm sm:text-base">Page {currentPage} of {totalPages}</span>
+                          <span className="ml-auto">Page {currentPage} of {totalPages}</span>
                         </div>
                       </div>
                   }

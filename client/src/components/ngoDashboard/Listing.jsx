@@ -101,19 +101,19 @@ const MyListing = ({ isMenuOpen }) => {
 
     return (
         <div className="h-full">
-            <h2 className="font-semibold text-2xl">Food Listings</h2>
+            <h2 className="font-semibold text-lg sm:text-xl md:text-2xl">Food Listings</h2>
 
             {loading ?
                 <div className="text-gray-500 h-full flex justify-center items-center">loading...</div> :
                 <div className="h-full">
                     {
                         foodListings.length === 0 ?
-                            <div className="text-gray-500 h-full flex justify-center items-center">
+                            <div className="text-gray-500 h-full flex justify-center items-center text-sm sm:text-base text-center">
                                 No foods are available as of now, check after some time.
                             </div> :
                             <div className="h-full">
                                 {/* filters */}
-                                <form className="flex gap-4 mt-4">
+                                <form className="flex flex-wrap gap-4 mt-4 text-sm sm:text-base">
                                     <input
                                         type="text"
                                         placeholder="Search by name..."
@@ -143,7 +143,7 @@ const MyListing = ({ isMenuOpen }) => {
                                             </div> :
                                             // rendering all the lisings here
                                             <div
-                                                className={`grid ${isMenuOpen ? "grid-cols-3" : "grid-cols-4"} gap-4 mt-6`}>
+                                                className="flex flex-wrap gap-4 my-4 justify-center sm:justify-start">
                                                 {
                                                     currentListings.map((foodListing) => {
                                                         return <ListingCard
