@@ -67,9 +67,9 @@ const NgoDashboard = () => {
     }
 
     return (
-        <div className="flex w-full min-h-[90vh] content-start ">
+        <div className="relative flex w-full min-h-[90vh] content-start ">
             {/* sidebar */}
-            <div className={`bg-gray-200 p-6 transition-all duration-300 ${isMenuOpen ? "w-1/5" : "w-16"}`}>
+            <div className={` top-0 left-0 min-h-screen bg-gray-200 p-6 transition-all duration-300 ${isMenuOpen ? "w-fit" : "w-16"}`}>
                 <div className="flex items-center justify-between">
                     <h2 className={`font-semibold text-xl ${isMenuOpen ? "block" : "hidden"}`}>NGO Dashboard</h2>
                     <div onClick={() => setIsMenuOpen(!isMenuOpen)} className={`${isMenuOpen ? "p-1" : "p-1 -ml-1"} border border-black  rounded-sm cursor-pointer`}>
@@ -116,7 +116,7 @@ const NgoDashboard = () => {
             </div>
 
             {/* main content */}
-            <div className="w-4/5 flex-grow p-6 mr-0">
+            <div className="w-4/5 flex-grow p-4 sm:p-6 mr-0">
                 {/* render menu content */}
                 {renderContent()}
             </div>

@@ -113,18 +113,18 @@ export const Profile = ({ setIsSelected, user, getUserData }) => {
   }
 
   return (
-    <div className="w-full bg-white p-6 rounded-xl shadow-lg">
-      <h2 className="font-semibold text-2xl">Edit your profile</h2>
+    <div className="w-full bg-white p-4 sm:p-6 rounded-xl shadow-lg">
+      <h2 className="font-semibold text-lg sm:text-xl md:text-2xl">Edit your profile</h2>
 
       <form className="mt-6 text-sm" onSubmit={handleSubmit}>
         {/* first row */}
-        <div className="flex gap-6">
+        <div className="flex flex-col sm:flex-row gap-6">
           {/* image */}
-          <div className="basis-6/12 w-full h-[180px] rounded-lg">
+          <div className="basis-6/12 w-full h-[150px] rounded-lg">
             {
               previewImg ?
                 <div className="relative h-full">
-                  <img src={previewImg} className="rounded-lg h-full w-full border"></img>
+                  <img src={previewImg} className="rounded-lg aspect-video h-[200px] sm:h-full w-full border"></img>
                   <button
                     type="button"
                     className="absolute top-2 -left-1 text-xs bg-green-600 text-white p-1 rounded-sm"
@@ -161,7 +161,7 @@ export const Profile = ({ setIsSelected, user, getUserData }) => {
                 className="border border-gray-500 w-full p-2 rounded-md my-2 outline-none"
                 required />
             </div>
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-x-4">
               <div className="w-full">
                 <label htmlFor="email">Email Address</label><br />
                 <input
@@ -191,8 +191,8 @@ export const Profile = ({ setIsSelected, user, getUserData }) => {
         </div>
 
         {/* second row */}
-        <div className="mt-4">
-          <div className="flex gap-4">
+        <div className="mt-0 sm:mt-4">
+          <div className="flex flex-col sm:flex-row gap-x-4">
             <div className="w-full">
               <label htmlFor="foundingDate">Founding Date</label><br />
               <input
@@ -218,7 +218,7 @@ export const Profile = ({ setIsSelected, user, getUserData }) => {
             </div>
           </div>
 
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-x-4">
             <div className="w-full">
               <label htmlFor="address">Address</label><br />
               <textarea
@@ -245,16 +245,16 @@ export const Profile = ({ setIsSelected, user, getUserData }) => {
           </div>
         </div>
 
-        <div className="flex gap-4">
+        <div className="flex gap-2 sm:gap-4">
           <button
-            className={`mt-4 block bg-gray-600 text-white font-semibold w-1/2 mx-auto py-2 rounded-lg ${loading && "cursor-not-allowed"}`}
+            className={`mt-4 block bg-gray-600 text-white text-sm md:text-base font-semibold w-1/2 mx-auto py-2 rounded-lg ${loading && "cursor-not-allowed"}`}
             onClick={resetForm}
             disabled={loading}>
             Reset Form
           </button>
           <button
             type="submit"
-            className={`mt-4 block bg-green-600 text-white font-semibold w-1/2 mx-auto py-2 rounded-lg
+            className={`mt-4 block bg-green-600 text-white text-sm md:text-base font-semibold w-1/2 mx-auto py-2 rounded-lg
             ${loading && "cursor-not-allowed"}`}
             disabled={loading}>
             {loading ? "Updating..." : "Update changes"}
