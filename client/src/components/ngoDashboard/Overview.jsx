@@ -13,7 +13,7 @@ const Overview = ({ setIsSelected, user }) => {
     return (
         < div className="flex flex-col gap-6" >
             <div>
-                <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-900">Overview</h2>
+                <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-900">Overview</h2>
                 <p className="my-1 text-gray-600 text-sm sm:text-base">Here you can see an overview of your NGO"s activities and impact.</p>
             </div>
 
