@@ -94,12 +94,12 @@ const Profile = ({setIsSelected, user, getUserData}) => {
   }
 
   return (
-    <div className="w-full bg-white p-6 rounded-xl shadow-lg">
-      <h2 className="font-semibold text-2xl">Edit your profile</h2>
+    <div className="w-full bg-white p-6 rounded-xl shadow-lg max-w-5xl m-auto">
+      <h2 className="font-semibold text-lg sm:text-xl md:text-2xl">Edit your profile</h2>
 
       <form className="mt-6 text-sm" onSubmit={handleSubmit}>
         {/* first row */}
-        <div className="flex gap-6">
+        <div className="flex flex-col sm:flex-row gap-6">
           {/* image */}
           <div className="basis-6/12 w-full h-[180px] rounded-lg"> 
             {
@@ -143,7 +143,7 @@ const Profile = ({setIsSelected, user, getUserData}) => {
                 placeholder="Enter your restaurant name..."
                 className="border border-gray-500 w-full p-2 rounded-md my-2 outline-none" />
             </div>
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-x-4">
               <div className="w-full">
                 <label htmlFor="email">Email Address</label><br />
                 <input
@@ -169,18 +169,18 @@ const Profile = ({setIsSelected, user, getUserData}) => {
         </div>
 
         {/* second row */}
-        <div className="mt-4">
-          <div className="flex gap-4">
+        <div className="mt-0 sm:mt-4">
+          <div className="flex flex-col sm:flex-row gap-x-4">
             <div className="w-full">
               <label >Opening Hours (start - end)</label><br />
-              <div className="flex gap-4 items-center">
+              <div className="flex gap-2 sm:gap-4 items-center">
                 <input
                   id="openFrom"
                   name="openFrom"
                   type="time"
                   value={formData.openFrom}
                   onChange={changeHandler}
-                  className="border border-gray-500 w-full p-2 rounded-md my-2 outline-none" />
+                  className="border border-gray-500 w-full p-2 rounded-md my-2 outline-none text-xs sm:text-base" />
                 to
                 <input
                   id="openTill"
@@ -188,7 +188,7 @@ const Profile = ({setIsSelected, user, getUserData}) => {
                   type="time"
                   value={formData.openTill}
                   onChange={changeHandler}
-                  className="border border-gray-500 w-full p-2 rounded-md my-2 outline-none" />
+                  className="border border-gray-500 w-full p-2 rounded-md my-2 outline-none text-xs sm:text-base" />
               </div>
             </div>
             <div className="w-full">
@@ -206,7 +206,7 @@ const Profile = ({setIsSelected, user, getUserData}) => {
             </div>
           </div>
 
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-x-4">
             <div className="w-full">
               <label htmlFor="address">Address</label><br />
               <textarea
@@ -236,9 +236,9 @@ const Profile = ({setIsSelected, user, getUserData}) => {
           </div>
         </div>
 
-        <div className="flex gap-4">
-          <button className="mt-4 block bg-gray-600 text-white font-semibold w-1/2 mx-auto py-2 rounded-lg" onClick={resetForm} disabled={loading}>Reset Form</button>
-          <button type="submit" className="mt-4 block bg-green-600 text-white font-semibold w-1/2 mx-auto py-2 rounded-lg" disabled={loading}>{loading ? "Updating..." : "Update changes"}</button>
+        <div className="flex flex-col sm:flex-row gap-4 text-sm sm:text-base">
+          <button className="mt-4 w-full block bg-gray-600 text-white font-semibold w-1/2 mx-auto py-2 rounded-full" onClick={resetForm} disabled={loading}>Reset Form</button>
+          <button type="submit" className="mt-0 sm:mt-4 w-full block bg-green-600 text-white font-semibold w-1/2 mx-auto py-2 rounded-full" disabled={loading}>{loading ? "Updating..." : "Update changes"}</button>
         </div>
       </form >
     </div >

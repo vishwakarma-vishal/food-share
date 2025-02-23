@@ -64,10 +64,12 @@ const ListingCard = ({ foodListing, handleDelete, isModalOpen, setIsModalOpen, g
     }
 
     return (
-        <div className=" bg-white p-4 rounded-lg flex flex-col gap-1 shadow-lg flex flex-col justify-between">
+        <div className="w-[300px] relative bg-white p-4 rounded-lg flex flex-col gap-1 shadow-lg flex flex-col justify-between">
             {/* image and delivery note */}
             <div className="relative w-full h-full">
-                <img src={foodListing.imageUrl} alt="food listing image" className="w-full h-40 rounded-lg" />
+                <img src={foodListing.imageUrl} 
+                alt="food listing image" 
+                className="w-full h-40 rounded-lg" />
 
                 {/* absolute posioned pickup note */}
                 {foodListing.deliveryNote && <p className="absolute top-2 -left-2 bg-gray-300 p-2 rounded-sm text-xs font-semibold">Delivery Note: <span className="font-normal text-gray-600">{foodListing.deliveryNote}</span></p>}
@@ -94,7 +96,7 @@ const ListingCard = ({ foodListing, handleDelete, isModalOpen, setIsModalOpen, g
                     {(foodListing.reservedBy?.name && foodListing.status === "reserved") &&
                         <p className="text-sm font-semibold">
                             Reserved By:
-                            <span className="font-normal text-gray-600">{foodListing.reservedBy.name}</span>
+                            <span className="font-normal text-gray-600"> {foodListing.reservedBy.name}</span>
                         </p>
                     }
                 </div>
@@ -105,7 +107,7 @@ const ListingCard = ({ foodListing, handleDelete, isModalOpen, setIsModalOpen, g
                 foodListing.status.toLowerCase() == "reserved" &&
                 <button
                     onClick={collectHandler}
-                    className="py-1 rounded-full text-white bg-yellow-600"
+                    className="py-1 rounded-full text-white bg-yellow-400 hover:bg-yellow-500 transition-all duration-200"
                 >
                     Mark Collected
                 </button>
@@ -115,8 +117,8 @@ const ListingCard = ({ foodListing, handleDelete, isModalOpen, setIsModalOpen, g
             {
                 (foodListing.status === "available" || foodListing.status === "reserved") ?
                 <div className="mt-2 w-full flex gap-4">
-                    <button onClick={() => setIsModalOpen(true)} className="py-1 text-white bg-green-600 w-full rounded-full">Edit</button>
-                    <button onClick={() => handleDelete(foodListing._id)} className="py-1 text-white bg-red-600 w-full rounded-full">Delete</button>
+                    <button onClick={() => setIsModalOpen(true)} className="py-1 text-white bg-green-500 hover:bg-green-600 w-full rounded-full duration-200">Edit</button>
+                    <button onClick={() => handleDelete(foodListing._id)} className="py-1 text-white bg-red-500 duration-200 hover:bg-red-600 w-full rounded-full">Delete</button>
                 </div> :
                 <div className="bg-gray-300 text-center py-1 rounded-sm">{foodListing.status}</div>
             }

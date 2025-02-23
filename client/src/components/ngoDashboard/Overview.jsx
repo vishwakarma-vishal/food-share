@@ -48,20 +48,20 @@ const Overview = ({ setIsSelected, user }) => {
 
             {/* Impact */}
             <div className="bg-white rounded-xl p-6 shadow-sm">
-                <h3 className="font-semibold text-lg text-gray-800">Impact Overview</h3>
+                <h3 className="font-semibold text-md sm:text-lg text-gray-800">Impact Overview</h3>
 
                 <div className="flex flex-wrap gap-4 mt-4">
                     <div className="flex-grow text-center bg-blue-100 p-6 rounded-lg">
-                        <p className="text-blue-600 font-semibold">Total Meals Collected</p>
-                        <span className="text-blue-600 font-bold text-xl">15,000 Meals</span>
+                        <p className="text-blue-600 font-semibold text-sm sm:text-normal">Total Meals Collected</p>
+                        <span className="text-blue-600 font-bold text-lg sm:text-xl">15,000 Meals</span>
                     </div>
                     <div className="flex-grow text-center bg-green-100 p-6 rounded-lg">
-                        <p className="text-green-600 font-semibold">People Benefited</p>
-                        <span className="text-green-600 font-bold text-xl">12,000 People</span>
+                        <p className="text-green-600 font-semibold text-sm sm:text-normal">People Benefited</p>
+                        <span className="text-green-600 font-bold text-lg sm:text-xl">12,000 People</span>
                     </div>
                     <div className="flex-grow text-center bg-purple-100 p-6 rounded-lg">
-                        <p className="text-purple-600 font-semibold">Active Volunteers</p>
-                        <span className="text-purple-600 font-bold text-xl">350 Volunteers</span>
+                        <p className="text-purple-600 font-semibold text-sm sm:text-normal">Active Volunteers</p>
+                        <span className="text-purple-600 font-bold text-lg sm:text-xl">350 Volunteers</span>
                     </div>
                 </div>
             </div>

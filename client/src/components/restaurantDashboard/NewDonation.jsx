@@ -105,12 +105,12 @@ const NewDonation = ({ setIsSelected }) => {
     }
 
     return (
-        <div className="w-full bg-white p-6 rounded-xl shadow-lg">
-            <h2 className="font-semibold text-2xl">New Food Donation</h2>
+        <div className="w-full bg-white p-4 sm:p-6 rounded-xl shadow-lg max-w-5xl m-auto">
+            <h2 className="font-semibold text-lg sm:text-xl md:text-2xl">New Food Donation</h2>
 
             <form className="mt-6 text-sm" onSubmit={submitHandler}>
                 {/* first row */}
-                <div className="flex gap-6">
+                <div className="flex flex-col sm:flex-row gap-6">
                     {/* image */}
                     <div className="basis-6/12 w-full h-[180px] flex justify-center items-center">
                         {
@@ -156,7 +156,7 @@ const NewDonation = ({ setIsSelected }) => {
                                 className="border border-gray-500 w-full p-2 rounded-md my-2 outline-none"
                                 required />
                         </div>
-                        <div className="flex gap-4">
+                        <div className="flex flex-col sm:flex-row gap-x-4">
                             <div className="w-full">
                                 <label htmlFor="category">Category</label><br />
                                 <select
@@ -187,7 +187,7 @@ const NewDonation = ({ setIsSelected }) => {
                 </div>
 
                 {/*second row => pickupfrom - pickuptill */}
-                <div className="mt-4">
+                <div className="mt-0 sm:mt-2">
                     <div className="flex gap-4">
                         <div className="w-full">
                             <label htmlFor="pickupFrom">Pickup From</label><br />
@@ -213,7 +213,7 @@ const NewDonation = ({ setIsSelected }) => {
                         </div>
                     </div>
 
-                    <div className="flex gap-4">
+                    <div className="flex flex-col sm:flex-row gap-x-4">
                         <div className="w-full">
                             <label htmlFor="description">Description</label><br />
                             <textarea
@@ -243,17 +243,17 @@ const NewDonation = ({ setIsSelected }) => {
                     </div>
                 </div>
 
-                <div className="flex gap-4">
+                <div className="flex flex-col sm:flex-row gap-4 text-sm sm:text-base">
                     <button
                         type="button"
                         onClick={resetHandler}
-                        className={`mt-4 block bg-gray-600 text-white font-semibold w-1/2 mx-auto py-2 rounded-lg ${loading && "bg-gray-400 cursor-not-allowed"}`}
+                        className={`w-full mt-4 block bg-gray-600 text-white font-semibold w-1/2 mx-auto py-2 rounded-full ${loading && "bg-gray-400 cursor-not-allowed"}`}
                         disabled={loading}>
                         Reset Form
                     </button>
                     <button
                         type="submit"
-                        className={`mt-4 block bg-green-600 text-white font-semibold w-1/2 mx-auto py-2 rounded-lg ${loading && "bg-green-400 cursor-not-allowed"}`}
+                        className={`w-full mt-0 sm:mt-4 block bg-green-600 text-white font-semibold w-1/2 mx-auto py-2 rounded-full ${loading && "bg-green-400 cursor-not-allowed"}`}
                         disabled={loading}>
                         {loading ? "Submitting Donation..." : "Submit Donation"}
                     </button>

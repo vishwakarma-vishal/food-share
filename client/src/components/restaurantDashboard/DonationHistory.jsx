@@ -112,16 +112,18 @@ const DonationHistory = () => {
             {loading ?
                 <div className="text-gray-500 h-full flex justify-center items-center">loading... </div> :
                 <div className='h-full'>
-                    <div className="flex justify-between">
-                        <h2 className="font-semibold text-2xl">Donation History</h2>
+                    <div className="flex flex-wrap gap-2 sm:gap-4 justify-between">
+                        <h2 className="font-semibold text-lg sm:text-xl md:text-2xl">Donation History</h2>
 
-                        <form className="flex items-center gap-4">
-                            <input type="text" placeholder="Search by Food or Restaurant..." className="p-2 w-56  text-sm rounded-lg border outline-none" onChange={searchInHistory} />
-                            <label htmlFor="sort" className="font-medium">Sort By</label>
-                            <select id="sort" className="py-2 px-4 rounded-lg border outline-none" onChange={sortHistory}>
-                                <option value="donation">Donation Date</option>
-                                <option value="name">Food Name</option>
-                            </select>
+                        <form className="flex flex-wrap items-center gap-2 sm:gap-4 text-sm sm:text-base">
+                            <input type="text" placeholder="Search by Food or Restaurant..." className="p-2 w-56 rounded-lg border outline-none" onChange={searchInHistory} />
+                            <div>
+                                <label htmlFor="sort" className="font-medium">Sort By</label>
+                                <select id="sort" className="ml-2 py-2 px-4 rounded-lg border outline-none" onChange={sortHistory}>
+                                    <option value="donation">Donation Date</option>
+                                    <option value="name">Food Name</option>
+                                </select>
+                            </div>
                         </form>
                     </div>
 
@@ -135,35 +137,37 @@ const DonationHistory = () => {
                                 The filtered result not available, Choose a different filter.
                             </div> :
                             <div className="mt-5">
-                                <table className="w-full rounded-lg border-collapse shadow-xl bg-white">
-                                    <thead>
-                                        <tr className="bg-gray-200 text-left text-sm font-medium text-gray-700">
-                                            <th className="border-b p-3">Food Name</th>
-                                            <th className="border-b p-3">Status</th>
-                                            <th className="border-b p-3">Donation Date</th>
-                                            <th className="border-b p-3">Ngo Name</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {currentRows.map((collection) => {
-                                            return (
-                                                <tr key={collection._id} className="text-left text-sm text-gray-800 hover:bg-gray-200">
-                                                    <td className="border-b p-3">{collection.foodListingId.title}</td>
-                                                    <td className="border-b p-3">{collection.status}</td>
-                                                    <td className="border-b p-3">{formatDate(collection.createdAt)}</td>
-                                                    <td className="border-b p-3">{collection.foodListingId.reservedBy?.name? collection.foodListingId.reservedBy.name: "NA" }</td>
-                                                </tr>
-                                            )
-                                        })}
-                                    </tbody>
-                                </table>
+                                <div className="w-full overflow-y-scroll text-xs sm:text-base">
+                                    <table className="w-full rounded-lg border-collapse shadow-xl bg-white">
+                                        <thead>
+                                            <tr className="bg-gray-200 text-left font-medium text-gray-700">
+                                                <th className="border-b p-3">Food Name</th>
+                                                <th className="border-b p-3">Status</th>
+                                                <th className="border-b p-3">Donation Date</th>
+                                                <th className="border-b p-3">Ngo Name</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {currentRows.map((collection) => {
+                                                return (
+                                                    <tr key={collection._id} className="text-left text-gray-800 hover:bg-gray-200">
+                                                        <td className="border-b p-3">{collection.foodListingId.title}</td>
+                                                        <td className="border-b p-3">{collection.status}</td>
+                                                        <td className="border-b p-3">{formatDate(collection.createdAt)}</td>
+                                                        <td className="border-b p-3">{collection.foodListingId.reservedBy?.name ? collection.foodListingId.reservedBy.name : "NA"}</td>
+                                                    </tr>
+                                                )
+                                            })}
+                                        </tbody>
+                                    </table>
+                                </div>
 
                                 {/* pagination */}
-                                <div className="flex gap-4 items-center mt-6">
-                                    <button onClick={goToPrevPage} className="bg-green-600 py-1 px-4 rounded-lg text-white">Previous</button>
-                                    <button onClick={goToNextPage} className="bg-blue-600 py-1 px-4 rounded-lg text-white">Next</button>
+                                <div className="flex gap-4 items-center mt-6 text-xs sm:text-sm md:text-base">
+                                    <button onClick={goToPrevPage} className="bg-green-600 py-1 px-4 rounded-full text-white">Previous</button>
+                                    <button onClick={goToNextPage} className="bg-blue-600 py-1 px-4 rounded-full text-white">Next</button>
 
-                                    <span className="ml-auto text-sm">Page {currentPage} of {totalPages}</span>
+                                    <span className="ml-auto">Page {currentPage} of {totalPages}</span>
                                 </div>
                             </div>
                     }

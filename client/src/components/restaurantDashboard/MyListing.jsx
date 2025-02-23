@@ -124,8 +124,8 @@ const MyListing = ({ isMenuOpen, isSelected, setIsSelected }) => {
     return (
         <div className="relative h-full">
             <div className="flex justify-between">
-                <h2 className="font-semibold text-2xl">My Listings</h2>
-                <button onClick={() => setIsSelected("new-donation")} className="text-white bg-green-500 rounded-lg py-2 px-4 font-semibold">
+                <h2 className="font-semibold text-lg sm:text-xl md:text-2xl">My Listings</h2>
+                <button onClick={() => setIsSelected("new-donation")} className="text-white bg-green-500 rounded-full text-sm sm:text-normal py-2 px-4 font-semibold">
                     New Listing
                 </button>
             </div>
@@ -135,12 +135,12 @@ const MyListing = ({ isMenuOpen, isSelected, setIsSelected }) => {
                 <div>
                     {
                         foodListings.length === 0 ?
-                            <div className="text-gray-500 h-full flex justify-center items-center">
+                            <div className="text-gray-500 h-full flex justify-center items-center text-sm sm:text-base text-center">
                                 You haven't posted any Listing yet.
                             </div> :
                             <div className="h-full">
                                 {/* filters */}
-                                <form className="flex gap-4 mt-4">
+                                <form className="flex flex-wrap gap-4 mt-4 text-sm sm:text-base">
                                     <input type="text" placeholder="Search by name..." className="py-2 px-4 border rounded-lg outline-none" onChange={searchByListingName} />
                                     <select className="py-2 px-4 border rounded-lg outline-none" onChange={filterByCategory}>
                                         <option value="all">All types</option>
@@ -163,7 +163,7 @@ const MyListing = ({ isMenuOpen, isSelected, setIsSelected }) => {
                                         <div className="text-gray-500 h-full flex justify-center items-center">
                                             The filtered result not available, Choose a different filter
                                         </div> :
-                                        <div className={`grid ${isMenuOpen ? "grid-cols-3" : "grid-cols-4"} gap-4 mt-6`}>
+                                        <div className="flex flex-wrap gap-4 my-4 justify-center sm:justify-start">
                                             {
                                                 currentListings.map((foodListing) => {
                                                     return <ListingCard
