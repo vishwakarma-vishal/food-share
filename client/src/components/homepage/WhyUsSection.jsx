@@ -4,22 +4,22 @@ const WhyUsSection = () => {
         {
             title: 'Minimize Food Waste',
             description: 'List surplus food easily and cut down on food waste, making a sustainable impact.',
-            imageUrl: '/benifits/1.jpeg'
+            imageUrl: '/benifits/reason-1.jpg'
         },
         {
             title: 'Help those in need',
             description: 'Donate surplus food to those who need it most, helping to alleviate hunger in your local community.',
-            imageUrl: '/benifits/2.jpeg'
+            imageUrl: '/benifits/reason-2.jpg'
         },
         {
             title: 'Enhance Your Brand',
             description: 'Using FoodShare, you can show your customers that you care about more than just profit.',
-            imageUrl: '/benifits/3.jpeg'
+            imageUrl: '/benifits/reason-3.jpg'
         },
         {
             title: 'Join a growing community',
             description: 'Join a network of restaurants and NGOs who are making a difference.',
-            imageUrl: '/benifits/4.jpeg'
+            imageUrl: '/benifits/reason-4.jpg'
         },
     ];
 
