@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
 import api from "../../utils/interceptors";
+import placeholderImg from "../../../public/food-placeholder.jpg";
 
 const ListingCard = ({ foodListing, getListings }) => {
     // format date like 1-jan-2025
@@ -65,7 +66,7 @@ const ListingCard = ({ foodListing, getListings }) => {
     return (
         <div className="w-[300px] relative bg-white p-4 rounded-lg flex flex-col gap-1 shadow-lg flex flex-col justify-between">
             {/* image */}
-            <img src={foodListing.imageUrl}
+             <img src={foodListing.imageUrl ? foodListing.imageUrl : placeholderImg} 
                 alt="food listing image"
                 className="relative w-full h-40 rounded-lg"
             />

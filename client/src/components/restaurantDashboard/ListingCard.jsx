@@ -3,6 +3,7 @@ import useAuth from "../../utils/useAuth";
 import EditListingModal from './EditListingModal';
 import axios from "axios";
 import { toast } from "react-toastify";
+import placeholderImg from "../../../public/food-placeholder.jpg"
 
 const ListingCard = ({ foodListing, handleDelete, isModalOpen, setIsModalOpen, getMyFoodListings }) => {
 
@@ -67,7 +68,7 @@ const ListingCard = ({ foodListing, handleDelete, isModalOpen, setIsModalOpen, g
         <div className="w-[300px] relative bg-white p-4 rounded-lg flex flex-col gap-1 shadow-lg flex flex-col justify-between">
             {/* image and delivery note */}
             <div className="relative w-full h-full">
-                <img src={foodListing.imageUrl} 
+                <img src={foodListing.imageUrl ? foodListing.imageUrl : placeholderImg} 
                 alt="food listing image" 
                 className="w-full h-40 rounded-lg" />
 
