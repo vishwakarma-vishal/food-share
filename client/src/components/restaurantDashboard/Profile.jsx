@@ -105,7 +105,7 @@ const Profile = ({setIsSelected, user, getUserData}) => {
             {
               previewImg ?
                 <div className="relative h-full">
-                  <img src={previewImg} className="rounded-lg h-full w-full border"></img>
+                  <img src={previewImg} className="rounded-lg aspect-video h-[200px] sm:h-full w-full border"></img>
                   <button
                     type="button"
                     className="absolute top-2 -left-1 text-xs bg-green-600 text-white p-1 rounded-sm"
@@ -113,7 +113,7 @@ const Profile = ({setIsSelected, user, getUserData}) => {
                     Upload new img
                   </button>
                 </div> :
-                <div className="flex justify-center items-center h-full">
+                <div className="flex justify-center items-center h-[200px] sm:h-full">
                   <input
                     type="file"
                     id="fileInput"

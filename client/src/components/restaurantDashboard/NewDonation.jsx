@@ -124,7 +124,7 @@ const NewDonation = ({ setIsSelected }) => {
                                         Upload new img
                                     </button>
                                 </div> :
-                                <div className="w-full h-full flex justify-center items-center bg-gray-200 rounded">
+                                <div className="w-full h-[200px] sm:h-full flex justify-center items-center bg-gray-200 rounded">
                                     <input
                                         type="file"
                                         id="fileInput"

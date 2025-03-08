@@ -132,7 +132,7 @@ export const Profile = ({ setIsSelected, user, getUserData }) => {
                     Upload new img
                   </button>
                 </div> :
-                <div className="flex justify-center items-center h-full">
+                <div className="flex justify-center items-center h-[200px] sm:h-full">
                   <input
                     type="file"
                     id="fileInput"
