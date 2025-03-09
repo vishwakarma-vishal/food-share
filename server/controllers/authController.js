@@ -12,7 +12,7 @@ ngoSignup = async (req, res) => {
         const ngoSignupSchema = z.object({
             name: z.string()
                 .trim()
-                .min(3, "NGO Name must be at least 3 characters")
+                .min(5, "NGO Name must be at least 5 characters")
                 .max(100, "NGO Name cannot exceed 100 characters"),
             phone: z.string()
                 .trim()
@@ -32,7 +32,7 @@ ngoSignup = async (req, res) => {
                 .max(50, "City cannot exceed 50 characters"),
             address: z.string()
                 .trim()
-                .min(3, "Address must be at least 3 characters")
+                .min(5, "Address must be at least 5 characters")
                 .max(200, "Address cannot exceed 200 characters"),
         });
 
@@ -111,7 +111,7 @@ restaurantSignup = async (req, res) => {
         const restaurantSignupSchema = z.object({
             name: z.string()
                 .trim()
-                .min(3, "Restaurant Name must be at least 3 characters")
+                .min(5, "Restaurant Name must be at least 5 characters")
                 .max(100, "Restaurant Name cannot exceed 100 characters"),
             phone: z.string()
                 .trim()
@@ -131,7 +131,7 @@ restaurantSignup = async (req, res) => {
                 .max(50, "City cannot exceed 50 characters"),
             address: z.string()
                 .trim()
-                .min(3, "Address must be at least 3 characters")
+                .min(5, "Address must be at least 5 characters")
                 .max(200, "Address cannot exceed 200 characters"),
         });
 

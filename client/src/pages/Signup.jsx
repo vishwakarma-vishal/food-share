@@ -148,7 +148,7 @@ const Signup = () => {
                             onChange={changeHandler}
                             placeholder="Restaurant/NGO name"
                             className="border outline-none border-gray-600 py-2 px-4 w-full rounded-full"
-                            minLength={3}
+                            minLength={5}
                             maxLength={100}
                             required
                         />
@@ -164,7 +164,7 @@ const Signup = () => {
                             onChange={changeHandler}
                             placeholder="Type your address"
                             className="border outline-none border-gray-600 py-2 px-4 w-full rounded-full"
-                            minLength={3}
+                            minLength={5}
                             maxLength={200}
                             required
                         />
