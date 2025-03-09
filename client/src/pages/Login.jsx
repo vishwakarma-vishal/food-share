@@ -49,8 +49,14 @@ const Login = () => {
             }
         }
         catch (e) {
-            console.log(e);
-            toast.error("An error occurred. Please try again.");
+            if (e.response && e.response.status === 401) {
+                toast.error("Invalid password");
+            } else if (e.response && e.response.status === 404) {
+                toast.error("User not found");
+            } else {
+                console.log(e.message);
+                toast.error("An error occurred. Please try again.");
+            }
         }
     }
 
