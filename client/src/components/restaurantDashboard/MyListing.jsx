@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import ListingCard from './ListingCard';
+import EditListingModal from './EditListingModal';
 import axios from 'axios';
 import { toast } from "react-toastify";
 import api from '../../utils/interceptors';
@@ -10,7 +11,7 @@ const MyListing = ({ isMenuOpen, isSelected, setIsSelected }) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [categoryFilter, setCategoryFilter] = useState("all");
     const [statusFilter, setStatusFilter] = useState("all");
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(null);
     const [loading, setLoading] = useState(false);
 
     // get my food listings 
@@ -166,13 +167,22 @@ const MyListing = ({ isMenuOpen, isSelected, setIsSelected }) => {
                                         <div className="flex flex-wrap gap-4 my-4 justify-center sm:justify-start">
                                             {
                                                 currentListings.map((foodListing) => {
-                                                    return <ListingCard
-                                                        key={foodListing._id}
-                                                        foodListing={foodListing}
-                                                        handleDelete={handleDelete}
-                                                        isModalOpen={isModalOpen}
-                                                        setIsModalOpen={setIsModalOpen}
-                                                        getMyFoodListings={getMyFoodListings} />
+                                                    return (
+                                                        <div key={foodListing._id}>
+                                                            <ListingCard
+                                                                foodListing={foodListing}
+                                                                handleDelete={handleDelete}
+                                                                setIsModalOpen={setIsModalOpen}
+                                                            />
+                                                            {isModalOpen === foodListing._id &&
+                                                                <EditListingModal
+                                                                    foodListing={foodListing}
+                                                                    setIsModalOpen={setIsModalOpen}
+                                                                    getMyFoodListings={getMyFoodListings}
+                                                                />
+                                                            }
+                                                        </div>
+                                                    )
                                                 })
                                             }
                                         </div>

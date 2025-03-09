@@ -101,6 +101,7 @@ const EditListingModal = ({ foodListing, setIsModalOpen, getMyFoodListings }) =>
 
             setLoading(false);
         } catch (error) {
+            console.log(error);
             setLoading(false);
             toast.error("Something went wrong, try again later.");
         }
@@ -116,16 +117,16 @@ const EditListingModal = ({ foodListing, setIsModalOpen, getMyFoodListings }) =>
     }
 
     return (
-        <div className="absolute top-0 left-0 h-full w-full flex justify-center items-center" style={{ backgroundColor: 'rgba(255, 255, 255, 0.8)' }}>
-            <div className="w-10/12 bg-white p-6 rounded-xl shadow-lg">
+        <div className="z-10 absolute top-0 left-0 h-full w-full flex justify-center items-start" style={{ backgroundColor: 'rgba(255, 255, 255, 0.8)' }}>
+            <div className="w-full md:w-10/12 bg-white p-4 sm:p-6 rounded-xl shadow-lg">
                 <div className="flex justify-between items-center">
-                    <h2 className="font-semibold text-2xl">Edit Listing</h2>
-                    <button className="text-2xl cursor-pointer" onClick={() => setIsModalOpen(false)}><ImCancelCircle /></button>
+                    <h2 className="font-semibold text-lg sm:text-xl md:text-2xl">Edit Listing</h2>
+                    <button className="text-lg sm:text-2xl cursor-pointer text-gray-800" onClick={() => setIsModalOpen(false)}><ImCancelCircle /></button>
                 </div>
 
                 <form className="mt-6 text-sm" onSubmit={submitHandler}>
                     {/* first row */}
-                    <div className="flex gap-6">
+                    <div className="flex flex-col sm:flex-row gap-x-6 gap-y-4">
                         {/* image */}
                         <div className="basis-6/12 w-full h-[180px] flex justify-center items-center">
                             {
@@ -139,7 +140,7 @@ const EditListingModal = ({ foodListing, setIsModalOpen, getMyFoodListings }) =>
                                             Upload new img
                                         </button>
                                     </div> :
-                                    <div className="w-full h-full flex justify-center items-center bg-gray-200 rounded">
+                                    <div className="w-full h-[180px] flex justify-center items-center bg-gray-200 rounded">
                                         <input
                                             type="file"
                                             id="fileInput"
@@ -228,7 +229,7 @@ const EditListingModal = ({ foodListing, setIsModalOpen, getMyFoodListings }) =>
                             </div>
                         </div>
 
-                        <div className="flex gap-4">
+                        <div className="flex flex-col sm:flex-row gap-x-4">
                             <div className="w-full">
                                 <label htmlFor="description">Description</label><br />
                                 <textarea
@@ -258,17 +259,17 @@ const EditListingModal = ({ foodListing, setIsModalOpen, getMyFoodListings }) =>
                         </div>
                     </div>
 
-                    <div className="flex gap-4">
+                    <div className="flex gap-4 text-sm sm:text-base">
                         <button
                             type="button"
                             onClick={resetHandler}
-                            className={`mt-4 block bg-gray-600 text-white font-semibold w-1/2 mx-auto py-2 rounded-lg ${loading && "bg-gray-400 cursor-not-allowed"}`}
+                            className={`mt-4 block bg-gray-600 text-white font-semibold w-1/2 mx-auto py-2 rounded-full ${loading && "bg-gray-400 cursor-not-allowed"}`}
                             disabled={loading}>
                             Reset Form
                         </button>
                         <button
                             type="submit"
-                            className={`mt-4 block bg-green-600 text-white font-semibold w-1/2 mx-auto py-2 rounded-lg ${loading && "bg-green-400 cursor-not-allowed"}`}
+                            className={`mt-4 block bg-green-600 text-white font-semibold w-1/2 mx-auto py-2 rounded-full ${loading && "bg-green-400 cursor-not-allowed"}`}
                             disabled={loading}>
                             {loading ? "Submitting Donation..." : "Submit Donation"}
                         </button>
