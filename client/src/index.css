@@ -9,3 +9,28 @@ html {
 * {
     box-sizing: border-box;
 }
+
+/* Default toast container styles */
+.Toastify__toast-container {
+    width: auto !important;
+    max-width: 350px !important;
+}
+
+.Toastify__toast {
+    font-size: 16px !important;
+    word-wrap: break-word;
+}
+
+@media (max-width: 768px) {
+    .Toastify__toast-container {
+        right: 10px !important;
+        left: auto !important;
+        width: auto !important;
+    }
+
+    .Toastify__toast {
+        font-size: 14px !important;
+        word-wrap: break-word;
+    }
+}
+
